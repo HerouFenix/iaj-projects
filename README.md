@@ -8,7 +8,7 @@ lectured.
 ## Authors
 
 -   **Diogo Silva** - [HerouFenix](https://github.com/HerouFenix)
--   **Carlos Marques** - [???](https://github.com/???)
+-   **Carlos Marques** - [Catralitos](https://github.com/Catralitos)
 -   **Rui Melo** - [???](https://github.com/???)
 
 ## License
