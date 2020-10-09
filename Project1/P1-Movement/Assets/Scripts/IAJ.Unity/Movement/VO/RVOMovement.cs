@@ -31,6 +31,9 @@ namespace Assets.Scripts.IAJ.Unity.Movement.VO
             this.DesiredMovement = goalMovement;
             base.Target = new KinematicData();
             this.Characters = movingCharacters;
+
+            this.IgnoreDistance = 15f;
+            this.CharacterSize = 2f;
         }
 
         private Vector3 getBestSample(Vector3 desiredVelocity, List<Vector3> samples)
@@ -108,7 +111,7 @@ namespace Assets.Scripts.IAJ.Unity.Movement.VO
 
             samples.Add(desiredVelocity);
 
-            int numSamples = 100;
+            int numSamples = 5;
 
             for(int i = 0; i < numSamples; i++)
             {

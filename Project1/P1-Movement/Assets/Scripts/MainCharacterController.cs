@@ -13,7 +13,7 @@ public class MainCharacterController : MonoBehaviour {
     public const float X_WORLD_SIZE = 56;
     public const float Z_WORLD_SIZE = 56;
     public float MAX_ACCELERATION = 20;
-    public float MAX_SPEED = 20;
+    private float MAX_SPEED = 20;
     public float DRAG = 0.01f;
 
     public float MAX_LOOK_AHEAD = 5.0f;
@@ -21,9 +21,6 @@ public class MainCharacterController : MonoBehaviour {
 
     public float MAX_TIME_LOOK_AHEAD = 3.0f;
     public float COLLISION_RADIUS = 1.0f;
-
-    public float IGNORE_DISTANCE = 5.0f; //TODO : VERIFY THIS IS GUCCI
-    public float CHARACTER_SIZE = 1.0f; //TODO : VERIFY HOW TO GET THE CHARACTER SIZE
 
     public GameObject movementText;
     public DynamicCharacter character;
@@ -120,8 +117,6 @@ public class MainCharacterController : MonoBehaviour {
             MaxAcceleration = MAX_ACCELERATION,
             MaxSpeed = MAX_SPEED,
             DebugColor = Color.black,
-            IgnoreDistance = IGNORE_DISTANCE,
-            CharacterSize = CHARACTER_SIZE
         };
 
         this.priorityMovement.Movements.Add(patrolMovement);
@@ -185,9 +180,7 @@ public class MainCharacterController : MonoBehaviour {
             Character = this.character.KinematicData,
             MaxAcceleration = MAX_ACCELERATION,
             MaxSpeed = MAX_SPEED,
-            DebugColor = Color.black,
-            IgnoreDistance = IGNORE_DISTANCE,
-            CharacterSize = CHARACTER_SIZE
+            DebugColor = Color.black
         };
     }
 
