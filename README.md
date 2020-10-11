@@ -9,7 +9,7 @@ lectured.
 
 -   **Diogo Silva** - [HerouFenix](https://github.com/HerouFenix)
 -   **Carlos Marques** - [Catralitos](https://github.com/Catralitos)
--   **Rui Melo** - [???](https://github.com/???)
+-   **Rui Melo** - [rufimelo99](https://github.com/rufimelo99)
 
 ## License
 
