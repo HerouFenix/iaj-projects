@@ -38,9 +38,7 @@ namespace Assets.Scripts.IAJ.Unity.Movement.VO
 
             // Add characters list
             this.Characters = movingCharacters;
-            Debug.Log(this.Characters.Count);
             this.Characters.Remove(character);
-            Debug.Log(this.Characters.Count);
             //this.Characters = new List<KinematicData>();
 
             // Add obstacle list
@@ -178,13 +176,34 @@ namespace Assets.Scripts.IAJ.Unity.Movement.VO
                         //}
                         //else
                         //{
-                        var closestPoint = obstacleCollider.ClosestPointOnBounds(this.Character.Position);
-                        var deltaP = closestPoint - this.Character.Position;
-                        if (deltaP.magnitude > (this.IgnoreDistance)) continue; // Ignore this wall (too far away)
+
+                        // FIRST METHOD OF COLLISION DETECTION (using the closest point on the collider bound
+                        //var closestPoint = obstacleCollider.ClosestPointOnBounds(this.Character.Position);
+                        //var deltaP = closestPoint - this.Character.Position;
+                        //if (deltaP.magnitude > (this.IgnoreDistance)) continue; // Ignore this wall (too far away)
+
+
+                        // SECOND METHOD OF COLLISION DETECTION (using raycasts) - SLOWER but more effective
+                        if (this.Character.velocity.magnitude == 0) continue;
+                        
+                        Ray mainRay = new Ray(this.Character.Position, this.Character.velocity.normalized);
+                        
+                        Vector3 leftWhisker = MathHelper.Rotate2D(this.Character.velocity, -MathConstants.MATH_PI_6);
+                        Vector3 rightWhisker = MathHelper.Rotate2D(this.Character.velocity, MathConstants.MATH_PI_6);
+                        
+                        Ray leftRay = new Ray(this.Character.Position, leftWhisker.normalized);
+                        Ray rightRay = new Ray(this.Character.Position, rightWhisker.normalized);
+                        
+                        RaycastHit hit;
+                        
+                        if (!obstacleCollider.Raycast(mainRay, out hit, this.IgnoreDistance) && !obstacleCollider.Raycast(leftRay, out hit, this.IgnoreDistance/2) && !obstacleCollider.Raycast(rightRay, out hit, this.IgnoreDistance/2))
+                        {
+                            continue;
+                        }
 
                         var rayVector = 2 * sample - this.Character.velocity;
 
-                        timeCollision = MathHelper.TimeToCollisionBetweenRayAndBox(this.Character.Position, rayVector, obstaclePosition, obstacleCollider.bounds.size);
+                        timeCollision = MathHelper.TimeToCollisionBetweenRayAndBox2(this.Character.Position, rayVector, obstaclePosition, obstacleCollider.bounds.size);
                         //Debug.Log(tc);
 
                         timeWeight = 9.0f;

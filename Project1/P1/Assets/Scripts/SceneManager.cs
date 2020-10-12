@@ -64,7 +64,9 @@ public class SceneManager : MonoBehaviour
                 "Instructions\n\n" +
                 this.blendedKey + " - Blended\n" +
                 this.priorityKey + " - Priority\n" +
-                this.stopKey + " - Stop";
+                this.stopKey + " - Stop\n" +
+                "A" + " - Enable Actuators\n" +
+                "N" + " - Disable Actuators";
         }
 
         this.NumberOfCharacerSliderChanged();
@@ -111,6 +113,19 @@ public class SceneManager : MonoBehaviour
             UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
         }
 
+        else if (Input.GetKeyDown(KeyCode.A))
+        {
+            foreach (var c in this.characterControllers)
+                c.ApplyActuator();
+            movementText.text = "Current Movement:" + this.CURRENT_MOVEMENT + " (with actuator)";
+        }
+
+        else if (Input.GetKeyDown(KeyCode.N))
+        {
+            foreach (var c in this.characterControllers)
+                c.ApplyActuator();
+            movementText.text = "Current Movement:" + this.CURRENT_MOVEMENT;
+        }
 
 
     }

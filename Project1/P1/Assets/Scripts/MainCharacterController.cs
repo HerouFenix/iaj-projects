@@ -158,6 +158,11 @@ public class MainCharacterController : MonoBehaviour {
 
     }
 
+    // Method to enable or disable actuators
+    public void ApplyActuator()
+    {
+        this.character.UsingActuators = !this.character.UsingActuators;
+    }
 
     // When we create characters dinamically we need to update the ones that already exist
     public void UpdateAvoidCharacterList(List<MainCharacterController> characterControllers, GameObject[] obstacles, List<DynamicCharacter> characters)

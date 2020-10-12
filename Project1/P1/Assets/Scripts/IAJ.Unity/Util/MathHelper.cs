@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom.Compiler;
 using UnityEngine;
 
 namespace Assets.Scripts.IAJ.Unity.Util
@@ -78,28 +79,28 @@ namespace Assets.Scripts.IAJ.Unity.Util
         public static float TimeToCollisionBetweenRayAndBox(Vector3 position, Vector3 direction, Vector3 boxCenter, Vector3 boxDimensions)
         {
             var dirFracX = 1.0f / direction.x;
-            var dirFracY = 1.0f / direction.y;
+            //var dirFracY = 1.0f / direction.y;
             var dirFracZ = 1.0f / direction.z;
 
             Vector3 leftBottom = Vector3.zero;
-            Vector3 rightBottom = Vector3.zero;
-            Vector3 leftTop = Vector3.zero;
+            //Vector3 rightBottom = Vector3.zero;
+            //Vector3 leftTop = Vector3.zero;
             Vector3 rightTop = Vector3.zero;
 
             leftBottom.x = boxCenter.x - (boxDimensions.x) / 2;
-            rightBottom.x = boxCenter.x + (boxDimensions.x) / 2;
-            leftTop.x = boxCenter.x - (boxDimensions.x) / 2;
+            //rightBottom.x = boxCenter.x + (boxDimensions.x) / 2;
+            //leftTop.x = boxCenter.x - (boxDimensions.x) / 2;
             rightTop.x = boxCenter.x + (boxDimensions.x) / 2;
 
             leftBottom.z = boxCenter.z - (boxDimensions.z) / 2;
-            rightBottom.z = boxCenter.z - (boxDimensions.z) / 2;
-            leftTop.z = boxCenter.z + (boxDimensions.z) / 2;
+            //rightBottom.z = boxCenter.z - (boxDimensions.z) / 2;
+            //leftTop.z = boxCenter.z + (boxDimensions.z) / 2;
             rightTop.z = boxCenter.z + (boxDimensions.z) / 2;
 
-            Debug.DrawLine(leftTop, rightTop, Color.red);
-            Debug.DrawLine(rightBottom, leftBottom, Color.red);
-            Debug.DrawLine(rightTop, rightBottom, Color.red);
-            Debug.DrawLine(leftBottom, leftTop, Color.red);
+            //Debug.DrawLine(leftTop, rightTop, Color.red);
+            //Debug.DrawLine(rightBottom, leftBottom, Color.red);
+            //Debug.DrawLine(rightTop, rightBottom, Color.red);
+            //Debug.DrawLine(leftBottom, leftTop, Color.red);
 
             float t1 = (leftBottom.x - position.x) * dirFracX;
             float t2 = (rightTop.x - position.x) * dirFracX;
@@ -117,6 +118,51 @@ namespace Assets.Scripts.IAJ.Unity.Util
             if(tMin > tMax)
             {
                 return -1;
+            }
+
+            return tMin;
+        }
+
+        //method adapted from https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection
+        //returns a negative value if there is no collision, and the time to the first collision if there is a collision detected
+        public static float TimeToCollisionBetweenRayAndBox2(Vector3 position, Vector3 direction, Vector3 boxCenter, Vector3 boxDimensions)
+        {
+            Vector3 leftBottom = Vector3.zero;
+            Vector3 rightTop = Vector3.zero;
+
+            leftBottom.x = boxCenter.x - (boxDimensions.x) / 2;
+            rightTop.x = boxCenter.x + (boxDimensions.x) / 2;
+
+            leftBottom.z = boxCenter.z - (boxDimensions.z) / 2;
+            rightTop.z = boxCenter.z + (boxDimensions.z) / 2;
+
+            float tMin = (leftBottom.x - position.x) / direction.x;
+            float tMax = (rightTop.x - position.x) / direction.x;
+
+            if (tMin > tMax) {
+                float temp = tMin;
+                tMin = tMax;
+                tMax = temp;
+            }
+
+            float tZMin = (leftBottom.z - position.z) / direction.z;
+            float tZMax = (rightTop.z - position.z) / direction.z;
+
+            if (tZMin > tZMax)
+            {
+                float temp = tZMin;
+                tZMin = tZMax;
+                tZMax = temp;
+            }
+
+            if((tMin > tZMax) || (tZMin > tMax))
+            {
+                return -1;
+            }
+
+            if(tZMin > tMin)
+            {
+                tMin = tZMin;
             }
 
             return tMin;
