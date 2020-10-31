@@ -203,7 +203,7 @@ namespace Assets.Scripts.IAJ.Unity.Movement.VO
 
                         var rayVector = 2 * sample - this.Character.velocity;
 
-                        timeCollision = MathHelper.TimeToCollisionBetweenRayAndBox2(this.Character.Position, rayVector, obstaclePosition, obstacleCollider.bounds.size);
+                        timeCollision = MathHelper.TimeToCollisionBetweenRayAndBox(this.Character.Position, rayVector, obstaclePosition, obstacleCollider.bounds.size);
                         //Debug.Log(tc);
 
                         timeWeight = 9.0f;
