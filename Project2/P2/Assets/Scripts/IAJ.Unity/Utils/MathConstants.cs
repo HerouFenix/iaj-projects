@@ -19,6 +19,9 @@
         /** pi/4 */
         public const float MATH_PI_4 = (float)0.78539816339744830962;
 
+        /** pi/6 */
+        public const float MATH_PI_6 = (float)0.52359877559829887307;
+
         /** 1/pi */
         public const float MATH_1_PI = (float)0.31830988618379067154;
 

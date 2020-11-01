@@ -130,8 +130,8 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                 if (node.CompareTo(child) == 1)
                 {
 
-                    this.NodeRecords.Replace(node, child);
                     child.status = NodeStatus.Open;
+                    this.NodeRecords.Replace(node, child);
                     this.grid.SetGridObject(child.x, child.y, child);
                 }
 
@@ -154,8 +154,8 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
 
 
             // Child is neither in closed nor open
-            this.NodeRecords.AddToOpen(child);
             child.status = NodeStatus.Open;
+            this.NodeRecords.AddToOpen(child);
             this.grid.SetGridObject(child.x, child.y, child);
         }
     }

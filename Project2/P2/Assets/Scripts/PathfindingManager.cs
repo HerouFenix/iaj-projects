@@ -7,6 +7,9 @@ using Assets.Scripts.IAJ.Unity.Pathfinding;
 using Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures;
 using Assets.Scripts.IAJ.Unity.Pathfinding.Heuristics;
 using Assets.Scripts.IAJ.Unity.Utils;
+using Random = UnityEngine.Random;
+
+
 public class PathfindingManager : MonoBehaviour
 {
 
@@ -47,6 +50,7 @@ public class PathfindingManager : MonoBehaviour
     public bool partialPath;
     public bool UseEuclidean;
     public String searchAlgorithm;
+    public bool spawnCar;
 
     //Public Debug options
     public bool showCoordinates;
@@ -61,6 +65,10 @@ public class PathfindingManager : MonoBehaviour
 
     //Path
     List<NodeRecord> solution;
+
+    //Cars
+    public List<GameObject> mainCharacterPrefabs;
+    private MainCharacterController car;
 
     private void Start()
     {
@@ -234,12 +242,67 @@ public class PathfindingManager : MonoBehaviour
                 debugNodesExplored.text = "# Nodes Explored: " + pathfinding.TotalExploredNodes;
                 debugMaxOpenSize.text = "Max Open Size: " + pathfinding.MaxOpenNodes;
                 debugSearchTime.text = "Total Search Time: " + pathfinding.TotalProcessingTime;
+
+                // Spawn car
+                if (this.spawnCar)
+                {
+                    if(this.car == null)
+                    {
+                        this.car = CreateCharacter();
+                        car.InitializeMovement();
+                    }
+
+                    this.car.Update();
+                    
+                }
             }
 
             this.pathfinding.TotalProcessingTime += Time.deltaTime;
 
         }
 
+    }
+
+    private MainCharacterController CreateCharacter()
+    {
+
+        // Random Car from the Prefabs List
+        var randomCarPrefab = Random.Range(0, mainCharacterPrefabs.Count);
+        var carObject = mainCharacterPrefabs[randomCarPrefab];
+
+        // Spawn according to given coordinates;
+        var spawn = pathfinding.grid.GetWorldPosition(this.solution[0].x,this.solution[0].y);
+
+
+        // Now we need a random destination from the remaining 3
+        var path = new List<Vector3>();
+        foreach(var node in this.solution){
+            path.Add(pathfinding.grid.GetWorldPosition(node.x,node.y));
+        }
+
+        // Instantiate the Prefab within the proper location (spawn)
+
+        var clone = GameObject.Instantiate(carObject);
+        var spawnPosition = new Vector3(spawn.x, 1.0f, spawn.z);
+
+        // Initiating the Character Controller with the correct information taken from the Editor
+        var characterController = clone.GetComponent<MainCharacterController>();
+        characterController.character.KinematicData.Position = spawnPosition;
+        characterController.path = path;
+
+        // SET VARIABLES
+        characterController.MAX_ACCELERATION = 5.0f;
+        characterController.MAX_SPEED = 2.5f;
+
+        characterController.X_WORLD_SIZE = pathfinding.grid.getWidth();
+        characterController.Z_WORLD_SIZE = pathfinding.grid.getHeight();
+
+        characterController.MAX_LOOK_AHEAD = 2.5f;
+        characterController.AVOID_MARGIN = 1.0f;
+
+        characterController.COLLISION_RADIUS = 1.5f;
+
+        return characterController;
     }
 
 

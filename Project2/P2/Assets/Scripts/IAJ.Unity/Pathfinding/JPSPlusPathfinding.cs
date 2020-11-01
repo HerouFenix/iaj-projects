@@ -38,7 +38,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             sweepUpDiagonally(); // DownRight and DownLeft
             sweepDownDiagonally(); // UpRight and UpLeft
 
-            Debug.Log(this.NodeRecords);
+            //Debug.Log(this.NodeRecords);
         }
         
         // Can Be Optimized!
@@ -693,7 +693,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
 
                 if (isCardinal(direction) &&
                     inExactDirection(currentNode, direction) &&
-                    CalculateDistanceCost(currentNode, this.GoalNode) <= Mathf.Abs(currentNode.distances[direction])
+                    DiagonalDistance(currentNode, this.GoalNode) <= Mathf.Abs(currentNode.distances[direction])
                    )
                 {
                     // Goal is closer than wall distance or closer than (or equal to) Jump Point Distance
@@ -775,8 +775,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
 
                 if(newSuccessor != null)
                 {
-                    newSuccessor.travelingDirection = direction;
-                    this.ProcessChildNode(currentNode, newSuccessor);
+                    this.ProcessSuccessorNode(currentNode, newSuccessor, direction);
 
                 }
             }
@@ -798,14 +797,15 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             }
         }
 
-        override protected void ProcessChildNode(NodeRecord parentNode, NodeRecord neighbourNode)
+        protected void ProcessSuccessorNode(NodeRecord parentNode, NodeRecord neighbourNode, string direction)
         {
             //this is where you process a child node 
             var child = this.GenerateChildNodeRecord(parentNode, neighbourNode);
-            child.travelingDirection = neighbourNode.travelingDirection;
+
+            //Additional assignments specific to successors
             child.directions = neighbourNode.directions;
             child.distances = neighbourNode.distances;
-            child.travelingDirection = neighbourNode.travelingDirection;
+            child.travelingDirection = direction;
 
             var node = this.NodeRecords.GetNodeRecord(child);
 
@@ -815,8 +815,8 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                 if (node.CompareTo(child) == 1)
                 {
 
-                    this.NodeRecords.Replace(node, child);
                     child.status = NodeStatus.Open;
+                    this.NodeRecords.Replace(node, child);
                     this.grid.SetGridObject(child.x, child.y, child);
                 }
 
@@ -844,5 +844,64 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             this.grid.SetGridObject(child.x, child.y, child);
         }
 
+        
+        override public List<NodeRecord> CalculatePath(NodeRecord endNode)
+        {
+            List<NodeRecord> path = new List<NodeRecord>();
+            path.Add(endNode);
+            NodeRecord currentNode = endNode;
+            //Go through the list of nodes from the end to the beggining
+            while (currentNode.parent != null)
+            {
+                NodeRecord intermediateNode = currentNode;
+                while (intermediateNode.x != currentNode.parent.x || intermediateNode.y != currentNode.parent.y)
+                {
+                    int intermediateNodeX = intermediateNode.x;
+                    int intermediateNodeY = intermediateNode.y;
+                    switch (currentNode.travelingDirection)
+                    {
+                        case "N":
+                            intermediateNodeY -= 1;
+                            break;
+                        case "S":
+                            intermediateNodeY += 1;
+                            break;
+                        case "W":
+                            intermediateNodeX += 1;
+                            break;
+                        case "E":
+                            intermediateNodeX -= 1;
+                            break;
+                        case "NE":
+                            intermediateNodeX -= 1;
+                            intermediateNodeY -= 1;
+                            break;
+                        case "NW":
+                            intermediateNodeX += 1;
+                            intermediateNodeY -= 1;
+                            break;
+                        case "SE":
+                            intermediateNodeX -= 1;
+                            intermediateNodeY += 1;
+                            break;
+                        case "SW":
+                            intermediateNodeX += 1;
+                            intermediateNodeY += 1;
+                            break;
+                    }
+
+                    intermediateNode = this.NodeRecords.GetNodeRecord(GetNode(intermediateNodeX, intermediateNodeY));
+                    path.Add(intermediateNode);
+
+                }
+                //path.Add(currentNode.parent);
+                currentNode = currentNode.parent;
+
+            }
+            //the list is reversed
+            path.Reverse();
+            return path;
+        }
+        
     }
 }

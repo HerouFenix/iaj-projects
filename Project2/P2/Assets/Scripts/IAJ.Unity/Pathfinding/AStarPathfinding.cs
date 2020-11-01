@@ -252,7 +252,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
         }
 
 
-        public List<NodeRecord> CalculatePath(NodeRecord endNode)
+        public virtual List<NodeRecord> CalculatePath(NodeRecord endNode)
         {
             List<NodeRecord> path = new List<NodeRecord>();
             path.Add(endNode);
