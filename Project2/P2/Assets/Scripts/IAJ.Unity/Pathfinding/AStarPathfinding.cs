@@ -242,7 +242,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             return grid.GetGridObject(x, y);
         }
 
-        private int CalculateDistanceCost(NodeRecord a, NodeRecord b)
+        protected int CalculateDistanceCost(NodeRecord a, NodeRecord b)
         {
             int xDistance = Mathf.Abs(a.x - b.x);
             int yDistance = Mathf.Abs(a.y - b.y);
@@ -267,6 +267,11 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             //the list is reversed
             path.Reverse();
             return path;
+        }
+
+        public virtual void MapPreprocessing()
+        {
+            return;
         }
     }
 }

@@ -13,6 +13,11 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
 
         public NodeArrayAStarPathfinding(int width, int height, float cellSize, IHeuristic heuristic) : base(width, height, cellSize, null, null, heuristic)
         {
+            
+        }
+
+        public override void MapPreprocessing()
+        {
             // Register Nodes
             List<NodeRecord> nodes = new List<NodeRecord>();
             for (int x = 0; x < grid.getWidth(); x++)
@@ -31,8 +36,8 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             this.StartPositionY = startY;
             this.GoalPositionX = goalX;
             this.GoalPositionY = goalY;
-            this.StartNode = grid.GetGridObject(StartPositionX, StartPositionY);
-            this.GoalNode = grid.GetGridObject(GoalPositionX, GoalPositionY);
+            this.StartNode = this.NodeRecords.GetNodeRecord(grid.GetGridObject(StartPositionX, StartPositionY));
+            this.GoalNode = this.NodeRecords.GetNodeRecord(grid.GetGridObject(GoalPositionX, GoalPositionY));
 
             //if it is not possible to quantize the positions and find the corresponding nodes, then we cannot proceed
             if (this.StartNode == null || this.GoalNode == null) return;
@@ -42,18 +47,14 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             this.TotalExploredNodes = 0;
             this.MaxOpenNodes = 0;
 
-            var initialNode = new NodeRecord(StartNode.x, StartNode.y)
-            {
-                gCost = 0,
-                hCost = this.Heuristic.H(this.StartNode, this.GoalNode),
-                NodeIndex = StartNode.NodeIndex
-            };
+            this.StartNode.gCost = 0;
+            this.StartNode.hCost = this.Heuristic.H(this.StartNode, this.GoalNode);
 
             this.NodeRecords.Initialize();
 
-            initialNode.CalculateFCost();
+            this.StartNode.CalculateFCost();
 
-            this.NodeRecords.AddToOpen(initialNode);
+            this.NodeRecords.AddToOpen(this.StartNode);
         }
 
         override public bool Search(out List<NodeRecord> solution, bool returnPartialSolution = false, int totalNodesSearched = 0)
@@ -128,7 +129,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                 // Child is in open
                 if (node.CompareTo(child) == 1)
                 {
-                    
+
                     this.NodeRecords.Replace(node, child);
                     child.status = NodeStatus.Open;
                     this.grid.SetGridObject(child.x, child.y, child);

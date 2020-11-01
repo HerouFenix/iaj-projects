@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
 {
@@ -25,6 +26,12 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
         public static int next_index = 0;
         public int NodeIndex;
 
+        public bool[] directions = { false, false, false, false }; // N S E W
+
+        public string travelingDirection;
+
+        public Dictionary<string, int> distances;
+
         public override string ToString()
         {
             return x + "," + y;
@@ -46,6 +53,16 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
             parent = null;
             isWalkable = true;
             status = NodeStatus.Unvisited;
+
+            distances = new Dictionary<string, int>();
+            distances.Add("S", 0);
+            distances.Add("SE",0);
+            distances.Add("E", 0);
+            distances.Add("NE", 0);
+            distances.Add("N", 0);
+            distances.Add("NW", 0);
+            distances.Add("W", 0);
+            distances.Add("SW", 0);
 
             NodeIndex = next_index;
             next_index++;

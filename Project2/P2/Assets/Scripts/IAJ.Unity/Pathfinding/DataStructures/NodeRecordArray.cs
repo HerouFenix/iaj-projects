@@ -7,15 +7,15 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
     public class NodeRecordArray : IOpenSet, IClosedSet
     {
         private NodeRecord[] NodeRecords { get; set; }
-        private List<NodeRecord> SpecialCaseNodes { get; set; } 
+        private List<NodeRecord> SpecialCaseNodes { get; set; }
         private NodePriorityHeap Open { get; set; }
 
         public NodeRecordArray(List<NodeRecord> nodes)
         {
             //this method creates and initializes the NodeRecordArray for all nodes in the Navigation Graph
             this.NodeRecords = new NodeRecord[nodes.Count];
-            
-            for(int i = 0; i < nodes.Count; i++)
+
+            for (int i = 0; i < nodes.Count; i++)
             {
                 var node = nodes[i];
                 this.NodeRecords[i] = node;
@@ -43,7 +43,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
             }
             else
             {
-                return  this.NodeRecords[node.NodeIndex];
+                return this.NodeRecords[node.NodeIndex];
             }
         }
 
@@ -83,25 +83,13 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
 
         public void AddToOpen(NodeRecord nodeRecord)
         {
-            var nodeToUpdate = this.NodeRecords.SingleOrDefault(x => x.NodeIndex == nodeRecord.NodeIndex);
-            nodeToUpdate.status = NodeStatus.Open;
-            nodeToUpdate.gCost = nodeRecord.gCost;
-            nodeToUpdate.hCost = nodeRecord.hCost;
-            nodeToUpdate.fCost = nodeRecord.fCost;
-            nodeToUpdate.parent = nodeRecord.parent;
-
+            this.NodeRecords[nodeRecord.NodeIndex] = nodeRecord;
             Open.AddToOpen(nodeRecord);
         }
 
         public void AddToClosed(NodeRecord nodeRecord)
         {
-            var nodeToUpdate = this.NodeRecords.SingleOrDefault(x => x.NodeIndex == nodeRecord.NodeIndex);
-            nodeToUpdate.status = NodeStatus.Closed;
-            nodeToUpdate.gCost = nodeRecord.gCost;
-            nodeToUpdate.hCost = nodeRecord.hCost;
-            nodeToUpdate.fCost = nodeRecord.fCost;
-            nodeToUpdate.parent = nodeRecord.parent;
-
+            this.NodeRecords[nodeRecord.NodeIndex] = nodeRecord;
         }
 
         public NodeRecord SearchInOpen(NodeRecord nodeRecord)
@@ -130,7 +118,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
         {
             NodeRecord node = Open.GetBestAndRemove();
 
-            var nodeToUpdate = this.NodeRecords.SingleOrDefault(x => x.NodeIndex == node.NodeIndex);
+            var nodeToUpdate = this.NodeRecords[node.NodeIndex];
             nodeToUpdate.status = NodeStatus.Closed;
 
             return this.NodeRecords[node.NodeIndex];
@@ -170,9 +158,9 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
         ICollection<NodeRecord> IClosedSet.All()
         {
             List<NodeRecord> closedNodes = new List<NodeRecord>();
-            foreach(var node in this.NodeRecords)
+            foreach (var node in this.NodeRecords)
             {
-                if(node.status == NodeStatus.Closed)
+                if (node.status == NodeStatus.Closed)
                 {
                     closedNodes.Add(node);
                 }

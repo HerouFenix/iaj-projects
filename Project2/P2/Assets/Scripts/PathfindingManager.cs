@@ -89,6 +89,7 @@ public class PathfindingManager : MonoBehaviour
                 this.pathfinding = new NodeArrayAStarPathfinding(width, height, cellSize, heuristic);
                 break;
             case "JPS+":
+                this.pathfinding = new JPSPlusPathfinding(width, height, cellSize, heuristic);
                 break;
             default:
                 this.pathfinding = new AStarPathfinding(width, height, cellSize, new SimpleUnorderedNodeList(), new ClosedDictionary(), heuristic);
@@ -97,6 +98,13 @@ public class PathfindingManager : MonoBehaviour
 
         visualGrid = new GameObject[width, height];
         GridMapVisual();
+
+        // Apply preprocessing
+        if (this.searchAlgorithm.Equals("NodeArrayA*") || this.searchAlgorithm.Equals("JPS+"))
+        {
+            this.pathfinding.MapPreprocessing();
+        }
+
         pathfinding.grid.OnGridValueChanged += Grid_OnGridValueChange;
 
         // Retrieving the Debug Components
