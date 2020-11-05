@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Assets.Scripts.IAJ.Unity.Utils;
 
 namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
@@ -31,6 +32,18 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
         public NodeRecord PeekBest()
         {
             return this.OpenHeap.Peek();
+        }
+
+        public NodeRecord GetBestAndRemoveTieBreaking()
+        {
+            //TODO implement
+            throw new NotImplementedException();
+        }
+
+        public NodeRecord PeekBestTieBreaking()
+        {
+            //TODO implement
+            throw new NotImplementedException();
         }
 
         public void AddToOpen(NodeRecord nodeRecord)

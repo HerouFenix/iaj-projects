@@ -19,7 +19,7 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
             this.Target = new KinematicData();
             this.MaxSpeed = 2.0f;
             this.StopRadius = 0.0f;
-            this.SlowRadius = 2.5f;
+            this.SlowRadius = 6.5f;
         }
 
         public override string Name

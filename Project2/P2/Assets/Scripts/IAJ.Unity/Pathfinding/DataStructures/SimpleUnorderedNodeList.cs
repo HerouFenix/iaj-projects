@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
 {
@@ -15,10 +16,15 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
 
         public void Initialize()
         {
-            this.NodeRecords.Clear(); 
+            this.NodeRecords.Clear();
         }
 
         public int CountOpen()
+        {
+            return this.NodeRecords.Count;
+        }
+
+        public int CountClosed()
         {
             return this.NodeRecords.Count;
         }
@@ -87,6 +93,37 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
             //so here I'm just using a lambda that compares the first element with the second and returns the lowest
             //by applying this to the whole list, I'm returning the node with the lowest F value.
             return this.NodeRecords.Aggregate((nodeRecord1, nodeRecord2) => nodeRecord1.fCost < nodeRecord2.fCost ? nodeRecord1 : nodeRecord2);
+        }
+
+        public NodeRecord GetBestAndRemoveTieBreaking()
+        {
+            var best = this.PeekBestTieBreaking();
+            this.NodeRecords.Remove(best);
+            return best;
+        }
+
+        public NodeRecord PeekBestTieBreaking()
+        {
+
+
+            NodeRecord best = this.NodeRecords.Aggregate((nodeRecord1, nodeRecord2) => (nodeRecord1.fCost < nodeRecord2.fCost ? nodeRecord1 : (nodeRecord1.fCost > nodeRecord2.fCost ? nodeRecord2 : (nodeRecord1.hCost < nodeRecord2.hCost ? nodeRecord1 : nodeRecord2))));
+
+            // Used for DEBUG
+            //foreach (NodeRecord node1 in this.NodeRecords)
+            //{
+            //    if (node1.x == best.x && node1.y == best.y)
+            //    {
+            //        continue;
+            //    }
+            //
+            //    if (node1.fCost == best.fCost)
+            //    {
+            //        Debug.Log(best);
+            //    }
+            //}
+
+            return best;
+
         }
     }
 }

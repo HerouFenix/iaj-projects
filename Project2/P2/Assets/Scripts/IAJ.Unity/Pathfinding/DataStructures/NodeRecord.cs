@@ -23,6 +23,8 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
         public NodeStatus status;
         public bool isWalkable;
 
+        public bool solveTies;
+
         public static int next_index = 0;
         public int NodeIndex;
 
@@ -39,7 +41,13 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
 
         public int CompareTo(NodeRecord other)
         {
-            return this.fCost.CompareTo(other.fCost);
+            var comp = this.fCost.CompareTo(other.fCost);
+            if (this.solveTies && comp == 0)
+            {
+                comp = this.hCost.CompareTo(other.hCost);
+            }
+
+            return comp;
         }
 
         public NodeRecord(int x, int y)

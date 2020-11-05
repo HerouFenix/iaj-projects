@@ -14,5 +14,8 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
         NodeRecord SearchInOpen(NodeRecord nodeRecord);
         ICollection<NodeRecord> All();
         int CountOpen();
+
+        NodeRecord GetBestAndRemoveTieBreaking();
+        NodeRecord PeekBestTieBreaking();
     }
 }

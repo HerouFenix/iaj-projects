@@ -35,6 +35,18 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
             throw new NotImplementedException();
         }
 
+        public NodeRecord GetBestAndRemoveTieBreaking()
+        {
+            //TODO implement
+            throw new NotImplementedException();
+        }
+
+        public NodeRecord PeekBestTieBreaking()
+        {
+            //TODO implement
+            throw new NotImplementedException();
+        }
+
         public void AddToOpen(NodeRecord nodeRecord)
         {
             //a little help here, notice the difference between this method and the one for the LeftPriority list

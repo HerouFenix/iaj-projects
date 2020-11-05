@@ -131,6 +131,21 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
             return Open.PeekBest();
         }
 
+        public NodeRecord GetBestAndRemoveTieBreaking()
+        {
+            NodeRecord node = Open.GetBestAndRemove();
+
+            var nodeToUpdate = this.NodeRecords[node.NodeIndex];
+            nodeToUpdate.status = NodeStatus.Closed;
+
+            return this.NodeRecords[node.NodeIndex];
+        }
+
+        public NodeRecord PeekBestTieBreaking()
+        {
+            return Open.PeekBest();
+        }
+
         public void Replace(NodeRecord nodeToBeReplaced, NodeRecord nodeToReplace)
         {
             this.NodeRecords[nodeToBeReplaced.NodeIndex] = nodeToReplace;
@@ -173,6 +188,19 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
         public int CountOpen()
         {
             return this.Open.CountOpen();
+        }
+
+        public int CountClosed()
+        {
+            int i = 0;
+            foreach (NodeRecord node in this.NodeRecords)
+            {
+                if (node.status == NodeStatus.Closed)
+                {
+                    i++;
+                }
+            }
+            return i;
         }
     }
 }

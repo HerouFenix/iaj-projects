@@ -11,10 +11,10 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
     {
         public NodeRecordArray NodeRecords;
         public Dictionary<string, string[]> ValidLookupTable;
+        public float CellSize;
 
-        public JPSPlusPathfinding(int width, int height, float cellSize, IHeuristic heuristic) : base(width, height, cellSize, null, null, heuristic)
+        public JPSPlusPathfinding(int width, int height, float cellSize, IHeuristic heuristic, bool tieBreaking) : base(width, height, cellSize, null, null, heuristic, tieBreaking)
         {
-
             // Valid Directions
             this.ValidLookupTable = new Dictionary<string, string[]>();
             this.ValidLookupTable.Add("S", new string[] { "W", "SW", "S", "SE", "E" });
@@ -25,6 +25,9 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             this.ValidLookupTable.Add("NW", new string[] { "N", "NW", "W" });
             this.ValidLookupTable.Add("W", new string[] { "N", "NW", "W", "SW", "S" });
             this.ValidLookupTable.Add("SW", new string[] { "W", "SW", "S" });
+
+            this.CellSize = cellSize;
+            this.TieBreaking = tieBreaking;
         }
 
         override public void MapPreprocessing()
@@ -37,11 +40,9 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             sweepUpDown(); //Up to Down and Down to Up
             sweepUpDiagonally(); // DownRight and DownLeft
             sweepDownDiagonally(); // UpRight and UpLeft
-
-            //Debug.Log(this.NodeRecords);
         }
-        
-        // Can Be Optimized!
+
+
         private void checkJumpPoint(NodeRecord node)
         {
             NodeRecord left = null;
@@ -148,10 +149,8 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                 {
                     //Add records to list
                     var currentNode = GetNode(x, y);
-
+                    currentNode.solveTies = this.TieBreaking;
                     checkJumpPoint(currentNode);
-                    
-
                     nodes.Add(currentNode);
                 }
 
@@ -333,9 +332,9 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
 
         private void sweepUpDiagonally()
         {
-            for(int r = 0; r < grid.getHeight(); ++r)
+            for (int r = 0; r < grid.getHeight(); ++r)
             {
-                for(int c = 0; c < grid.getWidth(); ++c)
+                for (int c = 0; c < grid.getWidth(); ++c)
                 {
                     var currentNode = this.NodeRecords.GetNodeRecord(GetNode(c, r));
 
@@ -344,32 +343,33 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                         bool incrementFromLast = true;
 
                         // SOUTHWEST
-                        if(r == 0 || c == 0 || (!GetNode(c,r-1).isWalkable || !GetNode(c-1, r).isWalkable || !GetNode(c-1, r - 1).isWalkable))
+                        if (r == 0 || c == 0 || (!GetNode(c, r - 1).isWalkable || !GetNode(c - 1, r).isWalkable || !GetNode(c - 1, r - 1).isWalkable))
                         {
                             // Wall one away
                             currentNode.distances["SW"] = 0;
                             incrementFromLast = false;
 
-                        }else if(GetNode(c,r-1).isWalkable && GetNode(c-1,r).isWalkable)
+                        }
+                        else if (GetNode(c, r - 1).isWalkable && GetNode(c - 1, r).isWalkable)
                         {
                             NodeRecord testNode = this.NodeRecords.GetNodeRecord(GetNode(c - 1, r - 1));
 
-                            if(testNode.distances["S"] > 0 || testNode.distances["W"] > 0)
+                            if (testNode.distances["S"] > 0 || testNode.distances["W"] > 0)
                             {
                                 // Diagonal one away
                                 currentNode.distances["SW"] = 1;
                                 incrementFromLast = false;
                             }
                         }
-                        
-                        if(incrementFromLast)
+
+                        if (incrementFromLast)
                         {
                             // Increment from last
                             NodeRecord testNode = this.NodeRecords.GetNodeRecord(GetNode(c - 1, r - 1));
 
                             int jumpDistance = testNode.distances["SW"];
 
-                            if(jumpDistance > 0)
+                            if (jumpDistance > 0)
                             {
                                 currentNode.distances["SW"] = 1 + jumpDistance;
                             }
@@ -397,10 +397,10 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                                 currentNode.distances["SE"] = 1;
                                 incrementFromLast = false;
                             }
-                            
+
                         }
 
-                        if(incrementFromLast)
+                        if (incrementFromLast)
                         {
                             // Increment from last
                             NodeRecord testNode = this.NodeRecords.GetNodeRecord(GetNode(c + 1, r - 1));
@@ -423,7 +423,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
 
         private void sweepDownDiagonally()
         {
-            for (int r = grid.getHeight()-1; r >= 0; --r)
+            for (int r = grid.getHeight() - 1; r >= 0; --r)
             {
                 for (int c = 0; c < grid.getWidth(); ++c)
                 {
@@ -450,9 +450,9 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                                 currentNode.distances["NW"] = 1;
                                 incrementFromLast = false;
                             }
-                            
+
                         }
-                        if (incrementFromLast) 
+                        if (incrementFromLast)
                         {
                             // Increment from last
                             NodeRecord testNode = this.NodeRecords.GetNodeRecord(GetNode(c - 1, r + 1));
@@ -489,9 +489,9 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                                 currentNode.distances["NE"] = 1;
                                 incrementFromLast = false;
                             }
-                            
+
                         }
-                        if(incrementFromLast)
+                        if (incrementFromLast)
                         {
                             // Increment from last
                             NodeRecord testNode = this.NodeRecords.GetNodeRecord(GetNode(c + 1, r + 1));
@@ -512,7 +512,6 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             }
         }
 
-
         override public void InitializePathfindingSearch(int startX, int startY, int goalX, int goalY)
         {
             this.StartPositionX = startX;
@@ -529,6 +528,11 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             this.TotalProcessingTime = 0.0f;
             this.TotalExploredNodes = 0;
             this.MaxOpenNodes = 0;
+            this.MaxClosedNodes = 0;
+            this.MaxNodeProcessingTime = 0;
+            this.MinNodeProcessingTime = -1;
+            this.AllNodesProcessingTime = new List<float>();
+            this.Fill = 0;
 
             var initialNode = this.NodeRecords.GetNodeRecord(StartNode);
             initialNode.gCost = 0;
@@ -577,13 +581,6 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
 
         private bool inGeneralDirection(NodeRecord start, string direction)
         {
-            //float diff = DiagonalDistance(start, this.GoalNode);
-            //bool isRemainder = (Mathf.Abs(diff % Mathf.Sqrt(2) - 0.0f) <= 0.1f);
-            //if (!isRemainder)
-            //{
-            //    return false;
-            //}
-
             switch (direction)
             {
                 case "NE":
@@ -617,13 +614,13 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
 
             return false;
         }
-        
+
         private bool inExactDirection(NodeRecord node, string direction)
         {
             switch (direction)
             {
                 case "N":
-                    if(this.GoalNode.x == node.x && this.GoalNode.y > node.y)
+                    if (this.GoalNode.x == node.x && this.GoalNode.y > node.y)
                         return true;
                     break;
                 case "S":
@@ -647,6 +644,8 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
 
         override public bool Search(out List<NodeRecord> solution, bool returnPartialSolution = false, int totalNodesSearched = 0)
         {
+            float currentTime = Time.realtimeSinceStartup;
+
             int openSize = this.NodeRecords.CountOpen();
             // Check if our open list is now bigger than our all-time maximum
             if (openSize > this.MaxOpenNodes)
@@ -658,17 +657,22 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             if (openSize == 0)
             {
                 solution = null;
+                this.AllNodesProcessingTime.Add(Time.realtimeSinceStartup - currentTime);
                 return false;
             }
 
             // CurrentNode is the best one from the Open set, start with that
             var currentNode = this.NodeRecords.GetBestAndRemove();
+            this.grid.SetGridObject(currentNode.x, currentNode.y, currentNode);
+
+            float givenCost = 0.0f;
 
             this.TotalExploredNodes++;  // Increment total number of explored nodes counter
 
             // Check if the current node is the goal node
             if (currentNode.x == this.GoalPositionX && currentNode.y == this.GoalPositionY)
             {
+                this.AllNodesProcessingTime.Add(Time.realtimeSinceStartup - currentTime);
                 solution = this.CalculatePath(currentNode);
                 return true;
             }
@@ -677,9 +681,9 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
 
             // Check which direction we're coming from
             string[] possibleDirections;
-            if(parentNode == null)
+            if (parentNode == null)
             { // Initially we can go in any direction
-                possibleDirections = new string[]{ "N","S","E","W", "SW", "NW", "SE", "NE"};
+                possibleDirections = new string[] { "N", "S", "E", "W", "SW", "NW", "SE", "NE" };
             }
             else
             {
@@ -687,7 +691,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             }
 
             // Iterate over all possible traveling directions
-            foreach(var direction in possibleDirections)
+            foreach (var direction in possibleDirections)
             {
                 NodeRecord newSuccessor = null;
 
@@ -698,11 +702,17 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                 {
                     // Goal is closer than wall distance or closer than (or equal to) Jump Point Distance
                     newSuccessor = this.GoalNode;
-                } else if ( //Diagonals
-                         inGeneralDirection(currentNode, direction) &&
-                         ((rowDistance(currentNode, this.GoalNode) <= Mathf.Abs(currentNode.distances[direction])) ||
-                         (colDistance(currentNode, this.GoalNode) <= Mathf.Abs(currentNode.distances[direction])))
-                       ){
+                    givenCost = currentNode.gCost + (MOVE_STRAIGHT_COST * DiagonalDistance(currentNode, this.GoalNode));
+                }
+                else if ( //Diagonals
+                       !isCardinal(direction) &&
+                       inGeneralDirection(currentNode, direction) &&
+                       (
+                        (rowDistance(currentNode, this.GoalNode) <= Mathf.Abs(currentNode.distances[direction])) ||
+                        (colDistance(currentNode, this.GoalNode) <= Mathf.Abs(currentNode.distances[direction]))
+                       )
+                     )
+                {
                     // Goal is closer or equal in either row or column than wall or jump point distance
                     // Create a target jump point
                     int minDiff = Mathf.Min(rowDistance(currentNode, this.GoalNode), colDistance(currentNode, this.GoalNode));
@@ -731,9 +741,10 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                     }
 
                     newSuccessor = this.NodeRecords.GetNodeRecord(GetNode(newX, newY));
+                    givenCost = currentNode.gCost + (MOVE_DIAGONAL_COST * minDiff);
 
-
-                }else if(currentNode.distances[direction] > 0)
+                }
+                else if (currentNode.distances[direction] > 0)
                 {
                     // Jump point in this direction
                     var jumpPointX = currentNode.x;
@@ -770,13 +781,23 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                             break;
                     }
                     newSuccessor = this.NodeRecords.GetNodeRecord(GetNode(jumpPointX, jumpPointY));
-                    
+
+                    givenCost = DiagonalDistance(currentNode, newSuccessor);
+                    if (isCardinal(direction))
+                    {
+                        givenCost *= MOVE_STRAIGHT_COST;
+                    }
+                    else
+                    {
+                        givenCost *= MOVE_DIAGONAL_COST;
+                    }
+
+                    givenCost += currentNode.gCost;
                 }
 
-                if(newSuccessor != null)
+                if (newSuccessor != null)
                 {
-                    this.ProcessSuccessorNode(currentNode, newSuccessor, direction);
-
+                    this.ProcessSuccessorNode(currentNode, newSuccessor, direction, givenCost);
                 }
             }
 
@@ -784,6 +805,8 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             if (totalNodesSearched >= this.NodesPerSearch)
             {
                 solution = null;
+
+                this.AllNodesProcessingTime.Add(Time.realtimeSinceStartup - currentTime);
 
                 if (returnPartialSolution)
                 {
@@ -793,21 +816,43 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             }
             else
             {
+                this.AllNodesProcessingTime.Add(Time.realtimeSinceStartup - currentTime);
                 return this.Search(out solution, returnPartialSolution, ++totalNodesSearched);
             }
         }
 
-        protected void ProcessSuccessorNode(NodeRecord parentNode, NodeRecord neighbourNode, string direction)
+        protected void ProcessSuccessorNode(NodeRecord parentNode, NodeRecord neighbourNode, string direction, float givenCost)
         {
             //this is where you process a child node 
-            var child = this.GenerateChildNodeRecord(parentNode, neighbourNode);
+            var child = new NodeRecord(neighbourNode.x, neighbourNode.y)
+            {
+                parent = parentNode,
+                gCost = givenCost,
+                //gCost = parentNode.gCost + CalculateDistanceCost(parentNode, neighbourNode),
+                hCost = this.Heuristic.H(neighbourNode, this.GoalNode),
+                NodeIndex = neighbourNode.NodeIndex,
+                directions = neighbourNode.directions,
+                distances = neighbourNode.distances,
+                travelingDirection = direction,
+                solveTies = this.TieBreaking
+            };
 
-            //Additional assignments specific to successors
-            child.directions = neighbourNode.directions;
-            child.distances = neighbourNode.distances;
-            child.travelingDirection = direction;
+            child.CalculateFCost();
 
             var node = this.NodeRecords.GetNodeRecord(child);
+
+            //if (node.status != NodeStatus.Open && node.status != NodeStatus.Closed)
+            //{
+            //    child.status = NodeStatus.Open;
+            //    this.NodeRecords.AddToOpen(child);
+            //    this.grid.SetGridObject(child.x, child.y, child);
+            //}
+            //else if (givenCost < node.gCost)
+            //{
+            //    child.status = NodeStatus.Open;
+            //    this.NodeRecords.Replace(node, child);
+            //    this.grid.SetGridObject(child.x, child.y, child);
+            //}
 
             if (node.status == NodeStatus.Open)
             {
@@ -839,20 +884,26 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
 
 
             // Child is neither in closed nor open
-            this.NodeRecords.AddToOpen(child);
             child.status = NodeStatus.Open;
+            this.NodeRecords.AddToOpen(child);
             this.grid.SetGridObject(child.x, child.y, child);
         }
 
-        
+
+
         override public List<NodeRecord> CalculatePath(NodeRecord endNode)
         {
             List<NodeRecord> path = new List<NodeRecord>();
             path.Add(endNode);
             NodeRecord currentNode = endNode;
+
+            uint i = 1;
+
             //Go through the list of nodes from the end to the beggining
             while (currentNode.parent != null)
             {
+                i++;
+
                 NodeRecord intermediateNode = currentNode;
                 while (intermediateNode.x != currentNode.parent.x || intermediateNode.y != currentNode.parent.y)
                 {
@@ -898,10 +949,13 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                 currentNode = currentNode.parent;
 
             }
+
+            this.Fill = this.TotalExploredNodes - i;
             //the list is reversed
             path.Reverse();
             return path;
         }
-        
+
     }
+
 }

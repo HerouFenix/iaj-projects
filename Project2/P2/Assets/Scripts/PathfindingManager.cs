@@ -48,9 +48,11 @@ public class PathfindingManager : MonoBehaviour
 
     //public properties
     public bool partialPath;
-    public bool UseEuclidean;
+    //public String Heuristic;
+    public bool UseEuclidian;
     public String searchAlgorithm;
     public bool spawnCar;
+    public bool TieBreaking;
 
     //Public Debug options
     public bool showCoordinates;
@@ -62,13 +64,20 @@ public class PathfindingManager : MonoBehaviour
     Text debugNodesExplored;
     Text debugMaxOpenSize;
     Text debugSearchTime;
+    Text debugJumpPoint;
+    Text debugDistances;
+    Text debugFill;
+    Text debugMaxNodeProcessingTime;
+    Text debugMinNodeProcessingTime;
+    Text debugAvgNodeProcessingTime;
 
     //Path
     List<NodeRecord> solution;
-
+    float PathCost = 0;
     //Cars
     public List<GameObject> mainCharacterPrefabs;
-    private MainCharacterController car;
+    private MainCharacterController carController;
+    private GameObject carPrefab;
 
     private void Start()
     {
@@ -79,9 +88,22 @@ public class PathfindingManager : MonoBehaviour
         HandleTextFile();
 
         IHeuristic heuristic;
-        if (UseEuclidean)
+        //switch (this.Heuristic)
+        //{
+        //    case "Euclidian":
+        //        heuristic = new EuclideanDistance();
+        //        break;
+        //    case "CellDistance":
+        //        heuristic = new CellDistanceHeuristic(this.cellSize);
+        //        break;
+        //    default:
+        //        heuristic = new ZeroHeuristic();
+        //        break;
+        //}
+
+        if (this.UseEuclidian)
         {
-            heuristic = new EuclideanDistance();
+            heuristic = new EuclideanDistance(this.cellSize);
         }
         else
         {
@@ -91,16 +113,16 @@ public class PathfindingManager : MonoBehaviour
         switch (this.searchAlgorithm)
         {
             case "A*":
-                this.pathfinding = new AStarPathfinding(width, height, cellSize, new SimpleUnorderedNodeList(), new ClosedDictionary(), heuristic);
+                this.pathfinding = new AStarPathfinding(width, height, cellSize, new SimpleUnorderedNodeList(), new ClosedDictionary(), heuristic,TieBreaking);
                 break;
             case "NodeArrayA*":
-                this.pathfinding = new NodeArrayAStarPathfinding(width, height, cellSize, heuristic);
+                this.pathfinding = new NodeArrayAStarPathfinding(width, height, cellSize, heuristic, TieBreaking);
                 break;
             case "JPS+":
-                this.pathfinding = new JPSPlusPathfinding(width, height, cellSize, heuristic);
+                this.pathfinding = new JPSPlusPathfinding(width, height, cellSize, heuristic, TieBreaking);
                 break;
             default:
-                this.pathfinding = new AStarPathfinding(width, height, cellSize, new SimpleUnorderedNodeList(), new ClosedDictionary(), heuristic);
+                this.pathfinding = new AStarPathfinding(width, height, cellSize, new SimpleUnorderedNodeList(), new ClosedDictionary(), heuristic, TieBreaking);
                 break;
         }
 
@@ -126,6 +148,14 @@ public class PathfindingManager : MonoBehaviour
         debugNodesExplored = debugTexts[6];
         debugMaxOpenSize = debugTexts[7];
         debugSearchTime = debugTexts[8];
+
+        debugFill = debugTexts[9];
+        debugMaxNodeProcessingTime = debugTexts[10];
+        debugMinNodeProcessingTime = debugTexts[11];
+        debugAvgNodeProcessingTime = debugTexts[12];
+
+        debugJumpPoint = debugTexts[13];
+        debugDistances = debugTexts[14];
     }
 
     // Update is called once per frame
@@ -175,6 +205,11 @@ public class PathfindingManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             ClearGrid();
+            if(this.carController != null)
+            {
+                this.carController = null;
+                Destroy(this.carPrefab);
+            }
         }
 
 
@@ -223,6 +258,25 @@ public class PathfindingManager : MonoBehaviour
                         debugNodesExplored.text = "# Nodes Explored: " + pathfinding.TotalExploredNodes;
                         debugMaxOpenSize.text = "Max Open Size: " + pathfinding.MaxOpenNodes;
                         debugSearchTime.text = "Total Search Time: " + pathfinding.TotalProcessingTime;
+
+                        debugFill.text = "Fill: " + pathfinding.Fill;
+                        debugMaxNodeProcessingTime.text = "Max. NPT: " + pathfinding.MaxNodeProcessingTime;
+                        debugMinNodeProcessingTime.text = "Min. NPT: " + pathfinding.MinNodeProcessingTime;
+                        debugAvgNodeProcessingTime.text = "Avg. NPT: " + pathfinding.AvgNodeProcessingTime;
+
+                        string text = "JP: [";
+                        foreach(var val in node.directions)
+                        {
+                            text += val+" ";
+                        }
+                        debugJumpPoint.text = text + "]";
+
+                        text = "Dist: [";
+                        foreach (var val in node.distances.Keys)
+                        {
+                            text += val + ":" + node.distances[val] + " ";
+                        }
+                        debugDistances.text = text + "]";
                     }
                 }
 
@@ -233,32 +287,48 @@ public class PathfindingManager : MonoBehaviour
         {
             var finished = this.pathfinding.Search(out this.solution, partialPath);
 
+            this.pathfinding.TotalProcessingTime += Time.deltaTime;
+
             if (finished)
             {
                 this.pathfinding.InProgress = false;
                 DrawPath(this.solution);
+
+                this.pathfinding.setDebugValues();
 
                 // Text Debuggers
                 debugNodesExplored.text = "# Nodes Explored: " + pathfinding.TotalExploredNodes;
                 debugMaxOpenSize.text = "Max Open Size: " + pathfinding.MaxOpenNodes;
                 debugSearchTime.text = "Total Search Time: " + pathfinding.TotalProcessingTime;
 
+                debugFill.text = "Fill: " + pathfinding.Fill;
+                debugMaxNodeProcessingTime.text = "Max. NPT: " + pathfinding.MaxNodeProcessingTime;
+                debugMinNodeProcessingTime.text = "Min. NPT: " + pathfinding.MinNodeProcessingTime;
+                debugAvgNodeProcessingTime.text = "Avg. NPT: " + pathfinding.AvgNodeProcessingTime;
+
+                this.PathCost = 0.0f;
+                for(int i = 1; i < this.solution.Count-2; i++)
+                {
+                    var x = (this.solution[i].x - this.solution[i+1].x);
+                    var y = (this.solution[i].y - this.solution[i + 1].y);
+                    this.PathCost += Mathf.Sqrt((x * x + y * y));
+                }
+
                 // Spawn car
                 if (this.spawnCar)
                 {
-                    if(this.car == null)
+                    if (this.carController != null)
                     {
-                        this.car = CreateCharacter();
-                        car.InitializeMovement();
+                        this.carController = null;
+                        Destroy(this.carPrefab);
+
                     }
 
-                    this.car.Update();
-                    
+                    this.carController = CreateCharacter();
+
+
                 }
             }
-
-            this.pathfinding.TotalProcessingTime += Time.deltaTime;
-
         }
 
     }
@@ -271,36 +341,40 @@ public class PathfindingManager : MonoBehaviour
         var carObject = mainCharacterPrefabs[randomCarPrefab];
 
         // Spawn according to given coordinates;
-        var spawn = pathfinding.grid.GetWorldPosition(this.solution[0].x,this.solution[0].y);
+        var spawn = pathfinding.grid.GetWorldPositionCellCenter(this.solution[0].x,this.solution[0].y);
 
 
         // Now we need a random destination from the remaining 3
         var path = new List<Vector3>();
-        foreach(var node in this.solution){
-            path.Add(pathfinding.grid.GetWorldPosition(node.x,node.y));
+        for(int i = 1; i < this.solution.Count; i++) // Add nodes to path (Except for the first one)
+        {
+            path.Add(pathfinding.grid.GetWorldPositionCellCenter(this.solution[i].x, this.solution[i].y));
+
         }
+
 
         // Instantiate the Prefab within the proper location (spawn)
 
-        var clone = GameObject.Instantiate(carObject);
+        this.carPrefab = GameObject.Instantiate(carObject);
+
         var spawnPosition = new Vector3(spawn.x, 1.0f, spawn.z);
 
         // Initiating the Character Controller with the correct information taken from the Editor
-        var characterController = clone.GetComponent<MainCharacterController>();
+        var characterController = this.carPrefab.GetComponent<MainCharacterController>();
         characterController.character.KinematicData.Position = spawnPosition;
         characterController.path = path;
+        characterController.spawnPosition = spawnPosition;
 
         // SET VARIABLES
-        characterController.MAX_ACCELERATION = 5.0f;
+        characterController.MAX_ACCELERATION = 2.5f;
         characterController.MAX_SPEED = 2.5f;
 
         characterController.X_WORLD_SIZE = pathfinding.grid.getWidth();
         characterController.Z_WORLD_SIZE = pathfinding.grid.getHeight();
 
-        characterController.MAX_LOOK_AHEAD = 2.5f;
+        characterController.MAX_LOOK_AHEAD = 5.0f;
         characterController.AVOID_MARGIN = 1.0f;
 
-        characterController.COLLISION_RADIUS = 1.5f;
 
         return characterController;
     }
@@ -359,13 +433,13 @@ public class PathfindingManager : MonoBehaviour
             for (int y = 0; y < pathfinding.grid.getHeight(); y++)
             {
 
-                visualGrid[x, y] = CreateGridObject(this.gridNodePrefab, pathfinding.grid.GetGridObject(x, y)?.ToString(), cellSize, pathfinding.grid.GetWorldPosition(x, y) + new Vector3(cellSize, 2, cellSize) * 0.5f, 40, Color.black, Color.white);
+                visualGrid[x, y] = CreateGridObject(this.gridNodePrefab, pathfinding.grid.GetGridObject(x, y)?.ToString(), cellSize, pathfinding.grid.GetWorldPosition(x, y) + new Vector3(cellSize, 2, cellSize) * 0.5f, 40, Color.black, Color.white, pathfinding.GetNode(x,y).isWalkable);
             }
         UpdateGrid();
     }
 
     // Instantiating a Grid Object from the prefab, I know, its a lot of small line in a row but its working :)
-    private GameObject CreateGridObject(GameObject prefab, string value, float cellsize, Vector3 position, int fontSize, Color fontColor, Color imageColor)
+    private GameObject CreateGridObject(GameObject prefab, string value, float cellsize, Vector3 position, int fontSize, Color fontColor, Color imageColor, bool walkable)
     {
 
         var obj = GameObject.Instantiate(prefab);
@@ -382,6 +456,12 @@ public class PathfindingManager : MonoBehaviour
         }
         SpriteRenderer s = obj.GetComponent<SpriteRenderer>();
         s.color = imageColor;
+
+        if (!walkable)
+        { // If not walkable, add collider
+            var collider = obj.AddComponent<BoxCollider>();
+            collider.size = new Vector3(1, 1, 1);
+        }
         return obj;
 
     }

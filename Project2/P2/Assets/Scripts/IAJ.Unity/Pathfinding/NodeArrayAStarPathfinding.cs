@@ -11,9 +11,9 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
     {
         public NodeRecordArray NodeRecords;
 
-        public NodeArrayAStarPathfinding(int width, int height, float cellSize, IHeuristic heuristic) : base(width, height, cellSize, null, null, heuristic)
+        public NodeArrayAStarPathfinding(int width, int height, float cellSize, IHeuristic heuristic, bool tieBreaking) : base(width, height, cellSize, null, null, heuristic, tieBreaking)
         {
-            
+            this.TieBreaking = tieBreaking;
         }
 
         public override void MapPreprocessing()
@@ -24,7 +24,9 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                 for (int y = 0; y < grid.getHeight(); y++)
                 {
                     //Add records to list
-                    nodes.Add(GetNode(x, y));
+                    NodeRecord node = GetNode(x, y);
+                    node.solveTies = this.TieBreaking;
+                    nodes.Add(node);
                 }
 
             this.NodeRecords = new NodeRecordArray(nodes);
@@ -43,9 +45,15 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             if (this.StartNode == null || this.GoalNode == null) return;
 
             this.InProgress = true;
+
             this.TotalProcessingTime = 0.0f;
             this.TotalExploredNodes = 0;
             this.MaxOpenNodes = 0;
+            this.MaxClosedNodes = 0;
+            this.MaxNodeProcessingTime = 0;
+            this.MinNodeProcessingTime = -1;
+            this.AllNodesProcessingTime = new List<float>();
+            this.Fill = 0;
 
             this.StartNode.gCost = 0;
             this.StartNode.hCost = this.Heuristic.H(this.StartNode, this.GoalNode);
@@ -59,6 +67,8 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
 
         override public bool Search(out List<NodeRecord> solution, bool returnPartialSolution = false, int totalNodesSearched = 0)
         {
+            float currentTime = Time.realtimeSinceStartup;
+
             int openSize = this.NodeRecords.CountOpen();
             // Check if our open list is now bigger than our all-time maximum
             if (openSize > this.MaxOpenNodes)
@@ -70,6 +80,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             if (openSize == 0)
             {
                 solution = null;
+                this.AllNodesProcessingTime.Add(Time.realtimeSinceStartup - currentTime);
                 return false;
             }
 
@@ -82,11 +93,13 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             if (currentNode.x == this.GoalPositionX && currentNode.y == this.GoalPositionY)
             {
                 solution = this.CalculatePath(currentNode);
+                this.AllNodesProcessingTime.Add(Time.realtimeSinceStartup - currentTime);
                 return true;
             }
 
             // Add current to  closed so we dont re-expand it
             this.NodeRecords.AddToClosed(currentNode);
+            
 
             currentNode.status = NodeStatus.Closed;
             this.grid.SetGridObject(currentNode.x, currentNode.y, currentNode);
@@ -104,6 +117,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             if (totalNodesSearched >= this.NodesPerSearch)
             {
                 solution = null;
+                this.AllNodesProcessingTime.Add(Time.realtimeSinceStartup - currentTime);
 
                 if (returnPartialSolution)
                 {
@@ -113,6 +127,8 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             }
             else
             {
+                this.AllNodesProcessingTime.Add(Time.realtimeSinceStartup - currentTime);
+
                 return this.Search(out solution, returnPartialSolution, ++totalNodesSearched);
             }
         }
@@ -122,6 +138,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
         {
             //this is where you process a child node 
             var child = this.GenerateChildNodeRecord(parentNode, neighbourNode);
+            child.solveTies = this.TieBreaking;
             var node = this.NodeRecords.GetNodeRecord(child);
 
             if (node.status == NodeStatus.Open)

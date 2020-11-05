@@ -43,6 +43,13 @@ namespace Assets.Scripts.Grid
             return new Vector3(x, 0, y) * cellSize;
         }
 
+        public Vector3 GetWorldPositionCellCenter(int x, int y)
+        {
+            var newX = (x * cellSize) + cellSize / 2;
+            var newZ = (y * cellSize) + cellSize / 2;
+            return new Vector3(newX, 0, newZ);
+        }
+
         public int getWidth()
         {
             return this.width;
