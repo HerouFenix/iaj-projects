@@ -7,11 +7,14 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.Heuristics
 {
     public class EuclideanDistance : IHeuristic
     {
-        public float CellSize;
-        public EuclideanDistance(float cellSize)
-        {
-            this.CellSize = cellSize;
-        }
+        protected const int MOVE_STRAIGHT_COST = 10;
+        protected const int MOVE_DIAGONAL_COST = 14;
+
+        //public float CellSize;
+        //public EuclideanDistance(float cellSize)
+        //{
+        //    this.CellSize = cellSize;
+        //}
 
         public float H(NodeRecord node, NodeRecord goalNode)
         {
@@ -21,10 +24,24 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.Heuristics
             //
             //return Mathf.Sqrt(x * x + y * y);
 
-            float x = (goalNode.x - node.x)*this.CellSize;
-            float y = (goalNode.y - node.y)* this.CellSize;
-                        
-            return Mathf.Sqrt(x*x + y*y);
+            //float x = (goalNode.x - node.x)*this.CellSize;
+            //float y = (goalNode.y - node.y)* this.CellSize;
+
+            //float x = (goalNode.x - node.x) * MOVE_STRAIGHT_COST;
+            //float y = (goalNode.y - node.y) * MOVE_STRAIGHT_COST;
+            //
+            //return Mathf.RoundToInt(Mathf.Sqrt(x * x + y * y));
+
+            float x = (goalNode.x - node.x);
+            float y = (goalNode.y - node.y);
+            
+            return Mathf.FloorToInt(Mathf.Sqrt(x * x + y * y) * MOVE_STRAIGHT_COST);
+
+            //int xDistance = Mathf.Abs(goalNode.x - node.x);
+            //int yDistance = Mathf.Abs(goalNode.y - node.y);
+            //int remaining = Mathf.Abs(xDistance - yDistance);
+            //
+            //return MOVE_DIAGONAL_COST * Mathf.Min(xDistance, yDistance) + MOVE_STRAIGHT_COST * remaining;
         }
     }
 }

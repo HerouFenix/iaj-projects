@@ -58,8 +58,8 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
             Vector3 rightWhisker = (Quaternion.Euler(0, 37, 0) * this.Character.velocity);
             */
 
-            Vector3 leftWhisker = MathHelper.Rotate2D(this.Character.velocity, -MathConstants.MATH_PI_6);
-            Vector3 rightWhisker = MathHelper.Rotate2D(this.Character.velocity, MathConstants.MATH_PI_6);
+            Vector3 leftWhisker = MathHelper.Rotate2D(this.Character.velocity, -MathConstants.MATH_PI_4);
+            Vector3 rightWhisker = MathHelper.Rotate2D(this.Character.velocity, MathConstants.MATH_PI_4);
 
             Ray leftRay = new Ray(this.Character.Position, leftWhisker.normalized);
             Ray rightRay = new Ray(this.Character.Position, rightWhisker.normalized);
@@ -69,11 +69,12 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
             bool collision = false;
 
             //Check Collisions
-            if (ObstacleCollider.Raycast(mainRay, out hit, this.MaxLookAhead))
+            if (ObstacleCollider.Raycast(mainRay, out hit, this.MaxLookAhead/2))
             {
                 mainRayColor = Color.red;
                 collision = true;
-            }else if (ObstacleCollider.Raycast(leftRay, out hit, this.MaxLookAhead/2))
+            }else
+            if (ObstacleCollider.Raycast(leftRay, out hit, this.MaxLookAhead/2))
             {
                 leftRayColor = Color.red;
                 collision = true;
@@ -90,7 +91,7 @@ namespace Assets.Scripts.IAJ.Unity.Movement.DynamicMovement
                 movementOutput = base.GetMovement();
             }
 
-            Debug.DrawRay(this.Character.Position, this.Character.velocity.normalized * this.MaxLookAhead, mainRayColor);
+            Debug.DrawRay(this.Character.Position, this.Character.velocity.normalized * this.MaxLookAhead/2, mainRayColor);
             Debug.DrawRay(this.Character.Position, leftWhisker.normalized * this.MaxLookAhead/2, leftRayColor);
             Debug.DrawRay(this.Character.Position, rightWhisker.normalized * this.MaxLookAhead/2, rightRayColor);
 

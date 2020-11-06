@@ -52,7 +52,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             this.InProgress = false;
             this.Heuristic = heuristic;
             //this.NodesPerSearch = uint.MaxValue;
-            this.NodesPerSearch = 15;
+            this.NodesPerSearch = 25;
 
             this.TieBreaking = tieBreaking;
 
@@ -74,8 +74,8 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             this.TotalExploredNodes = 0;
             this.MaxOpenNodes = 0;
             this.MaxClosedNodes = 0;
-            this.MaxNodeProcessingTime = 0;
-            this.MinNodeProcessingTime = -1;
+            this.MaxNodeProcessingTime = int.MinValue;
+            this.MinNodeProcessingTime = int.MaxValue;
             this.AllNodesProcessingTime = new List<float>();
             this.Fill = 0;
 
@@ -178,11 +178,9 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             {
                 if (open.x == child.x && open.y == child.y)
                 {
-
                     // Child is in open
-                    if (open.CompareTo(child) == 1)
+                    if (open.fCost > child.fCost)
                     {
-
                         this.Open.Replace(open, child);
                         child.status = NodeStatus.Open;
                         this.grid.SetGridObject(child.x, child.y, child);
@@ -197,7 +195,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                 if (closed.x == child.x && closed.y == child.y)
                 {
                     // Child is in closed
-                    if (closed.CompareTo(child) == 1)
+                    if (closed.fCost > child.fCost)
                     {
                         this.Closed.RemoveFromClosed(closed);
                         this.Open.AddToOpen(child);
@@ -224,8 +222,10 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                 parent = parent,
                 gCost = parent.gCost + CalculateDistanceCost(parent, neighbour),
                 hCost = this.Heuristic.H(neighbour, this.GoalNode),
-                NodeIndex = neighbour.NodeIndex
+                isWalkable = neighbour.isWalkable,
             };
+
+            childNodeRecord.NodeIndex = neighbour.NodeIndex;
 
             childNodeRecord.CalculateFCost();
 
@@ -270,7 +270,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             return neighbourList;
         }
         */
-        
+
         protected List<NodeRecord> GetNeighbourList(NodeRecord currentNode)
         {
             List<NodeRecord> neighbourList = new List<NodeRecord>();
@@ -281,13 +281,13 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
 
             for (int xx = startX; xx <= endX; xx++)
             {
-                for(int yy = startY; yy <= endY; yy++)
+                for (int yy = startY; yy <= endY; yy++)
                 {
-                    if(xx == 0 && yy == 0)
+                    if (xx == 0 && yy == 0)
                     {
                         continue; // Dont add yourself as a neighbour
                     }
-                    neighbourList.Add(GetNode(currentNode.x+xx, currentNode.y+yy));
+                    neighbourList.Add(GetNode(currentNode.x + xx, currentNode.y + yy));
                 }
             }
 
@@ -341,8 +341,8 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
 
         public virtual void setDebugValues()
         {
-            this.MaxNodeProcessingTime = this.AllNodesProcessingTime[0];
-            this.MinNodeProcessingTime = this.AllNodesProcessingTime[0];
+            this.MaxNodeProcessingTime = int.MinValue;
+            this.MinNodeProcessingTime = int.MaxValue;
             float sum = 0;
             foreach (var time in this.AllNodesProcessingTime)
             {

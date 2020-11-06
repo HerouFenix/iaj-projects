@@ -149,7 +149,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                 {
                     //Add records to list
                     var currentNode = GetNode(x, y);
-                    currentNode.solveTies = this.TieBreaking;
+                    //currentNode.solveTies = this.TieBreaking;
                     checkJumpPoint(currentNode);
                     nodes.Add(currentNode);
                 }
@@ -529,16 +529,16 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             this.TotalExploredNodes = 0;
             this.MaxOpenNodes = 0;
             this.MaxClosedNodes = 0;
-            this.MaxNodeProcessingTime = 0;
-            this.MinNodeProcessingTime = -1;
+            this.MaxNodeProcessingTime = int.MinValue;
+            this.MinNodeProcessingTime = int.MaxValue;
             this.AllNodesProcessingTime = new List<float>();
             this.Fill = 0;
 
             var initialNode = this.NodeRecords.GetNodeRecord(StartNode);
-            initialNode.gCost = 0;
-            initialNode.hCost = this.Heuristic.H(this.StartNode, this.GoalNode);
 
             this.NodeRecords.Initialize();
+            initialNode.gCost = 0;
+            initialNode.hCost = this.Heuristic.H(this.StartNode, this.GoalNode);
 
             initialNode.CalculateFCost();
 
@@ -833,8 +833,8 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                 NodeIndex = neighbourNode.NodeIndex,
                 directions = neighbourNode.directions,
                 distances = neighbourNode.distances,
-                travelingDirection = direction,
-                solveTies = this.TieBreaking
+                travelingDirection = direction
+                //solveTies = this.TieBreaking
             };
 
             child.CalculateFCost();

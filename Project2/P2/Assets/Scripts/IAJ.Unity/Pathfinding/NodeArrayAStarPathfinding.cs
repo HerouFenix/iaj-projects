@@ -10,7 +10,6 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
     public class NodeArrayAStarPathfinding : AStarPathfinding
     {
         public NodeRecordArray NodeRecords;
-
         public NodeArrayAStarPathfinding(int width, int height, float cellSize, IHeuristic heuristic, bool tieBreaking) : base(width, height, cellSize, null, null, heuristic, tieBreaking)
         {
             this.TieBreaking = tieBreaking;
@@ -25,7 +24,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                 {
                     //Add records to list
                     NodeRecord node = GetNode(x, y);
-                    node.solveTies = this.TieBreaking;
+                    //node.solveTies = this.TieBreaking;
                     nodes.Add(node);
                 }
 
@@ -50,16 +49,15 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             this.TotalExploredNodes = 0;
             this.MaxOpenNodes = 0;
             this.MaxClosedNodes = 0;
-            this.MaxNodeProcessingTime = 0;
-            this.MinNodeProcessingTime = -1;
+            this.MaxNodeProcessingTime = int.MinValue;
+            this.MinNodeProcessingTime = int.MaxValue;
             this.AllNodesProcessingTime = new List<float>();
             this.Fill = 0;
 
-            this.StartNode.gCost = 0;
-            this.StartNode.hCost = this.Heuristic.H(this.StartNode, this.GoalNode);
-
             this.NodeRecords.Initialize();
 
+            this.StartNode.gCost = 0;
+            this.StartNode.hCost = this.Heuristic.H(this.StartNode, this.GoalNode);
             this.StartNode.CalculateFCost();
 
             this.NodeRecords.AddToOpen(this.StartNode);
@@ -99,7 +97,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
 
             // Add current to  closed so we dont re-expand it
             this.NodeRecords.AddToClosed(currentNode);
-            
+
 
             currentNode.status = NodeStatus.Closed;
             this.grid.SetGridObject(currentNode.x, currentNode.y, currentNode);
@@ -133,12 +131,13 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             }
         }
 
-
+        /*
         override protected void ProcessChildNode(NodeRecord parentNode, NodeRecord neighbourNode)
         {
             //this is where you process a child node 
             var child = this.GenerateChildNodeRecord(parentNode, neighbourNode);
-            child.solveTies = this.TieBreaking;
+
+            //child.solveTies = this.TieBreaking;
             var node = this.NodeRecords.GetNodeRecord(child);
 
             if (node.status == NodeStatus.Open)
@@ -146,7 +145,6 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                 // Child is in open
                 if (node.CompareTo(child) == 1)
                 {
-
                     child.status = NodeStatus.Open;
                     this.NodeRecords.Replace(node, child);
                     this.grid.SetGridObject(child.x, child.y, child);
@@ -160,9 +158,9 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
                 if (node.CompareTo(child) == 1)
                 {
                     this.NodeRecords.RemoveFromClosed(node);
+                    child.status = NodeStatus.Open;
                     this.NodeRecords.AddToOpen(child);
 
-                    child.status = NodeStatus.Open;
                     this.grid.SetGridObject(child.x, child.y, child);
                 }
 
@@ -175,5 +173,62 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding
             this.NodeRecords.AddToOpen(child);
             this.grid.SetGridObject(child.x, child.y, child);
         }
+        */
+
+         override protected void ProcessChildNode(NodeRecord parentNode, NodeRecord neighbourNode)
+        {
+            //this is where you process a child node 
+            //var child = this.GenerateChildNodeRecord(parentNode, neighbourNode);
+            neighbourNode = this.NodeRecords.GetNodeRecord(neighbourNode);
+            parentNode = this.NodeRecords.GetNodeRecord(parentNode);
+
+            var gCost = parentNode.gCost + CalculateDistanceCost(parentNode, neighbourNode);
+            var hCost = this.Heuristic.H(neighbourNode, this.GoalNode);
+            var fCost = gCost + hCost;
+
+            //child.solveTies = this.TieBreaking;
+            var node = this.NodeRecords.GetNodeRecord(neighbourNode);
+
+            if (node.status == NodeStatus.Open)
+            {
+                // Child is in open
+                if (node.fCost > fCost)
+                {
+                    node.status = NodeStatus.Open;
+                    node.gCost = gCost;
+                    node.hCost = hCost;
+                    node.fCost = fCost;
+                    node.parent = parentNode;
+
+                    this.NodeRecords.Replace(node, node);
+                    this.grid.SetGridObject(node.x, node.y, node);
+                }
+
+                return;
+            }
+            else if (node.status == NodeStatus.Closed)
+            {
+                // Child is in closed
+                if (node.fCost > fCost)
+                {
+                    this.NodeRecords.RemoveFromClosed(node);
+
+                    node.status = NodeStatus.Open;
+                    this.NodeRecords.AddToOpen(node.NodeIndex, gCost, hCost, fCost, parentNode.NodeIndex);
+
+                    this.grid.SetGridObject(node.x, node.y, node);
+                }
+
+                return;
+            }
+
+
+            // Child is neither in closed nor open
+            node.status = NodeStatus.Open;
+            this.NodeRecords.AddToOpen(node.NodeIndex, gCost, hCost, fCost, parentNode.NodeIndex);
+            this.grid.SetGridObject(node.x, node.y, node);
+        }
+        
+
     }
 }

@@ -53,6 +53,7 @@ public class PathfindingManager : MonoBehaviour
     public String searchAlgorithm;
     public bool spawnCar;
     public bool TieBreaking;
+    public bool UsePriorityMovement;
 
     //Public Debug options
     public bool showCoordinates;
@@ -79,6 +80,8 @@ public class PathfindingManager : MonoBehaviour
     private MainCharacterController carController;
     private GameObject carPrefab;
 
+    private List<GameObject> obstacles = new List<GameObject>();
+
     private void Start()
     {
         gridPath = "Assets/Resources/" + gridName + ".txt";
@@ -103,7 +106,8 @@ public class PathfindingManager : MonoBehaviour
 
         if (this.UseEuclidian)
         {
-            heuristic = new EuclideanDistance(this.cellSize);
+            //heuristic = new EuclideanDistance(this.cellSize);
+            heuristic = new EuclideanDistance();
         }
         else
         {
@@ -364,6 +368,10 @@ public class PathfindingManager : MonoBehaviour
         characterController.character.KinematicData.Position = spawnPosition;
         characterController.path = path;
         characterController.spawnPosition = spawnPosition;
+        characterController.cellSize = this.cellSize;
+        characterController.obstacles = this.obstacles.ToArray();
+        characterController.USE_PRIORITY = this.UsePriorityMovement;
+
 
         // SET VARIABLES
         characterController.MAX_ACCELERATION = 2.5f;
@@ -372,8 +380,9 @@ public class PathfindingManager : MonoBehaviour
         characterController.X_WORLD_SIZE = pathfinding.grid.getWidth();
         characterController.Z_WORLD_SIZE = pathfinding.grid.getHeight();
 
-        characterController.MAX_LOOK_AHEAD = 5.0f;
-        characterController.AVOID_MARGIN = 1.0f;
+        characterController.CULL_LOOK_ITERATION = 5.0f;
+        characterController.MAX_LOOK_AHEAD = 10.0f;
+        characterController.AVOID_MARGIN = 5f;
 
 
         return characterController;
@@ -461,6 +470,7 @@ public class PathfindingManager : MonoBehaviour
         { // If not walkable, add collider
             var collider = obj.AddComponent<BoxCollider>();
             collider.size = new Vector3(1, 1, 1);
+            obstacles.Add(obj);
         }
         return obj;
 

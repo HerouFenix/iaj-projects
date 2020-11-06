@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using UnityEngine;
 namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
 {
     public class NodeRecordArray : IOpenSet, IClosedSet
@@ -9,7 +9,7 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
         private NodeRecord[] NodeRecords { get; set; }
         private List<NodeRecord> SpecialCaseNodes { get; set; }
         private NodePriorityHeap Open { get; set; }
-
+        
         public NodeRecordArray(List<NodeRecord> nodes)
         {
             //this method creates and initializes the NodeRecordArray for all nodes in the Navigation Graph
@@ -59,6 +59,9 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
             for (int i = 0; i < this.NodeRecords.Length; i++)
             {
                 this.NodeRecords[i].status = NodeStatus.Unvisited;
+                this.NodeRecords[i].parent = null;
+                this.NodeRecords[i].gCost = int.MaxValue;
+                this.NodeRecords[i].fCost = int.MaxValue;
             }
 
             this.SpecialCaseNodes.Clear();
@@ -85,13 +88,32 @@ namespace Assets.Scripts.IAJ.Unity.Pathfinding.DataStructures
         {
             nodeRecord.status = NodeStatus.Open;
             this.NodeRecords[nodeRecord.NodeIndex] = nodeRecord;
+
             Open.AddToOpen(nodeRecord);
+        }
+
+        public void AddToOpen(int index, float gCost, float hCost, float fCost, int parentIndex)
+        {
+            var nodeToUpdate = this.NodeRecords[index];
+            nodeToUpdate.status = NodeStatus.Open;
+            nodeToUpdate.gCost = gCost;
+            nodeToUpdate.hCost = hCost;
+            nodeToUpdate.fCost = fCost;
+            nodeToUpdate.parent = this.NodeRecords[parentIndex];
+
+            //nodeRecord.status = NodeStatus.Open;
+            //this.NodeRecords[nodeRecord.NodeIndex] = nodeRecord;
+
+            Open.AddToOpen(this.NodeRecords[index]);
         }
 
         public void AddToClosed(NodeRecord nodeRecord)
         {
-            nodeRecord.status = NodeStatus.Closed;
-            this.NodeRecords[nodeRecord.NodeIndex] = nodeRecord;
+            //nodeRecord.status = NodeStatus.Closed;
+            //this.NodeRecords[nodeRecord.NodeIndex] = nodeRecord;
+
+            var nodeToUpdate = this.NodeRecords[nodeRecord.NodeIndex];
+            nodeToUpdate.status = NodeStatus.Closed;
         }
 
         public NodeRecord SearchInOpen(NodeRecord nodeRecord)

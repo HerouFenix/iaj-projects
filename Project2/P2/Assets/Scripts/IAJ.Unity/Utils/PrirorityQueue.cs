@@ -71,7 +71,7 @@ namespace Assets.Scripts.IAJ.Unity.Utils
                 throw new InvalidOperationException("Priority queue is empty");
         }
 
-      
+
 
         /// <summary>
         /// Returns priority and value of the element with minimun priority, without removing it from the queue
@@ -298,7 +298,7 @@ namespace Assets.Scripts.IAJ.Unity.Utils
             {
                 if (this._baseHeap[i].Equals(item))
                 {
-                    
+
                     return this._baseHeap[i];
                 }
             }
