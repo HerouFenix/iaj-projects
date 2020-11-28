@@ -53,13 +53,13 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.ForwardModel.ForwardModelActio
             this.Character.GameManager.SwordAttack(this.Target);
         }
 
-        public override void ApplyActionEffects(WorldModel worldModel)
+        public override void ApplyActionEffects(IWorldModel IWorldModel)
         {
-            base.ApplyActionEffects(worldModel);
+            base.ApplyActionEffects(IWorldModel);
 
-            int hp = (int)worldModel.GetProperty(Properties.HP);
-            int shieldHp = (int)worldModel.GetProperty(Properties.ShieldHP);
-            int xp = (int)worldModel.GetProperty(Properties.XP);
+            int hp = (int)IWorldModel.GetProperty(Properties.HP);
+            int shieldHp = (int)IWorldModel.GetProperty(Properties.ShieldHP);
+            int xp = (int)IWorldModel.GetProperty(Properties.XP);
 
             int damage = 0;
             if (this.Character.GameManager.StochasticWorld)
@@ -79,12 +79,12 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.ForwardModel.ForwardModelActio
             if(remainingDamage > 0)
             {
                 remainingHP = (hp - remainingDamage);
-                worldModel.SetProperty(Properties.HP, remainingHP);
+                IWorldModel.SetProperty(Properties.HP, remainingHP);
             }
 
-            worldModel.SetProperty(Properties.ShieldHP, remainingShield);
-            var surviveValue = worldModel.GetGoalValue(AutonomousCharacter.SURVIVE_GOAL);
-            worldModel.SetGoalValue(AutonomousCharacter.SURVIVE_GOAL, surviveValue + remainingDamage);
+            IWorldModel.SetProperty(Properties.ShieldHP, remainingShield);
+            var surviveValue = IWorldModel.GetGoalValue(AutonomousCharacter.SURVIVE_GOAL);
+            IWorldModel.SetGoalValue(AutonomousCharacter.SURVIVE_GOAL, surviveValue + remainingDamage);
 
 
             //calculate Hit
@@ -95,18 +95,18 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.ForwardModel.ForwardModelActio
             {
                 //there was an hit, enemy is destroyed, gain xp
                 //disables the target object so that it can't be reused again
-                worldModel.SetProperty(this.Target.name, false);
-                worldModel.SetProperty(Properties.XP, xp + this.xpChange);
+                IWorldModel.SetProperty(this.Target.name, false);
+                IWorldModel.SetProperty(Properties.XP, xp + this.xpChange);
             }
         }
 
-        public override float GetHValue(WorldModel worldModel)
+        public override float GetHValue(IWorldModel IWorldModel)
         {
-            var hp = (int)worldModel.GetProperty(Properties.HP);
+            var hp = (int)IWorldModel.GetProperty(Properties.HP);
             
             if (hp > this.expectedHPChange)
             {
-                return base.GetHValue(worldModel)/1.5f;
+                return base.GetHValue(IWorldModel)/1.5f;
             }
 
             // Don't attack if you think you're gonna die

@@ -22,10 +22,10 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.ForwardModel.ForwardModelActio
         }
 
 
-        public override bool CanExecute(WorldModel worldModel)
+        public override bool CanExecute(IWorldModel IWorldModel)
         {
-            int mana = (int)worldModel.GetProperty(Properties.MANA);
-            int level = (int)worldModel.GetProperty(Properties.LEVEL);
+            int mana = (int)IWorldModel.GetProperty(Properties.MANA);
+            int level = (int)IWorldModel.GetProperty(Properties.LEVEL);
 
             return level >= 2 && mana >= 5;
         }
@@ -35,15 +35,15 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.ForwardModel.ForwardModelActio
             this.Character.GameManager.Teleport();
         }
 
-        public override void ApplyActionEffects(WorldModel worldModel)
+        public override void ApplyActionEffects(IWorldModel IWorldModel)
         {
-            int mana = (int)worldModel.GetProperty(Properties.MANA);
+            int mana = (int)IWorldModel.GetProperty(Properties.MANA);
 
-            worldModel.SetProperty(Properties.POSITION, this.Character.GameManager.initialPosition);
-            worldModel.SetProperty(Properties.MANA, mana - 5);
+            IWorldModel.SetProperty(Properties.POSITION, this.Character.GameManager.initialPosition);
+            IWorldModel.SetProperty(Properties.MANA, mana - 5);
         }
 
-        public override float GetHValue(WorldModel worldModel)
+        public override float GetHValue(IWorldModel IWorldModel)
         {
             // TODO
             return 0.0f;

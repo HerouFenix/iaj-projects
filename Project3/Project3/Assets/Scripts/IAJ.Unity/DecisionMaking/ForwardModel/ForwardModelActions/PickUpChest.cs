@@ -19,9 +19,9 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.ForwardModel.ForwardModelActio
             return true;
         }
 
-        public override bool CanExecute(WorldModel worldModel)
+        public override bool CanExecute(IWorldModel IWorldModel)
         {
-            if (!base.CanExecute(worldModel)) return false;
+            if (!base.CanExecute(IWorldModel)) return false;
             return true;
         }
 
@@ -32,23 +32,23 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.ForwardModel.ForwardModelActio
             this.Character.GameManager.PickUpChest(this.Target);
         }
 
-        public override void ApplyActionEffects(WorldModel worldModel)
+        public override void ApplyActionEffects(IWorldModel IWorldModel)
         {
-            base.ApplyActionEffects(worldModel);
+            base.ApplyActionEffects(IWorldModel);
 
-            var goalValue = worldModel.GetGoalValue(AutonomousCharacter.GET_RICH_GOAL);
-            worldModel.SetGoalValue(AutonomousCharacter.GET_RICH_GOAL, goalValue - 5.0f);
+            var goalValue = IWorldModel.GetGoalValue(AutonomousCharacter.GET_RICH_GOAL);
+            IWorldModel.SetGoalValue(AutonomousCharacter.GET_RICH_GOAL, goalValue - 5.0f);
 
-            var money = (int)worldModel.GetProperty(Properties.MONEY);
-            worldModel.SetProperty(Properties.MONEY, money + 5);
+            var money = (int)IWorldModel.GetProperty(Properties.MONEY);
+            IWorldModel.SetProperty(Properties.MONEY, money + 5);
 
             //disables the target object so that it can't be reused again
-            worldModel.SetProperty(this.Target.name, false);
+            IWorldModel.SetProperty(this.Target.name, false);
         }
 
-        public override float GetHValue(WorldModel worldModel)
+        public override float GetHValue(IWorldModel IWorldModel)
         {
-            return base.GetHValue(worldModel)/5.0f;
+            return base.GetHValue(IWorldModel)/5.0f;
         }
     }
 }

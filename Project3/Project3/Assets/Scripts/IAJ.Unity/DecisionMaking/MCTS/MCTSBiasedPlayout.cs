@@ -11,11 +11,11 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
     public class MCTSBiasedPlayout : MCTS
     {
 
-        public MCTSBiasedPlayout(CurrentStateWorldModel currentStateWorldModel) : base(currentStateWorldModel)
+        public MCTSBiasedPlayout(IWorldModel currentStateWorldModel) : base(currentStateWorldModel)
         {
         }
 
-        protected double[] Gibbs(Action[] actions, WorldModel state)
+        protected double[] Gibbs(Action[] actions, IWorldModel state)
         {
             var probabilities = new double[actions.Length];
             double heuristicSum = 0.0;
@@ -127,11 +127,11 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         }
         */
 
-        protected override Reward Playout(WorldModel initialPlayoutState)
+        protected override Reward Playout(IWorldModel initialPlayoutState)
         {
             Action[] executableActions;
 
-            WorldModel state = initialPlayoutState.GenerateChildWorldModel();
+            IWorldModel state = initialPlayoutState.GenerateChildWorldModel();
 
             int playoutDepth = 0;
             while (!state.IsTerminal())

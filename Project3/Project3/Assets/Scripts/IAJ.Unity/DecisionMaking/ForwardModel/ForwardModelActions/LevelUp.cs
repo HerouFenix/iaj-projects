@@ -22,10 +22,10 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.ForwardModel.ForwardModelActio
         }
         
 
-        public override bool CanExecute(WorldModel worldModel)
+        public override bool CanExecute(IWorldModel IWorldModel)
         {
-            int xp = (int)worldModel.GetProperty(Properties.XP);
-            int level = (int)worldModel.GetProperty(Properties.LEVEL);
+            int xp = (int)IWorldModel.GetProperty(Properties.XP);
+            int level = (int)IWorldModel.GetProperty(Properties.LEVEL);
 
             return xp >= level * 10;
         }
@@ -35,18 +35,18 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.ForwardModel.ForwardModelActio
             this.Character.GameManager.LevelUp();
         }
 
-        public override void ApplyActionEffects(WorldModel worldModel)
+        public override void ApplyActionEffects(IWorldModel IWorldModel)
         {
-            int maxHP = (int)worldModel.GetProperty(Properties.MAXHP);
-            int level = (int)worldModel.GetProperty(Properties.LEVEL);
+            int maxHP = (int)IWorldModel.GetProperty(Properties.MAXHP);
+            int level = (int)IWorldModel.GetProperty(Properties.LEVEL);
 
-            worldModel.SetProperty(Properties.LEVEL, level + 1);
-            worldModel.SetProperty(Properties.MAXHP, maxHP + 10);
-            worldModel.SetProperty(Properties.XP, (int)0);
-            worldModel.SetGoalValue(AutonomousCharacter.GAIN_LEVEL_GOAL, 0);
+            IWorldModel.SetProperty(Properties.LEVEL, level + 1);
+            IWorldModel.SetProperty(Properties.MAXHP, maxHP + 10);
+            IWorldModel.SetProperty(Properties.XP, (int)0);
+            IWorldModel.SetGoalValue(AutonomousCharacter.GAIN_LEVEL_GOAL, 0);
         }
 
-        public override float GetHValue(WorldModel worldModel)
+        public override float GetHValue(IWorldModel IWorldModel)
         {
             //you would be dumb not to level up if possible
             return -100.0f;

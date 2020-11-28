@@ -19,7 +19,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.ForwardModel.ForwardModelActio
         }
 
 
-        public override bool CanExecute(WorldModel worldModel)
+        public override bool CanExecute(IWorldModel IWorldModel)
         {
             return true;
         }
@@ -29,46 +29,46 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.ForwardModel.ForwardModelActio
             this.Character.GameManager.Rest();
         }
 
-        public override void ApplyActionEffects(WorldModel worldModel)
+        public override void ApplyActionEffects(IWorldModel IWorldModel)
         {
             var duration = 5;
             
-            var quicknessValue = worldModel.GetGoalValue(AutonomousCharacter.BE_QUICK_GOAL);
-            worldModel.SetGoalValue(AutonomousCharacter.BE_QUICK_GOAL, quicknessValue + duration * 0.1f);
+            var quicknessValue = IWorldModel.GetGoalValue(AutonomousCharacter.BE_QUICK_GOAL);
+            IWorldModel.SetGoalValue(AutonomousCharacter.BE_QUICK_GOAL, quicknessValue + duration * 0.1f);
 
             var expectedHPGain = 2;
 
-            var surviveValue = worldModel.GetGoalValue(AutonomousCharacter.SURVIVE_GOAL) - expectedHPGain;
+            var surviveValue = IWorldModel.GetGoalValue(AutonomousCharacter.SURVIVE_GOAL) - expectedHPGain;
 
             if (surviveValue < 0)
             {
                 surviveValue = 0;
             }
-            worldModel.SetGoalValue(AutonomousCharacter.SURVIVE_GOAL, surviveValue);
+            IWorldModel.SetGoalValue(AutonomousCharacter.SURVIVE_GOAL, surviveValue);
 
-            int newHP = (int)worldModel.GetProperty(Properties.HP) + 2;
-            if (newHP > (int)worldModel.GetProperty(Properties.MAXHP))
+            int newHP = (int)IWorldModel.GetProperty(Properties.HP) + 2;
+            if (newHP > (int)IWorldModel.GetProperty(Properties.MAXHP))
             {
-                newHP = (int)worldModel.GetProperty(Properties.MAXHP);
+                newHP = (int)IWorldModel.GetProperty(Properties.MAXHP);
             }
 
-            worldModel.SetProperty(Properties.HP, newHP);
+            IWorldModel.SetProperty(Properties.HP, newHP);
         }
 
-        public override float GetHValue(WorldModel worldModel)
+        public override float GetHValue(IWorldModel IWorldModel)
         {
-            var curHP = (int)worldModel.GetProperty(Properties.HP);
+            var curHP = (int)IWorldModel.GetProperty(Properties.HP);
             if (curHP < 5)
             {
-                return 3.0f;
-            }else if(curHP > (int)worldModel.GetProperty(Properties.MAXHP)-2)
+                return 4.0f;
+            }else if(curHP > (int)IWorldModel.GetProperty(Properties.MAXHP)-2)
             {
-                return 7.5f;
-            }else if(curHP == (int)worldModel.GetProperty(Properties.MAXHP))
+                return 10.0f;
+            }else if(curHP == (int)IWorldModel.GetProperty(Properties.MAXHP))
             {
                 return 100.0f;
             }
-            return 5.0f;
+            return 7.0f;
         }
     }
 }

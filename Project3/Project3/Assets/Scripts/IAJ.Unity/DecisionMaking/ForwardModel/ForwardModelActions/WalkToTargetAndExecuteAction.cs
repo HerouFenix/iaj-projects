@@ -23,9 +23,9 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.ForwardModel.ForwardModelActio
             return this.GetDuration(this.Character.Character.KinematicData.position);
         }
 
-        public override float GetDuration(WorldModel worldModel)
+        public override float GetDuration(IWorldModel IWorldModel)
         {
-            var position = (Vector3)worldModel.GetProperty(Properties.POSITION);
+            var position = (Vector3)IWorldModel.GetProperty(Properties.POSITION);
             return this.GetDuration(position);
         }
 
@@ -40,10 +40,10 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.ForwardModel.ForwardModelActio
             return this.Target != null;
         }
 
-        public override bool CanExecute(WorldModel worldModel)
+        public override bool CanExecute(IWorldModel IWorldModel)
         {
             if (this.Target == null) return false;
-            var targetEnabled = (bool)worldModel.GetProperty(this.Target.name);
+            var targetEnabled = (bool)IWorldModel.GetProperty(this.Target.name);
             return targetEnabled;
         }
 
@@ -62,22 +62,22 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.ForwardModel.ForwardModelActio
         }
 
 
-        public override void ApplyActionEffects(WorldModel worldModel)
+        public override void ApplyActionEffects(IWorldModel IWorldModel)
         {
-            var duration = this.GetDuration(worldModel);
+            var duration = this.GetDuration(IWorldModel);
 
-            var quicknessValue = worldModel.GetGoalValue(AutonomousCharacter.BE_QUICK_GOAL);
-            worldModel.SetGoalValue(AutonomousCharacter.BE_QUICK_GOAL, quicknessValue + duration * 0.1f);
+            var quicknessValue = IWorldModel.GetGoalValue(AutonomousCharacter.BE_QUICK_GOAL);
+            IWorldModel.SetGoalValue(AutonomousCharacter.BE_QUICK_GOAL, quicknessValue + duration * 0.1f);
 
-            var time = (float)worldModel.GetProperty(Properties.TIME);
-            worldModel.SetProperty(Properties.TIME, time + duration);
+            var time = (float)IWorldModel.GetProperty(Properties.TIME);
+            IWorldModel.SetProperty(Properties.TIME, time + duration);
 
-            worldModel.SetProperty(Properties.POSITION, Target.transform.position);
+            IWorldModel.SetProperty(Properties.POSITION, Target.transform.position);
         }
 
-        public override float GetHValue(WorldModel worldModel)
+        public override float GetHValue(IWorldModel IWorldModel)
         {
-            var position = (Vector3)worldModel.GetProperty(Properties.POSITION);
+            var position = (Vector3)IWorldModel.GetProperty(Properties.POSITION);
             var distance = getDistance(position, Target.transform.position);
             return distance* 1/25.0f;
         }

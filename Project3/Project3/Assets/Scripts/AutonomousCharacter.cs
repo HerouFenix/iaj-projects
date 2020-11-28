@@ -43,8 +43,11 @@ namespace Assets.Scripts
         public Text DiaryText;
         public bool MCTSActive;
         public bool MCTSBiasedActive;
+        public bool MCTSLimitedBiasedActive;
+        public bool FEAR;
         public bool Resting = false;
         public float StopRestTime;
+        public bool ChildCulling;
 
         public Goal BeQuickGoal { get; private set; }
         public Goal SurviveGoal { get; private set; }
@@ -161,7 +164,7 @@ namespace Assets.Scripts
 
             this.Actions.Add(new LevelUp(this));
             this.Actions.Add(new Teleport(this));
-            //this.Actions.Add(new Rest(this));
+            this.Actions.Add(new Rest(this));
             this.Actions.Add(new ShieldOfFaith(this));
 
             foreach (var chest in GameObject.FindGameObjectsWithTag("Chest"))
@@ -195,10 +198,23 @@ namespace Assets.Scripts
                 this.Actions.Add(new SwordAttack(this, enemy));
             }
 
-            var worldModel = new CurrentStateWorldModel(this.GameManager, this.Actions, this.Goals);
+            IWorldModel worldModel;
+            if (this.FEAR)
+            {
+                worldModel = new WorldModelFEAR(this.GameManager, this.Actions, this.Goals);
+            }
+            else
+            {
+                worldModel = new CurrentStateWorldModel(this.GameManager, this.Actions, this.Goals);
+            }
+
             this.GOAPDecisionMaking = new DepthLimitedGOAPDecisionMaking(worldModel, this.Actions, this.Goals);
 
-            if (this.MCTSBiasedActive)
+            if (this.MCTSLimitedBiasedActive)
+            {
+                this.MCTSDecisionMaking = new MCTSLimitedBiasedPlayout(worldModel);
+            }
+            else if (this.MCTSBiasedActive)
             {
                 this.MCTSDecisionMaking = new MCTSBiasedPlayout(worldModel);
             }
@@ -206,6 +222,17 @@ namespace Assets.Scripts
             {
                 this.MCTSDecisionMaking = new MCTS(worldModel);
             }
+
+
+            this.GOAPDecisionMaking.fearWorld = this.FEAR;
+            this.MCTSDecisionMaking.fearWorld = this.FEAR;
+
+
+            if (this.ChildCulling)
+            {
+                this.MCTSDecisionMaking.ChildCulling = this.ChildCulling;
+            }
+
             this.Resting = false;
             this.StopRestTime = -1.0f;
 
@@ -225,6 +252,7 @@ namespace Assets.Scripts
             {
                 this.GameManager.WorldChanged = false;
                 this.nextUpdateTime = Time.time + DECISION_MAKING_INTERVAL;
+                this.lookingForPath = false;
 
                 //first step, perceptions
                 //update the agent's goals based on the state of the world
@@ -272,7 +300,7 @@ namespace Assets.Scripts
                 //initialize Decision Making Proccess
                 lookingForPath = false;
                 this.CurrentAction = null;
-                if (this.MCTSActive || this.MCTSBiasedActive)
+                if (this.MCTSActive || this.MCTSBiasedActive || this.MCTSLimitedBiasedActive)
                 {
                     this.MCTSDecisionMaking.InitializeMCTSearch();
                 }
@@ -282,7 +310,7 @@ namespace Assets.Scripts
                 }
             }
 
-            if (this.MCTSActive || this.MCTSBiasedActive)
+            if (this.MCTSActive || this.MCTSBiasedActive || this.MCTSLimitedBiasedActive)
             {
                 this.UpdateMCTS();
             }
@@ -299,7 +327,7 @@ namespace Assets.Scripts
                     { // Started resting
                         this.Resting = true;
                         this.StopRestTime = Time.time + RESTING_INTERVAL;
-                        
+
                     }
 
                     if (Time.time >= this.StopRestTime)
@@ -360,7 +388,7 @@ namespace Assets.Scripts
 
             }
 
-            if(!Resting)
+            if (!Resting)
                 this.Character.Update();
 
             //manage the character's animation

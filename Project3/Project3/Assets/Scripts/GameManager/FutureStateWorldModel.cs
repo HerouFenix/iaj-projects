@@ -23,7 +23,7 @@ namespace Assets.Scripts.GameManager
             this.GameManager = parent.GameManager;
         }
 
-        public override WorldModel GenerateChildWorldModel()
+        public override IWorldModel GenerateChildWorldModel()
         {
             return new FutureStateWorldModel(this);
         }

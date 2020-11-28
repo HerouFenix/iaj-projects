@@ -14,16 +14,19 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.GOB
         public int TotalActionCombinationsProcessed { get; set; }
         public bool InProgress { get; set; }
 
-        public CurrentStateWorldModel InitialWorldModel { get; set; }
+        public IWorldModel InitialWorldModel { get; set; }
+        public IWorldModel NextWorldModel { get; set; }
+
         private List<Goal> Goals { get; set; }
-        private WorldModel[] Models { get; set; }
+        private IWorldModel[] Models { get; set; }
         private Action[] ActionPerLevel { get; set; }
         public Action[] BestActionSequence { get; private set; }
         public Action BestAction { get; private set; }
         public float BestDiscontentmentValue { get; private set; }
         private int CurrentDepth { get; set; }
+        public bool fearWorld;
 
-        public DepthLimitedGOAPDecisionMaking(CurrentStateWorldModel currentStateWorldModel, List<Action> actions, List<Goal> goals)
+        public DepthLimitedGOAPDecisionMaking(IWorldModel currentStateWorldModel, List<Action> actions, List<Goal> goals)
         {
             this.ActionCombinationsProcessedPerFrame = 200;
             this.Goals = goals;
@@ -32,11 +35,17 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.GOB
 
         public void InitializeDecisionMakingProcess()
         {
+            if (fearWorld && NextWorldModel != null)
+            {
+                this.InitialWorldModel = NextWorldModel;
+                this.NextWorldModel = null;
+            }
+
             this.InProgress = true;
             this.TotalProcessingTime = 0.0f;
             this.TotalActionCombinationsProcessed = 0;
             this.CurrentDepth = 0;
-            this.Models = new WorldModel[MAX_DEPTH + 1];
+            this.Models = new IWorldModel[MAX_DEPTH + 1];
             this.Models[0] = this.InitialWorldModel;
             this.ActionPerLevel = new Action[MAX_DEPTH];
             this.BestActionSequence = new Action[MAX_DEPTH];
@@ -110,6 +119,16 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.GOB
             { // In case we couldn't execute any action, try reducing the depth
                 MAX_DEPTH--;
                 this.InitializeDecisionMakingProcess();
+            }
+
+            // Update current world state based on past picked action
+            if (this.fearWorld)
+            {
+                NextWorldModel = this.InitialWorldModel.GenerateChildWorldModel();
+                if (this.BestAction != null)
+                {
+                    this.BestAction.ApplyActionEffects(this.NextWorldModel); // Update initial model
+                }
             }
 
             return this.BestAction;

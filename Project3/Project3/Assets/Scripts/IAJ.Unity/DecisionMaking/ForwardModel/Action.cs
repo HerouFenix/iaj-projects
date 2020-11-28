@@ -40,12 +40,12 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.ForwardModel
             return this.Duration;
         }
 
-        public virtual float GetDuration(WorldModel worldModel)
+        public virtual float GetDuration(IWorldModel IWorldModel)
         {
             return this.Duration;
         }
 
-        public virtual bool CanExecute(WorldModel woldModel)
+        public virtual bool CanExecute(IWorldModel woldModel)
         {
             return true;
         }
@@ -59,11 +59,11 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.ForwardModel
         {
         }
 
-        public virtual void ApplyActionEffects(WorldModel worldModel)
+        public virtual void ApplyActionEffects(IWorldModel IWorldModel)
         {
         }
 
-        public virtual float GetHValue(WorldModel worldModel)
+        public virtual float GetHValue(IWorldModel IWorldModel)
         {
             return 0.0f;
         }

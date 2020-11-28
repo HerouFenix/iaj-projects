@@ -22,9 +22,9 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.ForwardModel.ForwardModelActio
             return base.CanExecute() && this.Character.GameManager.characterData.Mana >= 2;
         }
 
-        public override bool CanExecute(WorldModel worldModel)
+        public override bool CanExecute(IWorldModel IWorldModel)
         {
-            return base.CanExecute(worldModel) && (int)worldModel.GetProperty(Properties.MANA) >= 2;
+            return base.CanExecute(IWorldModel) && (int)IWorldModel.GetProperty(Properties.MANA) >= 2;
         }
 
         public override void Execute()
@@ -33,24 +33,24 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.ForwardModel.ForwardModelActio
             this.Character.GameManager.DivineSmite(this.Target);
         }
 
-        public override void ApplyActionEffects(WorldModel worldModel)
+        public override void ApplyActionEffects(IWorldModel IWorldModel)
         {
-            base.ApplyActionEffects(worldModel);
+            base.ApplyActionEffects(IWorldModel);
 
-            int xpValue = (int)worldModel.GetGoalValue(AutonomousCharacter.GAIN_LEVEL_GOAL);
-            worldModel.SetGoalValue(AutonomousCharacter.GAIN_LEVEL_GOAL, xpValue - expectedXPChange);
+            int xpValue = (int)IWorldModel.GetGoalValue(AutonomousCharacter.GAIN_LEVEL_GOAL);
+            IWorldModel.SetGoalValue(AutonomousCharacter.GAIN_LEVEL_GOAL, xpValue - expectedXPChange);
             
-            int xp = (int)worldModel.GetProperty(Properties.XP);
-            worldModel.SetProperty(Properties.MANA, (int)worldModel.GetProperty(Properties.MANA) - 2);
-            worldModel.SetProperty(Properties.XP, xp + this.xpChange);
+            int xp = (int)IWorldModel.GetProperty(Properties.XP);
+            IWorldModel.SetProperty(Properties.MANA, (int)IWorldModel.GetProperty(Properties.MANA) - 2);
+            IWorldModel.SetProperty(Properties.XP, xp + this.xpChange);
 
-            worldModel.SetProperty(this.Target.name, false);
+            IWorldModel.SetProperty(this.Target.name, false);
         }
 
-        public override float GetHValue(WorldModel worldModel)
+        public override float GetHValue(IWorldModel IWorldModel)
         {
 
-            return base.GetHValue(worldModel) / 1.5f;
+            return base.GetHValue(IWorldModel) / 1.5f;
 
         }
     }

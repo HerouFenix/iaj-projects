@@ -19,9 +19,9 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.ForwardModel.ForwardModelActio
         }
 
 
-        public override bool CanExecute(WorldModel worldModel)
+        public override bool CanExecute(IWorldModel IWorldModel)
         {
-            return (int)worldModel.GetProperty(Properties.MANA) >= 5;
+            return (int)IWorldModel.GetProperty(Properties.MANA) >= 5;
         }
 
         public override void Execute()
@@ -29,22 +29,22 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.ForwardModel.ForwardModelActio
             this.Character.GameManager.ShieldOfFaith();
         }
 
-        public override void ApplyActionEffects(WorldModel worldModel)
+        public override void ApplyActionEffects(IWorldModel IWorldModel)
         {
-            base.ApplyActionEffects(worldModel);
+            base.ApplyActionEffects(IWorldModel);
 
-            var expectedHPGain = 5 - (int)worldModel.GetProperty(Properties.ShieldHP);
+            var expectedHPGain = 5 - (int)IWorldModel.GetProperty(Properties.ShieldHP);
 
-            var surviveValue = worldModel.GetGoalValue(AutonomousCharacter.SURVIVE_GOAL);
-            worldModel.SetGoalValue(AutonomousCharacter.SURVIVE_GOAL, surviveValue - expectedHPGain);
+            var surviveValue = IWorldModel.GetGoalValue(AutonomousCharacter.SURVIVE_GOAL);
+            IWorldModel.SetGoalValue(AutonomousCharacter.SURVIVE_GOAL, surviveValue - expectedHPGain);
 
-            worldModel.SetProperty(Properties.ShieldHP, 5);
-            worldModel.SetProperty(Properties.MANA, (int)worldModel.GetProperty(Properties.MANA)-5);
+            IWorldModel.SetProperty(Properties.ShieldHP, 5);
+            IWorldModel.SetProperty(Properties.MANA, (int)IWorldModel.GetProperty(Properties.MANA)-5);
         }
 
-        public override float GetHValue(WorldModel worldModel)
+        public override float GetHValue(IWorldModel IWorldModel)
         {
-            int addedHP = 5 - (int)worldModel.GetProperty(Properties.ShieldHP);
+            int addedHP = 5 - (int)IWorldModel.GetProperty(Properties.ShieldHP);
 
             if (addedHP == 0)
             { // Makes no sense to try to go get a health potion when you're at max shield HP (i.e addedHP is 0)

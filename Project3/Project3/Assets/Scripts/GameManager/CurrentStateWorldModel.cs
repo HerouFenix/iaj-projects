@@ -21,7 +21,7 @@ namespace Assets.Scripts.GameManager
             }
         }
 
-        public void Initialize()
+        public override void Initialize()
         {
             this.ActionEnumerator.Reset();
         }

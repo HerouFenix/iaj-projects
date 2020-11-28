@@ -5,7 +5,7 @@ using Assets.Scripts.IAJ.Unity.Utils;
 
 namespace Assets.Scripts.IAJ.Unity.DecisionMaking.ForwardModel
 {
-    public class WorldModel
+    public class WorldModel : IWorldModel
     {
         private Dictionary<string, object> Properties { get; set; }
         private List<Action> Actions { get; set; }
@@ -89,7 +89,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.ForwardModel
             this.GoalValues[goalName] = limitedValue;
         }
 
-        public virtual WorldModel GenerateChildWorldModel()
+        public virtual IWorldModel GenerateChildWorldModel()
         {
             return new WorldModel(this);
         }
@@ -114,7 +114,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.ForwardModel
 
             foreach (var goal in goals)
             {
-                var newValue = this.GetGoalValue(goal.Name);
+                var newValue = this.GetGoalValue(goal. Name);
 
                 utility += newValue;
             }
@@ -169,6 +169,11 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.ForwardModel
 
         public virtual void CalculateNextPlayer()
         {
+        }
+
+        public virtual void Initialize()
+        {
+            
         }
     }
 }

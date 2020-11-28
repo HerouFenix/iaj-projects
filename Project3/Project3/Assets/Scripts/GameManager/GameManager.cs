@@ -31,6 +31,10 @@ namespace Assets.Scripts.GameManager
         public bool SleepingNPCs;
         public bool MCTSActive;
         public bool MCTSBiasedActive;
+        public bool MCTSLimitedBiasedPlayout;
+        public bool FEAR;
+        public bool ChildCulling;
+
 
         //fields
         public List<GameObject> chests { get; set; }
@@ -69,6 +73,17 @@ namespace Assets.Scripts.GameManager
                 autonomousCharacter.MCTSActive = true;
             else if (MCTSBiasedActive)
                 autonomousCharacter.MCTSBiasedActive = true;
+            else if(MCTSLimitedBiasedPlayout)
+                autonomousCharacter.MCTSLimitedBiasedActive = true;
+
+            if (FEAR)
+            {
+                autonomousCharacter.FEAR = true;
+            }
+            if (ChildCulling)
+            {
+                autonomousCharacter.ChildCulling = true;
+            }
             cellSize = pathfindingManager.cellSize;
         }
 
@@ -368,6 +383,7 @@ namespace Assets.Scripts.GameManager
             if (this.characterData.Level >= 2 && this.characterData.Mana >= 5)
             {
                 this.character.transform.position = this.initialPosition;
+                this.autonomousCharacter.Character.KinematicData.position = this.initialPosition;
                 this.characterData.Mana -= 5;
                 this.autonomousCharacter.DiaryText.text += Time.time + " Deity of the Helm get me out of here!\n";
                 this.WorldChanged = true;

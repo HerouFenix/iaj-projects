@@ -19,9 +19,9 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.ForwardModel.ForwardModelActio
             return true;
         }
 
-        public override bool CanExecute(WorldModel worldModel)
+        public override bool CanExecute(IWorldModel IWorldModel)
         {
-            if (!base.CanExecute(worldModel)) return false;
+            if (!base.CanExecute(IWorldModel)) return false;
             return true;
         }
 
@@ -32,27 +32,27 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.ForwardModel.ForwardModelActio
             this.Character.GameManager.GetManaPotion(this.Target);
         }
 
-        public override void ApplyActionEffects(WorldModel worldModel)
+        public override void ApplyActionEffects(IWorldModel IWorldModel)
         {
-            base.ApplyActionEffects(worldModel);
+            base.ApplyActionEffects(IWorldModel);
 
-            worldModel.SetProperty(Properties.MANA, 10);
+            IWorldModel.SetProperty(Properties.MANA, 10);
 
             //disables the target object so that it can't be reused again
-            worldModel.SetProperty(this.Target.name, false);
+            IWorldModel.SetProperty(this.Target.name, false);
         }
 
 
 
-        public override float GetHValue(WorldModel worldModel)
+        public override float GetHValue(IWorldModel IWorldModel)
         {
-            int addedMana = 10 - (int)worldModel.GetProperty(Properties.MANA);
+            int addedMana = 10 - (int)IWorldModel.GetProperty(Properties.MANA);
             if (addedMana < 3)
             { // Makes no sense to try to go get a mana potion when you still got so much
                 return 1000f;
             }
 
-            return base.GetHValue(worldModel) / (addedMana * 2.0f); //The more Mana we add, the smaller the HValue
+            return base.GetHValue(IWorldModel) / (addedMana * 2.0f); //The more Mana we add, the smaller the HValue
         }
     }
 }
