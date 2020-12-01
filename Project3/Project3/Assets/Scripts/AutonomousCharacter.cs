@@ -44,6 +44,7 @@ namespace Assets.Scripts
         public bool MCTSActive;
         public bool MCTSBiasedActive;
         public bool MCTSLimitedBiasedActive;
+        public bool MCTSRaveActive;
         public bool FEAR;
         public bool Resting = false;
         public float StopRestTime;
@@ -143,10 +144,10 @@ namespace Assets.Scripts
             this.GetRichGoal = new Goal(GET_RICH_GOAL, 5.0f)
             {
                 InsistenceValue = 5.0f,
-                ChangeRate = 1.0f
+                ChangeRate = 2.0f
             };
 
-            this.BeQuickGoal = new Goal(BE_QUICK_GOAL, 6.0f)
+            this.BeQuickGoal = new Goal(BE_QUICK_GOAL, 4.0f)
             {
                 ChangeRate = 0.1f
             };
@@ -217,6 +218,10 @@ namespace Assets.Scripts
             else if (this.MCTSBiasedActive)
             {
                 this.MCTSDecisionMaking = new MCTSBiasedPlayout(worldModel);
+            }
+            else if (this.MCTSRaveActive)
+            {
+                this.MCTSDecisionMaking = new MCTSRave(worldModel);
             }
             else
             {
@@ -300,7 +305,7 @@ namespace Assets.Scripts
                 //initialize Decision Making Proccess
                 lookingForPath = false;
                 this.CurrentAction = null;
-                if (this.MCTSActive || this.MCTSBiasedActive || this.MCTSLimitedBiasedActive)
+                if (this.MCTSActive || this.MCTSBiasedActive || this.MCTSLimitedBiasedActive || this.MCTSRaveActive)
                 {
                     this.MCTSDecisionMaking.InitializeMCTSearch();
                 }
@@ -310,7 +315,7 @@ namespace Assets.Scripts
                 }
             }
 
-            if (this.MCTSActive || this.MCTSBiasedActive || this.MCTSLimitedBiasedActive)
+            if (this.MCTSActive || this.MCTSBiasedActive || this.MCTSLimitedBiasedActive || this.MCTSRaveActive)
             {
                 this.UpdateMCTS();
             }
@@ -421,6 +426,17 @@ namespace Assets.Scripts
 
             if (this.MCTSDecisionMaking.BestFirstChild != null)
             {
+                this.GameManager.totalProcessingTime += this.MCTSDecisionMaking.TotalProcessingTime;
+                this.GameManager.timeCounter++;
+
+                this.GameManager.totalSelectionDepth += this.MCTSDecisionMaking.MaxSelectionDepthReached;
+                this.GameManager.selectionCounter++;
+
+                this.GameManager.totalPlayoutDepth += this.MCTSDecisionMaking.MaxPlayoutDepthReached;
+                this.GameManager.playoutCounter++;
+
+                this.GameManager.actionCounter++;
+
                 var q = this.MCTSDecisionMaking.BestFirstChild.Q / this.MCTSDecisionMaking.BestFirstChild.N;
                 this.BestDiscontentmentText.text = "Best Exp. Q value: " + q.ToString("F05");
                 var actionText = "";
@@ -467,6 +483,16 @@ namespace Assets.Scripts
 
             if (this.GOAPDecisionMaking.BestAction != null)
             {
+                this.GameManager.totalProcessingTime += this.GOAPDecisionMaking.TotalProcessingTime;
+                this.GameManager.timeCounter++;
+
+                this.GameManager.selectionCounter++;
+
+                this.GameManager.playoutCounter++;
+
+                this.GameManager.totalActionCombos += this.GOAPDecisionMaking.TotalActionCombinationsProcessed;
+                this.GameManager.actionCounter++;
+
                 if (newDecision)
                 {
                     DiaryText.text += Time.time + " I decided to " + GOAPDecisionMaking.BestAction.Name + "\n";

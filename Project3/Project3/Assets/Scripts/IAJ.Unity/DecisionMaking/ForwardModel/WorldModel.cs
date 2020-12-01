@@ -175,5 +175,10 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.ForwardModel
         {
             
         }
+
+        public void UpdateWorldArray()
+        {
+
+        }
     }
 }

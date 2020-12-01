@@ -284,5 +284,50 @@ namespace Assets.Scripts.GameManager
         {
             this.ActionEnumerator.Reset();
         }
+
+        public void UpdateWorldArray()
+        {
+
+            foreach (string key in this.WorldIndexes.Keys)
+            {
+                int index = this.WorldIndexes[key];
+
+                switch (key)
+                {
+                    case Properties.MANA:
+                        this.World[index] = this.GameManager.characterData.Mana;
+                        break;
+                    case Properties.XP:
+                        this.World[index] = this.GameManager.characterData.XP;
+                        break;
+                    case Properties.MAXHP:
+                        this.World[index] = this.GameManager.characterData.MaxHP;
+                        break;
+                    case Properties.HP:
+                        this.World[index] = this.GameManager.characterData.HP;
+                        break;
+                    case Properties.ShieldHP:
+                        this.World[index] = this.GameManager.characterData.ShieldHP;
+                        break;
+                    case Properties.MONEY:
+                        this.World[index] = this.GameManager.characterData.Money;
+                        break;
+                    case Properties.TIME:
+                        this.World[index] = this.GameManager.characterData.Time;
+                        break;
+                    case Properties.LEVEL:
+                        this.World[index] = this.GameManager.characterData.Level;
+                        break;
+                    case Properties.POSITION:
+                        this.World[index] = this.GameManager.characterData.CharacterGameObject.transform.position;
+                        break;
+                    default:
+                        this.World[index] = this.GameManager.disposableObjects.ContainsKey(key);
+                        break;
+                }
+
+            }
+
+        }
     }
 }

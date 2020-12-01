@@ -15,19 +15,34 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
 
         public MCTSLimitedBiasedPlayout(IWorldModel currentStateWorldModel) : base(currentStateWorldModel)
         {
-            this.MaxPlayoutDepth = 15;
+            this.MaxPlayoutDepth = 5;
         }
 
-        protected override Reward Playout(IWorldModel initialPlayoutState)
+        protected override Reward Playout(MCTSNode initialPlayoutState)
         {
             Action[] executableActions;
 
-            IWorldModel state = initialPlayoutState.GenerateChildWorldModel();
+            IWorldModel state = initialPlayoutState.State.GenerateChildWorldModel();
 
             int playoutDepth = 0;
 
             // Heuristics
-            float heuristicScore = 0.0f;
+            float wasted = 0.0f;
+            //float actionTime = 0.0f;
+            //actionTime += initialPlayoutState.Action.GetDuration();
+            //if ((initialPlayoutState.Action.Name.Contains("GetHealthPotion") || initialPlayoutState.Action.Name.Contains("Rest")) && (int)this.InitialNode.State.GetProperty("HP") >= 10)
+            //{
+            //    wasted += 10.0f;
+            //}
+            //else if (initialPlayoutState.Action.Name.Contains("GetManaPotion") && (int)this.InitialNode.State.GetProperty("Mana") == 10)
+            //{
+            //    wasted += 10.0f;
+            //}
+            //else if (initialPlayoutState.Action.Name.Contains("LevelUp"))
+            //{
+            //    wasted -= 10.0f;
+            //}
+
 
             while (!state.IsTerminal())
             {
@@ -49,18 +64,19 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
 
                 Action randomAction = executableActions[randomIndex];
 
-                // Heuristics
-                heuristicScore += randomAction.GetHValue(state)*0.001f;
+                if (randomAction.Name.Contains("GetHealthPotion") && (int)state.GetProperty("HP") == (int)state.GetProperty("MAXHP"))
+                {
+                    wasted += 0.5f;
+                }
+                if (randomAction.Name.Contains("GetManaPotion") && (int)state.GetProperty("Mana") == 10)
+                {
+                    wasted += 0.5f;
+                }
 
-                // HP Wasted
-                if(randomAction.Name.Contains("GetHealthPotion") && (int)state.GetProperty("HP") >= 10)
-                    heuristicScore -= 10.0f;
-                
-                // Mana Lost -> The bigger the Mana loss, the bigger the loss / The Bigger the Mana Gain, the bigger the reward
-                if (randomAction.Name.Contains("GetManaPotion") && (int)state.GetProperty("Mana") >= 7)
-                    heuristicScore -= 10.0f;
+
 
                 randomAction.ApplyActionEffects(state);
+                //actionTime += randomAction.GetDuration();
 
                 playoutDepth++;
 
@@ -76,22 +92,66 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 this.MaxPlayoutDepthReached = playoutDepth;
             }
 
-            // Time Wasted -> The bigger the waste the bigger the loss
-            heuristicScore += ((float)state.GetProperty("Time") - (float)initialPlayoutState.GetProperty("Time"))*0.5f;
-            //
-            //// Money Gain -> The bigger the Money Gain, the bigger the reward
-            heuristicScore -= ((int)state.GetProperty("Money") - (int)initialPlayoutState.GetProperty("Money"))*0.8f;
-
-            float score = state.GetScore() - heuristicScore;
-           
 
             Reward reward = new Reward
             {
-                Value = score,
+                Value = ComputeHeuristicScore(initialPlayoutState.State, state, wasted),
                 PlayerID = state.GetNextPlayer()
             };
 
             return reward;
+        }
+
+        private float ComputeHeuristicScore(IWorldModel initialState, IWorldModel state, float wasted)
+        {
+            if (state.IsTerminal())
+            { // If the node is terminal, get its score as normal
+                return state.GetScore();
+            }
+
+            // Heuristic Score > Bigger == Better
+
+            float maxValue = 0.0f;
+            float minValue = Mathf.Infinity;
+
+            float timeSpent = ((float)state.GetProperty("Time") - (float)this.InitialNode.State.GetProperty("Time"));
+            if (timeSpent > maxValue) maxValue = timeSpent;
+            if (timeSpent < minValue) minValue = timeSpent;
+
+            //float hpChange = ((int)state.GetProperty("HP") - (int)this.InitialNode.State.GetProperty("HP"));
+            //if (hpChange > maxValue) maxValue = hpChange;
+            //if (hpChange < minValue) minValue = hpChange;
+
+            float moneyGained = ((int)state.GetProperty("Money") - (int)this.InitialNode.State.GetProperty("Money"));
+            if (moneyGained > maxValue) maxValue = moneyGained;
+            if (moneyGained < minValue) minValue = moneyGained;
+
+            float lvlGained = ((int)state.GetProperty("Level") - (int)this.InitialNode.State.GetProperty("Level"));
+            if (lvlGained > maxValue) maxValue = lvlGained;
+            if (lvlGained < minValue) minValue = lvlGained;
+
+            float manaGained = ((int)state.GetProperty("Mana") - (int)this.InitialNode.State.GetProperty("Mana"));
+            if (manaGained > maxValue) maxValue = manaGained;
+            if (manaGained < minValue) minValue = manaGained;
+
+            // Normalize
+            timeSpent = (timeSpent - minValue) / (maxValue - minValue);
+            //hpChange = (hpChange - minValue) / (maxValue - minValue);
+            moneyGained = (moneyGained - minValue) / (maxValue - minValue);
+            lvlGained = (lvlGained - minValue) / (maxValue - minValue);
+            manaGained = (manaGained - minValue) / (maxValue - minValue);
+
+            //float heuristicValue = hpChange*0.075f + moneyGained*0.2f + manaGained*0.1f - timeSpent*2f - wasted;
+            float heuristicValue = moneyGained + manaGained*0.8f + lvlGained*2.0f - timeSpent - wasted;
+            if(heuristicValue > 1.0f)
+            {
+                heuristicValue = 1.0f;
+            }else if(heuristicValue < 0.0f)
+            {
+                heuristicValue = 0.0f;
+            }
+
+            return heuristicValue;
         }
 
     }

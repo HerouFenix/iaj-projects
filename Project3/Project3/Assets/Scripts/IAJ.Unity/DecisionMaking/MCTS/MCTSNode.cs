@@ -14,6 +14,10 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         public int N { get; set; }
         public float Q { get; set; }
 
+        public float NRave { get; set; }
+        public float QRave { get; set; }
+
+
         public MCTSNode(IWorldModel state)
         {
             this.State = state;

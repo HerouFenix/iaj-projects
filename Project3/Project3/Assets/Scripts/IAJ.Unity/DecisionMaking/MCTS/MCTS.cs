@@ -48,10 +48,9 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
 
         public void InitializeMCTSearch()
         {
-            if (fearWorld && NextWorldModel != null)
+            if (fearWorld)
             {
-                this.CurrentStateWorldModel = NextWorldModel;
-                this.NextWorldModel = null;
+                this.CurrentStateWorldModel.UpdateWorldArray();
             }
 
             this.MaxPlayoutDepthReached = 0;
@@ -91,12 +90,12 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 selectedNode = this.Selection(this.InitialNode);
 
                 // Playout (Simulate result)
-                reward = this.Playout(selectedNode.State);
+                reward = this.Playout(selectedNode);
 
                 // Do several playouts and get the average reward
                 for (int i = 1; i < this.MaxPlayouts; i++)
                 {
-                    reward.Value += this.Playout(selectedNode.State).Value;
+                    reward.Value += this.Playout(selectedNode).Value;
                 }
                 reward.Value = reward.Value / this.MaxPlayouts;
 
@@ -146,11 +145,11 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             return currentNode;
         }
 
-        protected virtual Reward Playout(IWorldModel initialPlayoutState)
+        protected virtual Reward Playout(MCTSNode initialPlayoutState)
         {
             Action[] executableActions;
 
-            IWorldModel state = initialPlayoutState.GenerateChildWorldModel();
+            IWorldModel state = initialPlayoutState.State.GenerateChildWorldModel();
 
             int playoutDepth = 0;
             while (!state.IsTerminal())
@@ -182,8 +181,6 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         {
             while (node != null)
             {
-                //node.N = node.N + 1;
-                //node.Q = node.Q + reward.Value;
                 node.N = node.N + 1;
                 node.Q = node.Q + reward.Value;
 
@@ -205,7 +202,9 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 Parent = parent,
                 PlayerID = newState.GetNextPlayer(),
                 Q = 0,
-                N = 0
+                N = 0,
+                QRave = 0.0f,
+                NRave = 0.0f
             };
 
             parent.ChildNodes.Add(newNode);
@@ -225,24 +224,28 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 if (this.ChildCulling)
                 {
                     if (child.Action.Name == "LevelUp")
-                    { //  We're removing the really stupid decisions that may happen due to the shitty way were computing score
-                        estimatedValue = 100.0f;
+                    { //  Cull children whose actions involve doing a completely unecessary move
+                        estimatedValue = 10.0f;
                     }
-                    else if (child.Action.Name.Contains("GetHealthPotion") && (int)node.State.GetProperty("HP") == (int)node.State.GetProperty("MAXHP"))
+                    else if (child.Action.Name.Contains("PickUp") && child.Action.GetDuration() <= 0.01f)
                     {
-                        estimatedValue = -100.0f;
+                        estimatedValue = 9.0f;
+                    }
+                    else if (child.Action.Name.Contains("GetHealthPotion") && (int)node.State.GetProperty("HP") >= 10)
+                    {
+                        estimatedValue = -10.0f;
                     }
                     else if (child.Action.Name.Contains("Rest") && (int)node.State.GetProperty("HP") >= 10)
                     {
-                        estimatedValue = -100.0f;
+                        estimatedValue = -10.0f;
                     }
-                    else if (child.Action.Name.Contains("GetManaPotion") && (int)node.State.GetProperty("Mana") >= 5)
+                    else if (child.Action.Name.Contains("GetManaPotion") && (int)node.State.GetProperty("Mana") >= 7)
                     {
-                        estimatedValue = -100.0f;
+                        estimatedValue = -10.0f;
                     }
                     else if (child.Action.Name == "ShieldOfFaith" && (int)node.State.GetProperty("ShieldHP") == 5)
                     {
-                        estimatedValue = -100.0f;
+                        estimatedValue = -10.0f;
                     }
                     else
                     {
@@ -274,7 +277,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
 
         //this method is very similar to the bestUCTChild, but it is used to return the final action of the MCTS search, and so we do not care about
         //the exploration factor
-        protected MCTSNode BestChild(MCTSNode node)
+        protected virtual MCTSNode BestChild(MCTSNode node)
         {
             float bestEstimatedValue = -1.0f;
             MCTSNode bestChild = null;
@@ -284,26 +287,29 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 float estimatedValue;
                 if (this.ChildCulling)
                 {
-
                     if (child.Action.Name == "LevelUp")
-                    { //  We're removing the really stupid decisions that may happen due to the shitty way were computing score
-                        estimatedValue = 100.0f;
+                    { //  Cull children whose actions involve doing a completely unecessary move
+                        estimatedValue = 10.0f;
                     }
-                    else if (child.Action.Name.Contains("GetHealthPotion") && (int)node.State.GetProperty("HP") == (int)node.State.GetProperty("MAXHP"))
+                    else if (child.Action.Name.Contains("PickUp") && child.Action.GetDuration() <= 0.1f)
                     {
-                        estimatedValue = -100.0f;
+                        estimatedValue = 9.0f;
+                    }
+                    else if (child.Action.Name.Contains("GetHealthPotion") && (int)node.State.GetProperty("HP") >= 10)
+                    {
+                        estimatedValue = -10.0f;
                     }
                     else if (child.Action.Name.Contains("Rest") && (int)node.State.GetProperty("HP") >= 10)
                     {
-                        estimatedValue = -1000.0f;
+                        estimatedValue = -10.0f;
                     }
-                    else if (child.Action.Name.Contains("GetManaPotion") && (int)node.State.GetProperty("Mana") >= 5)
+                    else if (child.Action.Name.Contains("GetManaPotion") && (int)node.State.GetProperty("Mana") >= 7)
                     {
-                        estimatedValue = -100.0f;
+                        estimatedValue = -10.0f;
                     }
                     else if (child.Action.Name == "ShieldOfFaith" && (int)node.State.GetProperty("ShieldHP") == 5)
                     {
-                        estimatedValue = -100.0f;
+                        estimatedValue = -10.0f;
                     }
                     else
                     {
@@ -353,18 +359,6 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 this.BestActionSequence.Add(bestChild.Action);
                 node = bestChild;
                 this.BestActionSequenceWorldState = node.State;
-            }
-
-
-            // Update current world state based on past picked action
-            if (this.fearWorld)
-            {
-                NextWorldModel = this.CurrentStateWorldModel.GenerateChildWorldModel();
-                if (this.BestFirstChild.Action != null)
-                {
-                    this.BestFirstChild.Action.ApplyActionEffects(this.NextWorldModel); // Update initial model
-                }
-
             }
 
             return this.BestFirstChild.Action;

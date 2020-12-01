@@ -35,21 +35,21 @@ namespace Assets.Scripts.GameManager
                     this.AC = 10;
                     this.HP = 5;
                     this.dmgRoll = () => RandomHelper.RollD6();
-                    this.simpleDamage = 2;
+                    this.simpleDamage = 3;
                     break;
                 case "Orc":
                     this.XPvalue = 10;
                     this.AC = 14;
                     this.HP = 15;
                     this.dmgRoll = () => RandomHelper.RollD10() +2;
-                    this.simpleDamage = 5;
+                    this.simpleDamage = 8;
                     break;
                 case "Dragon":
                     this.XPvalue = 20;
                     this.AC = 16;
                     this.HP = 30;
                     this.dmgRoll = () => RandomHelper.RollD12() + RandomHelper.RollD12();
-                    this.simpleDamage = 10;
+                    this.simpleDamage = 15;
                     break;
                 default:
                     this.XPvalue = 3;

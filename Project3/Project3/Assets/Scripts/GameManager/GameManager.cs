@@ -18,6 +18,18 @@ namespace Assets.Scripts.GameManager
         public AutonomousCharacter autonomousCharacter { get; private set; }
         public PathfindingManager pathfindingManager;
 
+        public float totalProcessingTime;
+        public float timeCounter = 0;
+
+        public float totalActionCombos;
+        public float actionCounter = 0;
+
+        public float totalSelectionDepth;
+        public float selectionCounter = 0;
+
+        public float totalPlayoutDepth;
+        public float playoutCounter = 0;
+
         public Text HPText;
         public Text ShieldHPText;
         public Text ManaText;
@@ -31,7 +43,8 @@ namespace Assets.Scripts.GameManager
         public bool SleepingNPCs;
         public bool MCTSActive;
         public bool MCTSBiasedActive;
-        public bool MCTSLimitedBiasedPlayout;
+        public bool MCTSLimitedBiasedPlayoutActive;
+        public bool MCTSRaveActive;
         public bool FEAR;
         public bool ChildCulling;
 
@@ -73,8 +86,10 @@ namespace Assets.Scripts.GameManager
                 autonomousCharacter.MCTSActive = true;
             else if (MCTSBiasedActive)
                 autonomousCharacter.MCTSBiasedActive = true;
-            else if(MCTSLimitedBiasedPlayout)
+            else if (MCTSLimitedBiasedPlayoutActive)
                 autonomousCharacter.MCTSLimitedBiasedActive = true;
+            else if (MCTSRaveActive)
+                autonomousCharacter.MCTSRaveActive = true;
 
             if (FEAR)
             {
@@ -211,14 +226,44 @@ namespace Assets.Scripts.GameManager
             {
                 this.GameEnd.SetActive(true);
                 this.gameEnded = true;
-                this.GameEnd.GetComponentInChildren<Text>().text = "You Died";
+
+                if (this.MCTSActive || this.MCTSBiasedActive || this.MCTSLimitedBiasedPlayoutActive || this.MCTSRaveActive)
+                {
+                    this.GameEnd.GetComponentInChildren<Text>().text = "You Died\n" +
+                        "Time Left: " + (this.TIME_LIMIT - this.characterData.Time).ToString() + "\n"
+                        + "Avg Proc. Time: " + (this.totalProcessingTime / this.timeCounter).ToString() + "\n"
+                        + "Avg. Selection Depth: " + (this.totalSelectionDepth / this.selectionCounter).ToString() + "\n"
+                        + "Avg. Playout Depth: " + (this.totalPlayoutDepth / this.playoutCounter).ToString();
+                }
+                else
+                {
+                    this.GameEnd.GetComponentInChildren<Text>().text = "You Died" + "\n"
+                    + "Time Left: " + (this.TIME_LIMIT - this.characterData.Time).ToString() + "\n"
+                    + "Avg Proc. Time: " + (this.totalProcessingTime / this.timeCounter).ToString() + "\n"
+                    + "Avg. Action Combos: " + (this.totalActionCombos / this.actionCounter).ToString();
+                }
             }
             else if (this.characterData.Money >= 25)
             {
                 this.GameEnd.SetActive(true);
                 this.gameEnded = true;
-                this.GameEnd.GetComponentInChildren<Text>().text = "Victory \n GG EZ";
+                if (this.MCTSActive || this.MCTSBiasedActive || this.MCTSLimitedBiasedPlayoutActive || this.MCTSRaveActive)
+                {
+                    this.GameEnd.GetComponentInChildren<Text>().text = "Victory \n GG EZ\n" +
+                        "Time Left: " + (this.TIME_LIMIT - this.characterData.Time).ToString() + "\n"
+                        + "Avg Proc. Time: " + (this.totalProcessingTime / this.timeCounter).ToString() + "\n"
+                        + "Avg. Selection Depth: " + (this.totalSelectionDepth / this.selectionCounter).ToString() + "\n"
+                        + "Avg. Playout Depth: " + (this.totalPlayoutDepth / this.playoutCounter).ToString();
+                }
+                else
+                {
+                    this.GameEnd.GetComponentInChildren<Text>().text = "Victory \n GG EZ\n" +
+                                            "Time Left: " + (this.TIME_LIMIT - this.characterData.Time).ToString() + "\n"
+                                            + "Avg Proc. Time: " + (this.totalProcessingTime / this.timeCounter).ToString() + "\n"
+                                            + "Avg. Action Combos: " + (this.totalActionCombos / this.actionCounter).ToString();
+                }
             }
+
         }
 
         public void SwordAttack(GameObject enemy)

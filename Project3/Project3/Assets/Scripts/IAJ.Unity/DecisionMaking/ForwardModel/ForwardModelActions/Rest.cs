@@ -29,6 +29,11 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.ForwardModel.ForwardModelActio
             this.Character.GameManager.Rest();
         }
 
+        public override float GetDuration()
+        {
+            return 5.0f;
+        }
+
         public override void ApplyActionEffects(IWorldModel IWorldModel)
         {
             var duration = 5;

@@ -127,11 +127,11 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         }
         */
 
-        protected override Reward Playout(IWorldModel initialPlayoutState)
+        protected override Reward Playout(MCTSNode initialPlayoutState)
         {
             Action[] executableActions;
 
-            IWorldModel state = initialPlayoutState.GenerateChildWorldModel();
+            IWorldModel state = initialPlayoutState.State.GenerateChildWorldModel();
 
             int playoutDepth = 0;
             while (!state.IsTerminal())

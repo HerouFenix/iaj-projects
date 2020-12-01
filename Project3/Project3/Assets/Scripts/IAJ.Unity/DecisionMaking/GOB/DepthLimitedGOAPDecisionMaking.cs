@@ -15,7 +15,6 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.GOB
         public bool InProgress { get; set; }
 
         public IWorldModel InitialWorldModel { get; set; }
-        public IWorldModel NextWorldModel { get; set; }
 
         private List<Goal> Goals { get; set; }
         private IWorldModel[] Models { get; set; }
@@ -35,10 +34,9 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.GOB
 
         public void InitializeDecisionMakingProcess()
         {
-            if (fearWorld && NextWorldModel != null)
+            if (fearWorld)
             {
-                this.InitialWorldModel = NextWorldModel;
-                this.NextWorldModel = null;
+                this.InitialWorldModel.UpdateWorldArray();
             }
 
             this.InProgress = true;
@@ -119,16 +117,6 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.GOB
             { // In case we couldn't execute any action, try reducing the depth
                 MAX_DEPTH--;
                 this.InitializeDecisionMakingProcess();
-            }
-
-            // Update current world state based on past picked action
-            if (this.fearWorld)
-            {
-                NextWorldModel = this.InitialWorldModel.GenerateChildWorldModel();
-                if (this.BestAction != null)
-                {
-                    this.BestAction.ApplyActionEffects(this.NextWorldModel); // Update initial model
-                }
             }
 
             return this.BestAction;

@@ -34,5 +34,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.ForwardModel
         int GetNextPlayer();
 
         void CalculateNextPlayer();
+
+        void UpdateWorldArray();
     }
 }
