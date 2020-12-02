@@ -23,25 +23,32 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             Action[] executableActions;
 
             IWorldModel state = initialPlayoutState.State.GenerateChildWorldModel();
+            state.CalculateNextPlayer();
 
             int playoutDepth = 0;
 
             // Heuristics
             float wasted = 0.0f;
-            //float actionTime = 0.0f;
+            //float actionHeuristic = 0.0f;
+            //actionHeuristic += initialPlayoutState.Action.GetHValue(this.InitialNode.State);
+
             //actionTime += initialPlayoutState.Action.GetDuration();
-            //if ((initialPlayoutState.Action.Name.Contains("GetHealthPotion") || initialPlayoutState.Action.Name.Contains("Rest")) && (int)this.InitialNode.State.GetProperty("HP") >= 10)
-            //{
-            //    wasted += 10.0f;
-            //}
-            //else if (initialPlayoutState.Action.Name.Contains("GetManaPotion") && (int)this.InitialNode.State.GetProperty("Mana") == 10)
-            //{
-            //    wasted += 10.0f;
-            //}
-            //else if (initialPlayoutState.Action.Name.Contains("LevelUp"))
-            //{
-            //    wasted -= 10.0f;
-            //}
+            if ((initialPlayoutState.Action.Name.Contains("GetHealthPotion") || initialPlayoutState.Action.Name.Contains("Rest")) && (int)this.InitialNode.State.GetProperty("HP") >= 10)
+            {
+                wasted += 10.0f;
+            }
+            else if (initialPlayoutState.Action.Name.Contains("GetManaPotion") && (int)this.InitialNode.State.GetProperty("Mana") == 10)
+            {
+                wasted += 10.0f;
+            }
+            else if (initialPlayoutState.Action.Name.Contains("ShieldOfFaith") && (int)this.InitialNode.State.GetProperty("ShieldHP") == 5)
+            {
+                wasted += 10.0f;
+            }
+            else if (initialPlayoutState.Action.Name == "LevelUp")
+            {
+                wasted -= 10.0f;
+            }
 
 
             while (!state.IsTerminal())
@@ -63,6 +70,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
 
 
                 Action randomAction = executableActions[randomIndex];
+                //actionHeuristic += randomAction.GetHValue(state);
 
                 if (randomAction.Name.Contains("GetHealthPotion") && (int)state.GetProperty("HP") == (int)state.GetProperty("MAXHP"))
                 {
@@ -76,6 +84,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
 
 
                 randomAction.ApplyActionEffects(state);
+                state.CalculateNextPlayer();
                 //actionTime += randomAction.GetDuration();
 
                 playoutDepth++;
@@ -92,6 +101,14 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 this.MaxPlayoutDepthReached = playoutDepth;
             }
 
+            //actionHeuristic = -actionHeuristic;
+            //if(actionHeuristic > 1)
+            //{
+            //    actionHeuristic = 1.0f;
+            //}else if(actionHeuristic < -1)
+            //{
+            //    actionHeuristic = -1.0f;
+            //}
 
             Reward reward = new Reward
             {
@@ -108,6 +125,17 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             { // If the node is terminal, get its score as normal
                 return state.GetScore();
             }
+
+            /*
+            if((int)state.GetProperty("HP") < 1)
+            {
+                return 0.0f;
+            }
+            if ((int)state.GetProperty("Money") >= 25)
+            {
+                return 1.0f;
+            }
+            */
 
             // Heuristic Score > Bigger == Better
 
@@ -146,7 +174,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             if(heuristicValue > 1.0f)
             {
                 heuristicValue = 1.0f;
-            }else if(heuristicValue < 0.0f)
+            }else if(heuristicValue < 0)
             {
                 heuristicValue = 0.0f;
             }

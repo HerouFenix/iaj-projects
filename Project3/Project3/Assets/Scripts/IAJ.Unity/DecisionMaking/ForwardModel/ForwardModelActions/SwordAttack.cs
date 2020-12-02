@@ -102,7 +102,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.ForwardModel.ForwardModelActio
 
         public override float GetHValue(IWorldModel IWorldModel)
         {
-            var hp = (int)IWorldModel.GetProperty(Properties.HP);
+            var hp = (int)IWorldModel.GetProperty(Properties.HP) + (int)IWorldModel.GetProperty(Properties.ShieldHP);
             
             if (hp > this.expectedHPChange)
             {
@@ -110,7 +110,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.ForwardModel.ForwardModelActio
             }
 
             // Don't attack if you think you're gonna die
-            return 20.0f;
+            return 100.0f;
         }
     }
 }

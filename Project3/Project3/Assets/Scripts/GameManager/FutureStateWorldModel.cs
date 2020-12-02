@@ -75,7 +75,11 @@ namespace Assets.Scripts.GameManager
             foreach (var enemy in this.GameManager.enemies)
             {
                 enemyEnabled = (bool)this.GetProperty(enemy.name);
-                if (enemyEnabled && (enemy.transform.position - position).sqrMagnitude <= 100)
+                var enemyPosition = enemy.transform.position;
+                var curPosition = position;
+                enemyPosition.y = 0;
+                curPosition.y = 0;
+                if (enemyEnabled && Vector3.Distance(enemyPosition, curPosition) <= 100)
                 {
                     this.NextPlayer = 1;
                     this.NextEnemyAction = new SwordAttack(this.GameManager.autonomousCharacter, enemy);
@@ -108,5 +112,9 @@ namespace Assets.Scripts.GameManager
             else return base.GetExecutableActions();
         }
 
+        public override GameObject[] GetEnemies()
+        {
+            return this.GameManager.enemies.ToArray();
+        }
     }
 }

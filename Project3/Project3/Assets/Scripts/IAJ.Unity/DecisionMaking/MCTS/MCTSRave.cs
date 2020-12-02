@@ -17,23 +17,57 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             KParameter = 10.0f;
         }
 
+        protected double[] Gibbs(Action[] actions, IWorldModel state)
+        {
+            var probabilities = new double[actions.Length];
+            double heuristicSum = 0.0;
+            foreach (Action ac in actions)
+            {
+                var h = ac.GetHValue(state);
+                heuristicSum += Math.Exp(-h);
+            }
+
+            for (int i = 0; i < actions.Length; i++)
+            {
+                probabilities[i] = Math.Exp(-actions[i].GetHValue(state)) / heuristicSum;
+            }
+
+
+            return probabilities;
+        }
+
         protected override Reward Playout(MCTSNode initialPlayoutState)
         {
             Action[] executableActions;
             List<object[]> actionHistory = new List<object[]>(); // Stores Player/Action combo
 
             IWorldModel state = initialPlayoutState.State.GenerateChildWorldModel();
+            state.CalculateNextPlayer();
 
             int playoutDepth = 0;
             while (!state.IsTerminal())
             {
                 executableActions = state.GetExecutableActions();
-                int randomIndex = this.RandomGenerator.Next(0, executableActions.Length);
+                double[] probabilities = this.Gibbs(executableActions, state);
+
+                double averageValue = 1.0f / executableActions.Length;
+                int randomIndex;
+                int maxCounter = 0;
+                while (true)
+                {
+                    randomIndex = this.RandomGenerator.Next(0, executableActions.Length);
+                    if (probabilities[randomIndex] > averageValue || maxCounter++ > 1000)
+                    { // Make sure the selected probability has a value higher than average
+                        break;
+                    }
+                }
 
                 Action randomAction = executableActions[randomIndex];
                 actionHistory.Add(new object[2] { state.GetNextPlayer(), randomAction });
 
                 randomAction.ApplyActionEffects(state);
+                state.CalculateNextPlayer();
+
                 playoutDepth++;
             }
 
@@ -69,9 +103,6 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                     {
                         for (int i = 0; i < reward.ActionHistory.Count; i++)
                         {
-                            var oof = (int)reward.ActionHistory[i][0];
-                            var oof2 = ((Action)reward.ActionHistory[i][1]).Name;
-                            var oof3 = child.Action.Name;
                             if ((int)reward.ActionHistory[i][0] == p && ((Action)reward.ActionHistory[i][1]).Name.Equals(child.Action.Name))
                             {
                                 child.NRave = child.NRave + 1;

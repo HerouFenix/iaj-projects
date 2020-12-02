@@ -132,6 +132,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             Action[] executableActions;
 
             IWorldModel state = initialPlayoutState.State.GenerateChildWorldModel();
+            state.CalculateNextPlayer();
 
             int playoutDepth = 0;
             while (!state.IsTerminal())
@@ -155,6 +156,8 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 Action randomAction = executableActions[randomIndex];
 
                 randomAction.ApplyActionEffects(state);
+                state.CalculateNextPlayer();
+
                 playoutDepth++;
             }
 

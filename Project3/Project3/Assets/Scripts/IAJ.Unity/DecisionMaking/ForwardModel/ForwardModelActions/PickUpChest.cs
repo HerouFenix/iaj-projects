@@ -7,7 +7,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.ForwardModel.ForwardModelActio
     public class PickUpChest : WalkToTargetAndExecuteAction
     {
 
-        public PickUpChest(AutonomousCharacter character, GameObject target) : base("PickUpChest",character,target)
+        public PickUpChest(AutonomousCharacter character, GameObject target) : base("PickUpChest", character, target)
         {
         }
 
@@ -27,7 +27,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.ForwardModel.ForwardModelActio
 
         public override void Execute()
         {
-            
+
             base.Execute();
             this.Character.GameManager.PickUpChest(this.Target);
         }
@@ -48,7 +48,37 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.ForwardModel.ForwardModelActio
 
         public override float GetHValue(IWorldModel IWorldModel)
         {
-            return base.GetHValue(IWorldModel)/5.0f;
+
+            if (!this.Character.GameManager.SleepingNPCs)
+            {
+                var enemies = IWorldModel.GetEnemies();
+
+                var chestPosition = this.Target.transform.position;
+                chestPosition.y = 0;
+                var totalHP = (int)IWorldModel.GetProperty(Properties.HP) + (int)IWorldModel.GetProperty(Properties.ShieldHP);
+                foreach (var enemy in enemies)
+                {
+                    var enemyPosition = enemy.transform.position;
+                    enemyPosition.y = 0;
+                    if (Vector3.Distance(chestPosition, enemyPosition) <= 50)
+                    {
+                        if (enemy.name.Contains("Dragon") && totalHP  < 14)
+                        {
+                            return 100f; // Dont get a chest next to a dragon if the HP is low
+                        }
+                        else if (enemy.name.Contains("Orc") && totalHP < 10)
+                        {
+                            return 100f; // Dont get a chest next to an orc if the HP is low
+                        }
+                        else if (enemy.name.Contains("Skeleton") && totalHP < 4)
+                        {
+                            return 100f; // Dont get a chest next to a spooky scary skelleton if the HP is low
+                        }
+                    }
+                }
+            }
+
+            return base.GetHValue(IWorldModel) / 5.0f;
         }
     }
 }

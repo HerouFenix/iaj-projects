@@ -40,9 +40,9 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             this.InProgress = false;
             this.CurrentStateWorldModel = currentStateWorldModel;
             this.MaxIterations = 500;
-            this.MaxIterationsProcessedPerFrame = 25;
+            this.MaxIterationsProcessedPerFrame = 30;
             this.RandomGenerator = new System.Random();
-            this.MaxPlayouts = 5;
+            this.MaxPlayouts = 6;
         }
 
 
@@ -99,7 +99,6 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 }
                 reward.Value = reward.Value / this.MaxPlayouts;
 
-
                 // Backpropagate results
                 this.Backpropagate(selectedNode, reward);
 
@@ -150,6 +149,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             Action[] executableActions;
 
             IWorldModel state = initialPlayoutState.State.GenerateChildWorldModel();
+            state.CalculateNextPlayer();
 
             int playoutDepth = 0;
             while (!state.IsTerminal())
@@ -160,6 +160,8 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 Action randomAction = executableActions[randomIndex];
 
                 randomAction.ApplyActionEffects(state);
+                state.CalculateNextPlayer();
+
                 playoutDepth++;
             }
 
@@ -193,7 +195,6 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             IWorldModel newState = parent.State.GenerateChildWorldModel();
 
             action.ApplyActionEffects(newState);
-
             newState.CalculateNextPlayer();
 
             MCTSNode newNode = new MCTSNode(newState)
@@ -223,13 +224,13 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
 
                 if (this.ChildCulling)
                 {
-                    if (child.Action.Name == "LevelUp")
+                    if (child.Action.Name.Equals("LevelUp"))
                     { //  Cull children whose actions involve doing a completely unecessary move
                         estimatedValue = 10.0f;
                     }
-                    else if (child.Action.Name.Contains("PickUp") && child.Action.GetDuration() <= 0.01f)
+                    else if (child.Action.Name.Contains("PickUp") && child.Action.GetDuration() <= 0.1f)
                     {
-                        estimatedValue = 9.0f;
+                        estimatedValue = 10.0f;
                     }
                     else if (child.Action.Name.Contains("GetHealthPotion") && (int)node.State.GetProperty("HP") >= 10)
                     {
@@ -243,7 +244,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                     {
                         estimatedValue = -10.0f;
                     }
-                    else if (child.Action.Name == "ShieldOfFaith" && (int)node.State.GetProperty("ShieldHP") == 5)
+                    else if (child.Action.Name.Equals("ShieldOfFaith") && (int)node.State.GetProperty("ShieldHP") == 5)
                     {
                         estimatedValue = -10.0f;
                     }
@@ -279,21 +280,21 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         //the exploration factor
         protected virtual MCTSNode BestChild(MCTSNode node)
         {
-            float bestEstimatedValue = -1.0f;
+            float bestEstimatedValue = -Mathf.Infinity;
             MCTSNode bestChild = null;
 
             foreach (MCTSNode child in node.ChildNodes)
             {
                 float estimatedValue;
                 if (this.ChildCulling)
-                {
-                    if (child.Action.Name == "LevelUp")
-                    { //  Cull children whose actions involve doing a completely unecessary move
+                {//  Cull children whose actions involve doing a completely unecessary move
+                    if (child.Action.Name.Equals("LevelUp"))
+                    { 
                         estimatedValue = 10.0f;
                     }
                     else if (child.Action.Name.Contains("PickUp") && child.Action.GetDuration() <= 0.1f)
                     {
-                        estimatedValue = 9.0f;
+                        estimatedValue = 10.0f;
                     }
                     else if (child.Action.Name.Contains("GetHealthPotion") && (int)node.State.GetProperty("HP") >= 10)
                     {
@@ -307,7 +308,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                     {
                         estimatedValue = -10.0f;
                     }
-                    else if (child.Action.Name == "ShieldOfFaith" && (int)node.State.GetProperty("ShieldHP") == 5)
+                    else if (child.Action.Name.Equals("ShieldOfFaith") && (int)node.State.GetProperty("ShieldHP") == 5)
                     {
                         estimatedValue = -10.0f;
                     }

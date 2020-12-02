@@ -176,9 +176,14 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.ForwardModel
             
         }
 
-        public void UpdateWorldArray()
+        public virtual void UpdateWorldArray()
         {
 
+        }
+
+        public virtual GameObject[] GetEnemies()
+        {
+            return null;
         }
     }
 }

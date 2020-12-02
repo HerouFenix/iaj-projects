@@ -134,7 +134,7 @@ namespace Assets.Scripts
             //    ChangeRate = 0.1f
             //};
 
-            this.SurviveGoal = new Goal(SURVIVE_GOAL, 4.0f);
+            this.SurviveGoal = new Goal(SURVIVE_GOAL, 3.0f);
 
             this.GainLevelGoal = new Goal(GAIN_LEVEL_GOAL, 6.0f)
             {
