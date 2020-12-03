@@ -249,7 +249,7 @@ namespace Assets.Scripts.GameManager
                 this.gameEnded = true;
                 if (this.MCTSActive || this.MCTSBiasedActive || this.MCTSLimitedBiasedPlayoutActive || this.MCTSRaveActive)
                 {
-                    this.GameEnd.GetComponentInChildren<Text>().text = "Victory \n GG EZ\n" +
+                    this.GameEnd.GetComponentInChildren<Text>().text = "Victory GG EZ\n" +
                         "Time Left: " + (this.TIME_LIMIT - this.characterData.Time).ToString() + "\n"
                         + "Avg Proc. Time: " + (this.totalProcessingTime / this.timeCounter).ToString() + "\n"
                         + "Avg. Selection Depth: " + (this.totalSelectionDepth / this.selectionCounter).ToString() + "\n"
@@ -257,7 +257,7 @@ namespace Assets.Scripts.GameManager
                 }
                 else
                 {
-                    this.GameEnd.GetComponentInChildren<Text>().text = "Victory \n GG EZ\n" +
+                    this.GameEnd.GetComponentInChildren<Text>().text = "Victory GG EZ\n" +
                                             "Time Left: " + (this.TIME_LIMIT - this.characterData.Time).ToString() + "\n"
                                             + "Avg Proc. Time: " + (this.totalProcessingTime / this.timeCounter).ToString() + "\n"
                                             + "Avg. Action Combos: " + (this.totalActionCombos / this.actionCounter).ToString();

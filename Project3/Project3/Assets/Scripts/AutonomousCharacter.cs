@@ -135,18 +135,18 @@ namespace Assets.Scripts
             //};
 
             this.SurviveGoal = new Goal(SURVIVE_GOAL, 3.0f);
-
-            this.GainLevelGoal = new Goal(GAIN_LEVEL_GOAL, 6.0f)
+            
+            this.GainLevelGoal = new Goal(GAIN_LEVEL_GOAL, 5.0f)
             {
                 ChangeRate = 0.1f
             };
-
-            this.GetRichGoal = new Goal(GET_RICH_GOAL, 5.0f)
+            
+            this.GetRichGoal = new Goal(GET_RICH_GOAL, 2.0f)
             {
                 InsistenceValue = 5.0f,
                 ChangeRate = 2.0f
             };
-
+            
             this.BeQuickGoal = new Goal(BE_QUICK_GOAL, 4.0f)
             {
                 ChangeRate = 0.1f
@@ -258,6 +258,8 @@ namespace Assets.Scripts
                 this.GameManager.WorldChanged = false;
                 this.nextUpdateTime = Time.time + DECISION_MAKING_INTERVAL;
                 this.lookingForPath = false;
+                this.currentSolution = null;
+                this.currentSmoothedSolution = null;
 
                 //first step, perceptions
                 //update the agent's goals based on the state of the world
@@ -345,6 +347,13 @@ namespace Assets.Scripts
                 }
                 else if (this.CurrentAction.CanExecute())
                 {
+                    if (this.CurrentAction is Teleport)
+                    {
+                        this.lookingForPath = false;
+                        this.currentSolution = null;
+                        this.currentSmoothedSolution = null;
+                    }
+
                     this.CurrentAction.Execute();
                 }
                 // Sometimes the Character wants to perfom an action whose target is empty, that cannot happen

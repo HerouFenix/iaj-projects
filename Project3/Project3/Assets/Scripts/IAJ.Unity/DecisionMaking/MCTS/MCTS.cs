@@ -14,7 +14,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
 
         public bool ChildCulling = false;
 
-        public bool InProgress { get; private set; }
+        public bool InProgress { get; set; }
         public int MaxIterations { get; set; }
         public int MaxIterationsProcessedPerFrame { get; set; }
         public int MaxPlayoutDepthReached { get; set; }
@@ -39,7 +39,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         {
             this.InProgress = false;
             this.CurrentStateWorldModel = currentStateWorldModel;
-            this.MaxIterations = 500;
+            this.MaxIterations = 800;
             this.MaxIterationsProcessedPerFrame = 30;
             this.RandomGenerator = new System.Random();
             this.MaxPlayouts = 6;
@@ -70,7 +70,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             this.BestActionSequence = new List<Action>();
         }
 
-        public Action Run()
+        public virtual Action Run()
         {
             MCTSNode selectedNode;
             Reward reward;
@@ -97,6 +97,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 {
                     reward.Value += this.Playout(selectedNode).Value;
                 }
+
                 reward.Value = reward.Value / this.MaxPlayouts;
 
                 // Backpropagate results
@@ -215,12 +216,12 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
 
         protected virtual MCTSNode BestUCTChild(MCTSNode node)
         {
-            float bestEstimatedValue = -1.0f;
+            double bestEstimatedValue = -Mathf.Infinity;
             MCTSNode bestChild = null;
 
             foreach (MCTSNode child in node.ChildNodes)
             {
-                float estimatedValue;
+                double estimatedValue;
 
                 if (this.ChildCulling)
                 {
@@ -263,7 +264,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                     bestEstimatedValue = estimatedValue;
                     bestChild = child;
                 }
-                else if (Mathf.Abs(estimatedValue - bestEstimatedValue) < 1e-3)
+                else if (Math.Abs(estimatedValue - bestEstimatedValue) < 1e-3)
                 { //If same estimated value, then check if one is quicker than the other
                     if (child.Action.GetDuration() < bestChild.Action.GetDuration())
                     {
@@ -280,12 +281,12 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         //the exploration factor
         protected virtual MCTSNode BestChild(MCTSNode node)
         {
-            float bestEstimatedValue = -Mathf.Infinity;
+            double bestEstimatedValue = -Mathf.Infinity;
             MCTSNode bestChild = null;
 
             foreach (MCTSNode child in node.ChildNodes)
             {
-                float estimatedValue;
+                double estimatedValue;
                 if (this.ChildCulling)
                 {//  Cull children whose actions involve doing a completely unecessary move
                     if (child.Action.Name.Equals("LevelUp"))
@@ -327,7 +328,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                     bestEstimatedValue = estimatedValue;
                     bestChild = child;
                 }
-                else if (Mathf.Abs(estimatedValue - bestEstimatedValue) < 1e-3)
+                else if (Math.Abs(estimatedValue - bestEstimatedValue) < 1e-3)
                 { //If same estimated value, then check if one is quicker than the other
                     if (child.Action.GetDuration() < bestChild.Action.GetDuration())
                     {

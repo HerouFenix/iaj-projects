@@ -17,6 +17,42 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             KParameter = 10.0f;
         }
 
+        public override Action Run()
+        {
+            MCTSNode selectedNode;
+            Reward reward;
+
+            var startTime = Time.realtimeSinceStartup;
+
+            while (this.CurrentIterations < this.MaxIterations)
+            {
+                if (this.CurrentIterationsInFrame > this.MaxIterationsProcessedPerFrame)
+                {
+                    this.CurrentIterationsInFrame = 0;
+                    this.TotalProcessingTime += Time.realtimeSinceStartup - startTime;
+                    return null;
+                }
+
+                // Selection
+                selectedNode = this.Selection(this.InitialNode);
+
+                // Playout (Simulate result)
+                reward = this.Playout(selectedNode);
+
+                // Backpropagate results
+                this.Backpropagate(selectedNode, reward);
+
+                this.CurrentIterationsInFrame++;
+                this.CurrentIterations++;
+            }
+
+            this.TotalProcessingTime += Time.realtimeSinceStartup - startTime;
+            this.CurrentIterationsInFrame = 0;
+            this.InProgress = false;
+            return this.BestFinalAction(this.InitialNode);
+        }
+
+
         protected double[] Gibbs(Action[] actions, IWorldModel state)
         {
             var probabilities = new double[actions.Length];
@@ -36,6 +72,9 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             return probabilities;
         }
 
+
+
+
         protected override Reward Playout(MCTSNode initialPlayoutState)
         {
             Action[] executableActions;
@@ -43,6 +82,8 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
 
             IWorldModel state = initialPlayoutState.State.GenerateChildWorldModel();
             state.CalculateNextPlayer();
+
+            actionHistory.Add(new object[2] { initialPlayoutState.Parent.State.GetNextPlayer(), initialPlayoutState.Action });
 
             int playoutDepth = 0;
             while (!state.IsTerminal())
@@ -61,6 +102,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                         break;
                     }
                 }
+
 
                 Action randomAction = executableActions[randomIndex];
                 actionHistory.Add(new object[2] { state.GetNextPlayer(), randomAction });
@@ -93,9 +135,8 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 node.N = node.N + 1;
                 node.Q = node.Q + reward.Value;
 
-                //List<Action> actionHistory = reward.ActionHistory;
-
                 node = node.Parent;
+
                 if (node != null)
                 {
                     int p = node.PlayerID;
@@ -121,7 +162,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
 
         protected override MCTSNode BestUCTChild(MCTSNode node)
         {
-            double bestEstimatedValue = -1.0f;
+            double bestEstimatedValue = -Mathf.Infinity;
             MCTSNode bestChild = null;
 
             foreach (MCTSNode child in node.ChildNodes)
@@ -130,8 +171,12 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
 
                 if (this.ChildCulling)
                 {
-                    if (child.Action.Name == "LevelUp")
+                    if (child.Action.Name.Equals("LevelUp"))
                     { //  Cull children whose actions involve doing a completely unecessary move
+                        estimatedValue = 10.0f;
+                    }
+                    else if (child.Action.Name.Contains("PickUp") && child.Action.GetDuration() <= 0.1f)
+                    {
                         estimatedValue = 10.0f;
                     }
                     else if (child.Action.Name.Contains("GetHealthPotion") && (int)node.State.GetProperty("HP") >= 10)
@@ -146,7 +191,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                     {
                         estimatedValue = -10.0f;
                     }
-                    else if (child.Action.Name == "ShieldOfFaith" && (int)node.State.GetProperty("ShieldHP") == 5)
+                    else if (child.Action.Name.Equals("ShieldOfFaith") && (int)node.State.GetProperty("ShieldHP") == 5)
                     {
                         estimatedValue = -10.0f;
                     }
@@ -154,36 +199,27 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                     {
                         double niu = child.Q / child.N;
                         double niuRave;
-                        if (child.NRave == 0)
-                        {
-                            niuRave = 0;
-                        }
-                        else
-                        {
-                            niuRave = child.QRave / child.NRave;
-                        }
+
+                        niuRave = child.QRave / child.NRave;
+
                         double beta = this.ComputeBeta(node.N);
 
                         estimatedValue = ((1 - beta) * niu + beta * niuRave) + C * Mathf.Sqrt(Mathf.Log10(node.N) / child.N);
+                        //estimatedValue = child.Q / child.N + C * Mathf.Sqrt(Mathf.Log10(node.N) / child.N);
                     }
                 }
                 else
                 {
                     double niu = child.Q / child.N;
                     double niuRave;
-                    if (child.NRave == 0)
-                    {
-                        niuRave = 0;
-                    }
-                    else
-                    {
-                        niuRave = child.QRave / child.NRave;
-                    }
+
+                    niuRave = child.QRave / child.NRave;
+
                     double beta = this.ComputeBeta(node.N);
 
                     estimatedValue = ((1 - beta) * niu + beta * niuRave) + C * Mathf.Sqrt(Mathf.Log10(node.N) / child.N);
+                    // estimatedValue = child.Q / child.N + C * Mathf.Sqrt(Mathf.Log10(node.N) / child.N);
                 }
-                
 
                 if (estimatedValue > bestEstimatedValue)
                 {
@@ -203,19 +239,24 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             return bestChild;
         }
 
+        //this method is very similar to the bestUCTChild, but it is used to return the final action of the MCTS search, and so we do not care about
+        //the exploration factor
         protected override MCTSNode BestChild(MCTSNode node)
         {
-            double bestEstimatedValue = -1.0f;
+            double bestEstimatedValue = -Mathf.Infinity;
             MCTSNode bestChild = null;
 
             foreach (MCTSNode child in node.ChildNodes)
             {
                 double estimatedValue;
-
                 if (this.ChildCulling)
-                {
-                    if (child.Action.Name == "LevelUp")
-                    { //  Cull children whose actions involve doing a completely unecessary move
+                {//  Cull children whose actions involve doing a completely unecessary move
+                    if (child.Action.Name.Equals("LevelUp"))
+                    {
+                        estimatedValue = 10.0f;
+                    }
+                    else if (child.Action.Name.Contains("PickUp") && child.Action.GetDuration() <= 0.1f)
+                    {
                         estimatedValue = 10.0f;
                     }
                     else if (child.Action.Name.Contains("GetHealthPotion") && (int)node.State.GetProperty("HP") >= 10)
@@ -230,7 +271,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                     {
                         estimatedValue = -10.0f;
                     }
-                    else if (child.Action.Name == "ShieldOfFaith" && (int)node.State.GetProperty("ShieldHP") == 5)
+                    else if (child.Action.Name.Equals("ShieldOfFaith") && (int)node.State.GetProperty("ShieldHP") == 5)
                     {
                         estimatedValue = -10.0f;
                     }
@@ -238,34 +279,26 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                     {
                         double niu = child.Q / child.N;
                         double niuRave;
-                        if (child.NRave == 0)
-                        {
-                            niuRave = 0;
-                        }
-                        else
-                        {
-                            niuRave = child.QRave / child.NRave;
-                        }
+
+                        niuRave = child.QRave / child.NRave;
+
                         double beta = this.ComputeBeta(node.N);
 
                         estimatedValue = ((1 - beta) * niu + beta * niuRave);
+                        //estimatedValue = child.Q / child.N;
                     }
                 }
                 else
                 {
                     double niu = child.Q / child.N;
                     double niuRave;
-                    if (child.NRave == 0)
-                    {
-                        niuRave = 0;
-                    }
-                    else
-                    {
-                        niuRave = child.QRave / child.NRave;
-                    }
+
+                    niuRave = child.QRave / child.NRave;
+
                     double beta = this.ComputeBeta(node.N);
 
                     estimatedValue = ((1 - beta) * niu + beta * niuRave);
+                    //estimatedValue = child.Q / child.N;
                 }
 
                 if (estimatedValue > bestEstimatedValue)

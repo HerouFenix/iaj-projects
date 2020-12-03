@@ -58,6 +58,9 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.ForwardModel.ForwardModelActio
             }
 
             IWorldModel.SetProperty(Properties.HP, newHP);
+
+            var time = (float)IWorldModel.GetProperty(Properties.TIME);
+            IWorldModel.SetProperty(Properties.TIME, time + 5.0f);
         }
 
         public override float GetHValue(IWorldModel IWorldModel)

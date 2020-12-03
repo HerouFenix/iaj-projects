@@ -29,27 +29,6 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
 
             // Heuristics
             float wasted = 0.0f;
-            //float actionHeuristic = 0.0f;
-            //actionHeuristic += initialPlayoutState.Action.GetHValue(this.InitialNode.State);
-
-            //actionTime += initialPlayoutState.Action.GetDuration();
-            if ((initialPlayoutState.Action.Name.Contains("GetHealthPotion") || initialPlayoutState.Action.Name.Contains("Rest")) && (int)this.InitialNode.State.GetProperty("HP") >= 10)
-            {
-                wasted += 10.0f;
-            }
-            else if (initialPlayoutState.Action.Name.Contains("GetManaPotion") && (int)this.InitialNode.State.GetProperty("Mana") == 10)
-            {
-                wasted += 10.0f;
-            }
-            else if (initialPlayoutState.Action.Name.Contains("ShieldOfFaith") && (int)this.InitialNode.State.GetProperty("ShieldHP") == 5)
-            {
-                wasted += 10.0f;
-            }
-            else if (initialPlayoutState.Action.Name == "LevelUp")
-            {
-                wasted -= 10.0f;
-            }
-
 
             while (!state.IsTerminal())
             {
@@ -70,22 +49,10 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
 
 
                 Action randomAction = executableActions[randomIndex];
-                //actionHeuristic += randomAction.GetHValue(state);
-
-                if (randomAction.Name.Contains("GetHealthPotion") && (int)state.GetProperty("HP") == (int)state.GetProperty("MAXHP"))
-                {
-                    wasted += 0.5f;
-                }
-                if (randomAction.Name.Contains("GetManaPotion") && (int)state.GetProperty("Mana") == 10)
-                {
-                    wasted += 0.5f;
-                }
-
 
 
                 randomAction.ApplyActionEffects(state);
                 state.CalculateNextPlayer();
-                //actionTime += randomAction.GetDuration();
 
                 playoutDepth++;
 
@@ -101,41 +68,127 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                 this.MaxPlayoutDepthReached = playoutDepth;
             }
 
-            //actionHeuristic = -actionHeuristic;
-            //if(actionHeuristic > 1)
-            //{
-            //    actionHeuristic = 1.0f;
-            //}else if(actionHeuristic < -1)
-            //{
-            //    actionHeuristic = -1.0f;
-            //}
-
             Reward reward = new Reward
             {
-                Value = ComputeHeuristicScore(initialPlayoutState.State, state, wasted),
+                Value = ComputeHeuristicScore(initialPlayoutState, state, wasted),
                 PlayerID = state.GetNextPlayer()
             };
 
             return reward;
         }
 
-        private float ComputeHeuristicScore(IWorldModel initialState, IWorldModel state, float wasted)
+        private float ComputeHeuristicScore(MCTSNode initialState, IWorldModel state, float wasted)
+        {
+            int finalHP = (int)state.GetProperty("HP") + (int)state.GetProperty("ShieldHP");
+            int currentHP = (int)this.InitialNode.State.GetProperty("HP") + (int)state.GetProperty("ShieldHP");
+
+            if (initialState.Parent.Parent == null)
+            {
+                // If our parent is the root cull stupid actions
+                if (initialState.Action.Name.Contains("PickUp") && initialState.Action.GetDuration() <= 0.1f)
+                { // If we're right on top of a chest just pick it up
+                    return Mathf.Infinity;
+                }
+                else if (initialState.Action.Name.Contains("PickUp"))
+                { // If we're right on top of a chest just pick it up
+                    var chestPosition = ((WalkToTargetAndExecuteAction)initialState.Action).Target.transform.position;
+                    chestPosition.y = 0;
+                    foreach (var enemy in initialState.State.GetEnemies())
+                    {
+                        var enemyPosition = enemy.transform.position;
+                        enemyPosition.y = 0;
+                        if (Vector3.Distance(chestPosition, enemyPosition) <= 30)
+                        {
+                            if (enemy.name.Contains("Dragon") && currentHP <= 15)
+                            {
+                                return -300; // Dont get a chest next to a dragon if the HP is low
+                            }
+                            else if (enemy.name.Contains("Orc") && currentHP <= 10)
+                            {
+                                return -300; // Dont get a chest next to an orc if the HP is low
+                            }
+                            else if (enemy.name.Contains("Skelleton") && currentHP <= 4)
+                            {
+                                return -300; // Dont get a chest next to a spooky scary skelleton if the HP is low
+                            }
+                        }
+                    }
+                }
+                else if (initialState.Action.Name.Contains("SwordAttack") && initialState.Action.Name.Contains("Dragon") && currentHP <= 15)
+                { // Don't try to fight the dragon if u got less than 16...suposively u should be able to kill em with less than that but my luck is poop
+                    return -10;
+                }
+                else if (initialState.Action.Name.Contains("SwordAttack") && initialState.Action.Name.Contains("Orc") && currentHP <= 10)
+                { // Don't try to fight the orc if u got less than 10...suposively u should be able to kill em with less than that but my luck is poop
+                    return -10;
+                }
+                else if (initialState.Action.Name.Contains("LevelUp"))
+                { // If we can level up, just do it
+                    return Mathf.Infinity;
+                }
+                else if ((initialState.Action.Name.Contains("ShieldOfFaith")))
+                {
+                    if ((int)this.InitialNode.State.GetProperty("ShieldHP") == 5) // If shield is full don't try to heal dude
+                        return -Mathf.Infinity;
+                    else if ((int)this.InitialNode.State.GetProperty("ShieldHP") == 0) // Replenish the shield when it dies..just to be safe
+                        return 150.0f;
+                    else if ((int)this.InitialNode.State.GetProperty("ShieldHP") <= 2 && (int)this.InitialNode.State.GetProperty("HP") <= 5) // If health is real low and so is the shield hp, just reuse it as a safety measure
+                        return 150.0f;
+                }
+                else if ((initialState.Action.Name.Contains("GetHealthPotion") || initialState.Action.Name.Contains("Rest")) && (int)this.InitialNode.State.GetProperty("HP") >= (int)this.InitialNode.State.GetProperty("MAXHP") - 2)
+                { // If health is full don't try to heal dude
+                    return -Mathf.Infinity;
+                }
+                else if ((initialState.Action.Name.Contains("GetManaPotion")) && (int)this.InitialNode.State.GetProperty("Mana") == 10)
+                { // If mana is full don't try to get more mana dude
+                    return -Mathf.Infinity;
+                }
+                else if ((initialState.Action.Name.Contains("GetManaPotion")) && (int)this.InitialNode.State.GetProperty("Mana") == 0)
+                { // If mana is empty try to get mana
+                    return 50.0f;
+                }
+            }
+
+            if (finalHP < 1)
+            { // If we lost thats like...real bad dude
+                return -10.0f;
+            }
+
+            int initialHP = (int)this.InitialNode.State.GetProperty("HP") + (int)this.InitialNode.State.GetProperty("ShieldHP");
+            int maxHP = (int)this.InitialNode.State.GetProperty("MAXHP") + 5;
+
+            int finalMana = (int)state.GetProperty("Mana");
+            int initialMana = (int)this.InitialNode.State.GetProperty("Mana");
+
+            int finalMoney = (int)state.GetProperty("Money");
+            int initialMoney = (int)this.InitialNode.State.GetProperty("Money");
+
+            int finalLvl = (int)state.GetProperty("Level");
+            int initialLvl = (int)this.InitialNode.State.GetProperty("Level");
+
+            float finalTime = (float)state.GetProperty("Time");
+            float initialTime = (float)this.InitialNode.State.GetProperty("Time");
+
+            var HPGain = finalHP - initialHP;
+            var ManaGain = finalMana - initialMana;
+            var MoneyGain = finalMoney - initialMoney;
+            var LvlGain = finalLvl - initialLvl;
+            var TimeLoss = finalTime - initialTime;
+
+
+            var heuristicScore = HPGain / maxHP + ManaGain / 10.0f + MoneyGain + LvlGain - TimeLoss * 2.5f;
+            return heuristicScore;
+
+        }
+
+
+        /*
+         * private float ComputeHeuristicScore(IWorldModel initialState, IWorldModel state, float wasted)
         {
             if (state.IsTerminal())
             { // If the node is terminal, get its score as normal
                 return state.GetScore();
             }
-
-            /*
-            if((int)state.GetProperty("HP") < 1)
-            {
-                return 0.0f;
-            }
-            if ((int)state.GetProperty("Money") >= 25)
-            {
-                return 1.0f;
-            }
-            */
 
             // Heuristic Score > Bigger == Better
 
@@ -180,7 +233,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             }
 
             return heuristicValue;
-        }
+        }*/
 
     }
 }
