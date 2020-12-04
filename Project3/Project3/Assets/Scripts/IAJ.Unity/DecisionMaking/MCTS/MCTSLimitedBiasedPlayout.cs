@@ -85,7 +85,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
             if (initialState.Parent.Parent == null)
             {
                 // If our parent is the root cull stupid actions
-                if (initialState.Action.Name.Contains("PickUp") && initialState.Action.GetDuration() <= 0.1f)
+                if (initialState.Action.Name.Contains("PickUp") && initialState.Action.GetDuration() <= 0.12f)
                 { // If we're right on top of a chest just pick it up
                     return Mathf.Infinity;
                 }
@@ -114,11 +114,11 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
                         }
                     }
                 }
-                else if (initialState.Action.Name.Contains("SwordAttack") && initialState.Action.Name.Contains("Dragon") && currentHP <= 15)
+                else if (initialState.Action.Name.Contains("SwordAttack") && initialState.Action.Name.Contains("Dragon") && currentHP <= 16)
                 { // Don't try to fight the dragon if u got less than 16...suposively u should be able to kill em with less than that but my luck is poop
                     return -10;
                 }
-                else if (initialState.Action.Name.Contains("SwordAttack") && initialState.Action.Name.Contains("Orc") && currentHP <= 10)
+                else if (initialState.Action.Name.Contains("SwordAttack") && initialState.Action.Name.Contains("Orc") && currentHP <= 11)
                 { // Don't try to fight the orc if u got less than 10...suposively u should be able to kill em with less than that but my luck is poop
                     return -10;
                 }
