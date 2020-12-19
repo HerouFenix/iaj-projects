@@ -5,11 +5,9 @@ In the first project of IAJ, the goal is to implement and test several collision
 including the AvoidCharacter, AvoidObstacle and Reciprocal Velocity Obstacle methods
 lectured.
 
-## Authors
+## Author
 
 -   **Diogo Silva** - [HerouFenix](https://github.com/HerouFenix)
--   **Carlos Marques** - [Catralitos](https://github.com/Catralitos)
--   **Rui Melo** - [rufimelo99](https://github.com/rufimelo99)
 
 ## License
 
