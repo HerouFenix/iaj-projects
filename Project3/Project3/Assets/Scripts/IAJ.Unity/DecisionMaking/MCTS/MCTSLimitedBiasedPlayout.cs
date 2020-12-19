@@ -80,7 +80,7 @@ namespace Assets.Scripts.IAJ.Unity.DecisionMaking.MCTS
         private float ComputeHeuristicScore(MCTSNode initialState, IWorldModel state, float wasted)
         {
             int finalHP = (int)state.GetProperty("HP") + (int)state.GetProperty("ShieldHP");
-            int currentHP = (int)this.InitialNode.State.GetProperty("HP") + (int)state.GetProperty("ShieldHP");
+            int currentHP = (int)this.InitialNode.State.GetProperty("HP") + (int)this.InitialNode.State.GetProperty("ShieldHP");
 
             if (initialState.Parent.Parent == null)
             {
