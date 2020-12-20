@@ -3,31 +3,50 @@ using System.Collections;
 
 public class EuclideanTorus : MonoBehaviour
 {
+    private bool isWrappingX = false;
+    private bool isWrappingY = false;
+
+    Renderer m_Renderer;
+    // Use this for initialization
+    void Start()
+    {
+        m_Renderer = GetComponent<Renderer>();
+    }
 
     // Update is called once per frame
     void Update()
     {
+        var isVisible = m_Renderer.isVisible;
+
+        if (isVisible)
+        {
+            isWrappingX = false;
+            isWrappingY = false;
+            return;
+        }
+
+        if (isWrappingX && isWrappingY)
+        {
+            return;
+        }
+
+        var cam = Camera.main;
+        var viewportPosition = cam.WorldToViewportPoint(transform.position);
+        var newPosition = transform.position;
 
         // Teleport the game object
-        if (transform.position.x > 300)
+        if (!isWrappingX && (viewportPosition.x > 1 || viewportPosition.x < 0))
         {
-
-            transform.position = new Vector3(-300, 0, transform.position.z);
-
-        }
-        else if (transform.position.x < -300)
-        {
-            transform.position = new Vector3(300, 0, transform.position.z);
+            newPosition.x = -newPosition.x;
+            isWrappingX = true;
         }
 
-        else if (transform.position.z > 165)
+        if (!isWrappingY && (viewportPosition.y > 1 || viewportPosition.y < 0))
         {
-            transform.position = new Vector3(transform.position.x, 0, -165);
+            newPosition.z = -newPosition.z;
+            isWrappingY = true;
         }
 
-        else if (transform.position.z < -165)
-        {
-            transform.position = new Vector3(transform.position.x, 0, 165);
-        }
+        transform.position = newPosition;
     }
 }

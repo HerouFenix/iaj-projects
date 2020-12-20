@@ -12,12 +12,11 @@ public class GameController : MonoBehaviour
     private int asteroidsRemaining;
     private int lives;
     private int wave;
-    private int increaseEachWave = 4;
 
     public Text scoreText;
     public Text livesText;
-    public Text waveText;
     public Text hiscoreText;
+    public Text waveText;
 
     // Use this for initialization
     void Start()
@@ -45,10 +44,10 @@ public class GameController : MonoBehaviour
         wave = 1;
 
         // Prepare the HUD
-        //scoreText.text = "SCORE:" + score;
-        //hiscoreText.text = "HISCORE: " + hiscore;
-        //livesText.text = "LIVES: " + lives;
-        //waveText.text = "WAVE: " + wave;
+        scoreText.text = "SCORE:" + score;
+        hiscoreText.text = "HISCORE: " + hiscore;
+        livesText.text = "LIVES: " + lives;
+        waveText.text = "WAVE: " + wave;
 
         SpawnAsteroids();
     }
@@ -60,7 +59,8 @@ public class GameController : MonoBehaviour
 
         // Decide how many asteroids to spawn
         // If any asteroids left over from previous game, subtract them
-        asteroidsRemaining = (wave * increaseEachWave);
+        asteroidsRemaining = 1;
+        //asteroidsRemaining = (wave * increaseEachWave);
 
         for (int i = 0; i < asteroidsRemaining; i++)
         {
@@ -69,23 +69,23 @@ public class GameController : MonoBehaviour
             Instantiate(asteroid,
                 new Vector3(Random.Range(-300.0f, 300.0f),
                     0, Random.Range(-165.0f, 165.0f)),
-                Quaternion.Euler(0, 0, Random.Range(-0.0f, 359.0f)));
+                Quaternion.Euler(0, Random.Range(-0.0f, 359.0f), 0));
 
         }
 
-        //waveText.text = "WAVE: " + wave;
+        waveText.text = "WAVE: " + wave;
     }
 
     public void IncrementScore()
     {
         score++;
 
-        //scoreText.text = "SCORE:" + score;
+        scoreText.text = "SCORE:" + score;
 
         if (score > hiscore)
         {
             hiscore = score;
-            //hiscoreText.text = "HISCORE: " + hiscore;
+            hiscoreText.text = "HISCORE: " + hiscore;
 
             // Save the new hiscore
             PlayerPrefs.SetInt("hiscore", hiscore);
@@ -94,7 +94,6 @@ public class GameController : MonoBehaviour
         // Has player destroyed all asteroids?
         if (asteroidsRemaining < 1)
         {
-
             // Start next wave
             wave++;
             SpawnAsteroids();
@@ -105,7 +104,7 @@ public class GameController : MonoBehaviour
     public void DecrementLives()
     {
         lives--;
-        //livesText.text = "LIVES: " + lives;
+        livesText.text = "LIVES: " + lives;
 
         // Has player run out of lives?
         if (lives < 1)
@@ -120,13 +119,13 @@ public class GameController : MonoBehaviour
         asteroidsRemaining--;
     }
 
-    public void SplitAsteroid()
+    public void SplitAsteroid(int split_amount)
     {
         // Two extra asteroids
         // - big one
         // + 3 little ones
         // = 2
-        asteroidsRemaining += 2;
+        asteroidsRemaining += split_amount;
 
     }
 
