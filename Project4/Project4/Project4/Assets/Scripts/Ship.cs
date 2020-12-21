@@ -4,11 +4,14 @@ using System.Collections;
 public class Ship : MonoBehaviour
 {
 
-    float rotationSpeed = 75.0f;
-    float thrustForce = 7.5f;
+    float rotationSpeed = 90.0f;
+    float thrustForce = 25.0f;
     float MAX_VELOCITY = 75.0f;
+    float TIME_BETWEEN_SHOTS = 1.0f;
 
-    float timeSinceLastShot = 2.0f;
+    float timeTillNextShot = 0.0f;
+
+    bool canShoot = true;
 
     public AudioClip crash;
     public AudioClip shoot;
@@ -34,11 +37,8 @@ public class Ship : MonoBehaviour
     }
 
 
-    void Update()
+    void FixedUpdate()
     {
-        // Ellapsed time since last shot
-        timeSinceLastShot += Time.deltaTime;
-
         // Move
         Vector3 extraForce = transform.forward * thrustForce * Input.GetAxis("Vertical");
         var forceDir = transform.InverseTransformDirection(extraForce).z;
@@ -55,15 +55,38 @@ public class Ship : MonoBehaviour
             body.AddForce(extraForce);
         }
 
+        // Not thrusting
+        if (Input.GetAxis("Vertical") == 0.0f)
+        {
+            // Decrease velocity overtime
+            body.velocity = body.velocity * 0.995f;
+        }
+
         // Rotate 
         transform.Rotate(0, Input.GetAxis("Horizontal") *
             rotationSpeed * Time.deltaTime, 0);
+    }
+
+    private void Update()
+    {
+        if (!canShoot)
+        {
+            // Ellapsed time since last shot
+            timeTillNextShot -= Time.deltaTime;
+
+            if (timeTillNextShot <= 0.0f)
+            {
+                canShoot = true;
+                timeTillNextShot = 0.0f;
+            }
+        }
 
         // Shoot
-        if (Input.GetKeyDown(KeyCode.Space) && timeSinceLastShot > 1.5f)
+        if (Input.GetKeyDown(KeyCode.Space) && canShoot)
         {
+            canShoot = false;
             ShootBullet();
-            timeSinceLastShot = 0.0f;
+            timeTillNextShot = TIME_BETWEEN_SHOTS;
         }
     }
 
@@ -73,6 +96,7 @@ public class Ship : MonoBehaviour
         // Anything except a bullet is an asteroid
         if (c.gameObject.tag != "Bullet")
         {
+            Destroy(c.gameObject);
 
             AudioSource.PlayClipAtPoint
                 (crash, Camera.main.transform.position);
@@ -88,7 +112,7 @@ public class Ship : MonoBehaviour
         }
     }
 
-    
+
     void ShootBullet()
     {
         Vector3 spawnPos = transform.position + transform.forward * 10.0f;
@@ -101,5 +125,5 @@ public class Ship : MonoBehaviour
         // Play a shoot sound
         AudioSource.PlayClipAtPoint(shoot, Camera.main.transform.position);
     }
-    
+
 }

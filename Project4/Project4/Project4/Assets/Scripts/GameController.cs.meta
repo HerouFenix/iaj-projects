@@ -3,7 +3,19 @@ guid: 6c01eb2dcf133e74bbb5a5005e0e4814
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - bigAsteroid: {fileID: 8191795852492544390, guid: 0b7dee1f86d08ac49b30eff7010dcfc4,
+      type: 3}
+  - mediumAsteroid: {fileID: 2811639424080900434, guid: a81f425c5eeda5f4cb3abe73fe717d30,
+      type: 3}
+  - smallAsteroid: {fileID: 7661498946380400381, guid: 326e84939731de442ab4fa2e3b67ab67,
+      type: 3}
+  - UFO: {fileID: 3807606160095245993, guid: ff1553283889aae41842470faaad7394, type: 3}
+  - ship: {fileID: 1948531812796171633, guid: f0327b7344a1cc2409264f8b9182c7ce, type: 3}
+  - scoreText: {instanceID: 0}
+  - livesText: {instanceID: 0}
+  - hiscoreText: {instanceID: 0}
+  - waveText: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

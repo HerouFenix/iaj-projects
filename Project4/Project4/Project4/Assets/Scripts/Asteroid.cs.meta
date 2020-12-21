@@ -3,7 +3,12 @@ guid: c6a37c99c52f3294baf0c2fbf31ffe3e
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - destroy: {fileID: 8300000, guid: a6774bcbba0d61c46bf32c4dedfff618, type: 3}
+  - smallAsteroid: {fileID: 7661498946380400381, guid: 326e84939731de442ab4fa2e3b67ab67,
+      type: 3}
+  - mediumAsteroid: {fileID: 2811639424080900434, guid: a81f425c5eeda5f4cb3abe73fe717d30,
+      type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

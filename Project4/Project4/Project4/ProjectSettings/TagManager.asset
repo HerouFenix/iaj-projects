@@ -9,6 +9,8 @@ TagManager:
   - MediumAsteroid
   - BigAsteroid
   - SmallAsteroid
+  - Bullet_UFO
+  - UFO
   layers:
   - Default
   - TransparentFX

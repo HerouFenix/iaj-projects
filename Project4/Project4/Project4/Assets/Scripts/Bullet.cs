@@ -12,7 +12,7 @@ public class Bullet : MonoBehaviour
 
         // Push the bullet in the direction it is facing
         GetComponent<Rigidbody>()
-            .AddForce(transform.forward * 5000f);
+            .AddForce(transform.forward * 5500f);
     }
 
 }
