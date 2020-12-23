@@ -3,6 +3,7 @@ using System.Collections;
 
 public class UFO : MonoBehaviour
 {
+    public int ID;
 
     public AudioClip destroy;
     public AudioClip shoot;
@@ -47,7 +48,7 @@ public class UFO : MonoBehaviour
             Destroy(c.gameObject);
 
             // Just a small asteroid destroyed
-            gameController.DecrementAsteroids();
+            gameController.DecrementAsteroids(ID);
 
 
             // Play a sound
@@ -55,7 +56,7 @@ public class UFO : MonoBehaviour
                 destroy, Camera.main.transform.position);
 
             // Add to the score
-            gameController.IncrementScore();
+            gameController.IncrementScore(ID);
 
             // Destroy the current asteroid
             Destroy(gameObject);
@@ -101,9 +102,10 @@ public class UFO : MonoBehaviour
         diff.Normalize();
 
         // Spawn a bullet
-        Instantiate(bullet,
+        var bulletInstance = Instantiate(bullet,
             spawnPos,
             Quaternion.Euler(0,0,0));
+        bulletInstance.GetComponent<BulletUFO>().ID = ID;
 
         // Play a shoot sound
         AudioSource.PlayClipAtPoint(shoot, Camera.main.transform.position);

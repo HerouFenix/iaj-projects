@@ -140,6 +140,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb1cdbcc0bdba3244a8dc86fa2c87700, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ID: 0
+  color: {r: 0, g: 0, b: 0, a: 0}
   crash: {fileID: 8300000, guid: f14f7f4b26856674ca27cc43d1b381d3, type: 3}
   shoot: {fileID: 8300000, guid: ccea4cc2ce120c349b2955e1901596aa, type: 3}
   bullet: {fileID: 4110744498710570776, guid: f1622641632b2ee419787505d71e745a, type: 3}

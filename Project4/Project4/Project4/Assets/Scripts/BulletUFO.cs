@@ -3,12 +3,24 @@ using System.Collections;
 
 public class BulletUFO : MonoBehaviour
 {
+    public int ID;
 
     // Use this for initialization
     void Start()
     {
-        GameObject playerObj = GameObject.FindWithTag("SpaceShip");
-        transform.LookAt(playerObj.transform.position);
+        GameObject[] allPlayerObj = GameObject.FindGameObjectsWithTag("SpaceShip");
+        GameObject playerObj = null;
+        for (int i = 0; i < allPlayerObj.Length; i++)
+        {
+            if (allPlayerObj[i].GetComponent<Ship>().ID == ID)
+            {
+                playerObj = allPlayerObj[i];
+                break;
+            }
+        }
+
+        if (playerObj != null)
+            transform.LookAt(playerObj.transform.position);
 
         // Set the bullet to destroy itself after 1 seconds
         Destroy(gameObject, 4.0f);

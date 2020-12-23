@@ -3,6 +3,12 @@ using System.Collections;
 
 public class Ship : MonoBehaviour
 {
+    public int ID;
+
+    public int score = 0;
+    public int wave = 1;
+    public int lives = 1;
+    public int asteroidsRemaining = 0;
 
     float rotationSpeed = 90.0f;
     float thrustForce = 25.0f;
@@ -94,8 +100,22 @@ public class Ship : MonoBehaviour
     {
 
         // Anything except a bullet is an asteroid
-        if (c.gameObject.tag != "Bullet")
+        if (c.gameObject.tag != "Bullet" && c.gameObject.tag != "SpaceShip")
         {
+            if (c.gameObject.tag == "UFO")
+            {
+                if (c.gameObject.GetComponent<UFO>().ID != ID)
+                    return;
+            }
+            else if (c.gameObject.tag == "Bullet_UFO")
+            {
+                if (c.gameObject.GetComponent<BulletUFO>().ID != ID)
+                    return;
+            }
+            else if (c.gameObject.GetComponent<Asteroid>().ID != ID)
+            {
+                return;
+            }
             Destroy(c.gameObject);
 
             AudioSource.PlayClipAtPoint
@@ -108,7 +128,7 @@ public class Ship : MonoBehaviour
             body.
                 velocity = new Vector3(0, 0, 0);
 
-            gameController.DecrementLives();
+            gameController.DecrementLives(ID);
         }
     }
 
@@ -118,9 +138,11 @@ public class Ship : MonoBehaviour
         Vector3 spawnPos = transform.position + transform.forward * 10.0f;
 
         // Spawn a bullet
-        Instantiate(bullet,
+        var bulletInstance = Instantiate(bullet,
             spawnPos,
             transform.rotation);
+
+        bulletInstance.GetComponent<Bullet>().ID = ID;
 
         // Play a shoot sound
         AudioSource.PlayClipAtPoint(shoot, Camera.main.transform.position);

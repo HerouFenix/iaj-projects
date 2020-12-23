@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Bullet : MonoBehaviour
 {
+    public int ID;
 
     // Use this for initialization
     void Start()
