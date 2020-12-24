@@ -317,6 +317,8 @@ public class GameController : MonoBehaviour
         gameInstances[ID][0]++;
         shipInstances[ID].GetComponent<Ship>().score = gameInstances[ID][0];
 
+        shipInstances[ID].GetComponent<Ship>().AddReward(1);
+
         if (ID == 0)
         {
             scoreText.text = "SCORE:" + gameInstances[ID][0];
