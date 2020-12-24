@@ -750,6 +750,7 @@ MonoBehaviour:
   waveText: {fileID: 1012869966}
   disableWaveIncrease: 0
   disableAliens: 0
+  startWave: 1
   numberOfAgents: 1
 --- !u!4 &1558259590
 Transform:

@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Unity.MLAgents;
+using Unity.MLAgents.Sensors;
 
-public class Ship : MonoBehaviour
+public class Ship : Agent
 {
     public int ID;
 
@@ -14,8 +16,10 @@ public class Ship : MonoBehaviour
     float thrustForce = 25.0f;
     float MAX_VELOCITY = 75.0f;
     float TIME_BETWEEN_SHOTS = 1.0f;
+    int STEPS_BETWEEN_SHOTS = 40;
 
     float timeTillNextShot = 0.0f;
+    int stepsUntilShoot = 0;
 
     bool canShoot = true;
 
@@ -27,6 +31,7 @@ public class Ship : MonoBehaviour
     private GameController gameController;
 
     private Rigidbody body;
+
     private void Awake()
     {
         body = GetComponent<Rigidbody>();
@@ -45,6 +50,19 @@ public class Ship : MonoBehaviour
 
     void FixedUpdate()
     {
+        //Debug.DrawRay(transform.position, transform.forward*100.0f);
+        //Debug.DrawRay(transform.position, transform.right * 100.0f);
+        //Debug.DrawRay(transform.position, -transform.forward * 100.0f);
+        //Debug.DrawRay(transform.position, -transform.right * 100.0f);
+        //Debug.DrawRay(transform.position, Quaternion.AngleAxis(30, Vector3.up) * transform.forward * 100.0f);
+        //Debug.DrawRay(transform.position, Quaternion.AngleAxis(30, Vector3.up) * transform.right * 100.0f);
+        //Debug.DrawRay(transform.position, Quaternion.AngleAxis(30, Vector3.up) * -transform.forward * 100.0f);
+        //Debug.DrawRay(transform.position, Quaternion.AngleAxis(30, Vector3.up) * -transform.right * 100.0f);
+        //Debug.DrawRay(transform.position, Quaternion.AngleAxis(60, Vector3.up) * transform.forward * 100.0f);
+        //Debug.DrawRay(transform.position, Quaternion.AngleAxis(60, Vector3.up) * transform.right * 100.0f);
+        //Debug.DrawRay(transform.position, Quaternion.AngleAxis(60, Vector3.up) * -transform.forward * 100.0f);
+        //Debug.DrawRay(transform.position, Quaternion.AngleAxis(60, Vector3.up) * -transform.right * 100.0f);
+
         // Move
         Vector3 extraForce = transform.forward * thrustForce * Input.GetAxis("Vertical");
         var forceDir = transform.InverseTransformDirection(extraForce).z;
@@ -71,8 +89,27 @@ public class Ship : MonoBehaviour
         // Rotate 
         transform.Rotate(0, Input.GetAxis("Horizontal") *
             rotationSpeed * Time.deltaTime, 0);
+
+        if (!canShoot)
+        {
+            stepsUntilShoot--;
+
+            if (stepsUntilShoot <= 0)
+            {
+                canShoot = true;
+            }
+        }
+
+        // Shoot
+        if (Input.GetKeyDown(KeyCode.Space) && canShoot)
+        {
+            ShootBullet();
+            canShoot = false;
+            stepsUntilShoot = STEPS_BETWEEN_SHOTS;
+        }
     }
 
+    /*
     private void Update()
     {
         if (!canShoot)
@@ -95,6 +132,7 @@ public class Ship : MonoBehaviour
             timeTillNextShot = TIME_BETWEEN_SHOTS;
         }
     }
+    */
 
     void OnTriggerEnter(Collider c)
     {
@@ -132,7 +170,6 @@ public class Ship : MonoBehaviour
         }
     }
 
-
     void ShootBullet()
     {
         Vector3 spawnPos = transform.position + transform.forward * 10.0f;
@@ -147,5 +184,35 @@ public class Ship : MonoBehaviour
         // Play a shoot sound
         AudioSource.PlayClipAtPoint(shoot, Camera.main.transform.position);
     }
+
+
+    // ML Agent Stuff
+
+    public override void Initialize()
+    {
+        base.Initialize();
+    }
+
+    //public override void CollectObservations(VectorSensor sensor)
+    //{
+    //    base.CollectObservations(sensor);
+    //}
+
+    public override void OnActionReceived(float[] vectorAction)
+    {
+        base.OnActionReceived(vectorAction);
+    }
+
+    public override void Heuristic(float[] actionsOut)
+    {
+        base.Heuristic(actionsOut);
+    }
+
+    public override void OnEpisodeBegin()
+    {
+        // Reset Environment
+        base.OnEpisodeBegin();
+    }
+
 
 }

@@ -15,10 +15,19 @@ public class UFO : MonoBehaviour
 
     float timeTillNextShot = 3.0f;
 
+    int STEPS_BETWEEN_SHOTS = 200;
+
+    int stepsUntilShoot;
+
     bool canShoot = false;
 
 
     public GameObject bullet;
+
+    private void Awake()
+    {
+        stepsUntilShoot = Random.Range(0, 150);
+    }
 
     // Use this for initialization
     void Start()
@@ -68,8 +77,26 @@ public class UFO : MonoBehaviour
     private void FixedUpdate()
     {
         transform.position.Set(transform.position.x, 0.0f, transform.position.z);
-    }
 
+        if (!canShoot)
+        {
+            stepsUntilShoot--;
+
+            if (stepsUntilShoot <= 0)
+            {
+                canShoot = true;
+            }
+        }
+
+        // Shoot
+        if (canShoot)
+        {
+            ShootBullet();
+            canShoot = false;
+            stepsUntilShoot = STEPS_BETWEEN_SHOTS;
+        }
+    }
+    /*
     private void Update()
     {
         if (!canShoot)
@@ -92,7 +119,7 @@ public class UFO : MonoBehaviour
             timeTillNextShot = TIME_BETWEEN_SHOTS;
         }
     }
-
+    */
 
     void ShootBullet()
     {

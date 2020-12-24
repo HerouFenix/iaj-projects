@@ -33,6 +33,7 @@ public class GameController : MonoBehaviour
 
     public bool disableWaveIncrease = false;
     public bool disableAliens = false;
+    public int startWave = 1;
 
     public int numberOfAgents = 1;
 
@@ -83,17 +84,17 @@ public class GameController : MonoBehaviour
 
             shipInstance.GetComponent<Ship>().ID = ID;
 
-            gameInstances.Add(ID, new int[4] { 0, 1, 1, 0 });
+            gameInstances.Add(ID, new int[4] { 0, 1, startWave, 0 });
             shipInstances.Add(ID, shipInstance);
         }
         else
         {
-            gameInstances[ID] = new int[4] { 0, 1, 1, 0 };
+            gameInstances[ID] = new int[4] { 0, 1, startWave, 0 };
             shipInstance = shipInstances[ID];
         }
 
         shipInstance.GetComponent<Ship>().score = 0;
-        shipInstance.GetComponent<Ship>().wave = 1;
+        shipInstance.GetComponent<Ship>().wave = startWave;
         shipInstance.GetComponent<Ship>().asteroidsRemaining = 0;
         shipInstance.GetComponent<Ship>().lives = 1;
 
