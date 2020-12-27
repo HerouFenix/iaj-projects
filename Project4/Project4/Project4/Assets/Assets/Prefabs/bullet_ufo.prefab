@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8487000381174461679}
   - component: {fileID: 8487000381174461675}
   - component: {fileID: 5537315225276745429}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: bullet_ufo
   m_TagString: Bullet_UFO
   m_Icon: {fileID: 0}
@@ -95,6 +95,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76ff3965849d7cc4c831a58e6326b1e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ID: 0
 --- !u!136 &8487000381174461679
 CapsuleCollider:
   m_ObjectHideFlags: 0

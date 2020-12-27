@@ -1,0 +1,36 @@
+{
+    "Ship": {
+        "checkpoints": [
+            {
+                "steps": 499151,
+                "file_path": "results\\ShootNRotate_Curiosity&ShootPenalty\\Ship\\Ship-499151.onnx",
+                "reward": null,
+                "creation_time": 1609027998.4526515
+            },
+            {
+                "steps": 999151,
+                "file_path": "results\\ShootNRotate_Curiosity&ShootPenalty\\Ship\\Ship-999151.onnx",
+                "reward": null,
+                "creation_time": 1609028888.1292887
+            },
+            {
+                "steps": 1047151,
+                "file_path": "results\\ShootNRotate_Curiosity&ShootPenalty\\Ship\\Ship-1047151.onnx",
+                "reward": null,
+                "creation_time": 1609028977.196242
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1047151,
+            "file_path": "results\\ShootNRotate_Curiosity&ShootPenalty\\Ship.onnx",
+            "reward": null,
+            "creation_time": 1609028977.196242
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.23.0",
+        "torch_version": "1.7.1+cpu",
+        "tensorflow_version": -1
+    }
+}

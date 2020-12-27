@@ -1,0 +1,24 @@
+{
+    "Ship": {
+        "checkpoints": [
+            {
+                "steps": 984,
+                "file_path": "results\\ShootNRotate_Curiosity_Extra\\Ship\\Ship-984.onnx",
+                "reward": 0.10818181593309749,
+                "creation_time": 1609029457.4394865
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 984,
+            "file_path": "results\\ShootNRotate_Curiosity_Extra\\Ship.onnx",
+            "reward": 0.10818181593309749,
+            "creation_time": 1609029457.4394865
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.23.0",
+        "torch_version": "1.7.1+cpu",
+        "tensorflow_version": -1
+    }
+}
