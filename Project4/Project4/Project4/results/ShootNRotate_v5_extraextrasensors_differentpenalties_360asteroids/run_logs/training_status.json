@@ -1,0 +1,36 @@
+{
+    "Ship": {
+        "checkpoints": [
+            {
+                "steps": 499865,
+                "file_path": "results\\ShootNRotate_v4_extraextrasensors_differentpenalties_360asteroids\\Ship\\Ship-499865.onnx",
+                "reward": 0.03657141540731702,
+                "creation_time": 1609107486.4732413
+            },
+            {
+                "steps": 999887,
+                "file_path": "results\\ShootNRotate_v4_extraextrasensors_differentpenalties_360asteroids\\Ship\\Ship-999887.onnx",
+                "reward": 0.005615365619842823,
+                "creation_time": 1609109879.6763835
+            },
+            {
+                "steps": 1140226,
+                "file_path": "results\\ShootNRotate_v4_extraextrasensors_differentpenalties_360asteroids\\Ship\\Ship-1140226.onnx",
+                "reward": 0.055818166245113716,
+                "creation_time": 1609110571.1994038
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1140226,
+            "file_path": "results\\ShootNRotate_v4_extraextrasensors_differentpenalties_360asteroids\\Ship.onnx",
+            "reward": 0.055818166245113716,
+            "creation_time": 1609110571.1994038
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.23.0",
+        "torch_version": "1.7.1+cpu",
+        "tensorflow_version": -1
+    }
+}

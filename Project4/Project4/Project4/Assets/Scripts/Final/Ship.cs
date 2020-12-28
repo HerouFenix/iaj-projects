@@ -39,33 +39,6 @@ public class Ship : Agent
 
     void FixedUpdate()
     {
-        // Move
-        //Vector3 extraForce = transform.forward * thrustForce * Input.GetAxis("Vertical");
-        //var forceDir = transform.InverseTransformDirection(extraForce).z;
-        //var localDir = transform.InverseTransformDirection(body.velocity).z;
-        //if ((forceDir > 0 && localDir > 0) || (forceDir < 0 && localDir < 0))
-        //{
-        //    if (body.velocity.magnitude <= MAX_VELOCITY)
-        //    {
-        //        body.AddForce(extraForce);
-        //    }
-        //}
-        //else
-        //{
-        //    body.AddForce(extraForce);
-        //}
-
-        // Not thrusting
-        //if (Input.GetAxis("Vertical") == 0.0f)
-        //{
-        //    // Decrease velocity overtime
-        //    body.velocity = body.velocity * 0.995f;
-        //}
-
-        // Rotate 
-        //transform.Rotate(0, Input.GetAxis("Horizontal") *
-        //    rotationSpeed * Time.deltaTime, 0);
-
         if (!canShoot)
         {
             stepsUntilShoot--;
@@ -76,11 +49,8 @@ public class Ship : Agent
             }
         }
 
-        // Shoot
-        //if (Input.GetKey(KeyCode.Space) && canShoot)
-        //{
-        //    ShootBullet();
-        //}
+        // Small penalty at each step
+        this.AddReward(-0.001f);
     }
 
     void OnTriggerEnter(Collider c)
@@ -120,6 +90,7 @@ public class Ship : Agent
         // Play a shoot sound
         AudioSource.PlayClipAtPoint(shoot, this.gameController.cam.transform.position);
 
+        AddReward(-0.1f);
 
         canShoot = false;
         stepsUntilShoot = STEPS_BETWEEN_SHOTS;
@@ -127,14 +98,14 @@ public class Ship : Agent
 
     public void IncrementScore()
     {
-        AddReward(0.15f);
+        AddReward(1.0f);
     }
 
     public void FinishEpisode()
     {
         stats.Add("Game/Score", this.gameController.score);
         stats.Add("Game/Wave", this.gameController.wave);
-
+        //Debug.Log(GetCumulativeReward());
         EndEpisode();
     }
 
@@ -170,299 +141,14 @@ public class Ship : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        //Debug.DrawRay(transform.position, transform.forward * 200.0f);
-        //Debug.DrawRay(transform.position, Quaternion.AngleAxis(-15, Vector3.up) * transform.forward * 200.0f);
-        //Debug.DrawRay(transform.position, Quaternion.AngleAxis(-30, Vector3.up) * transform.forward * 200.0f);
-        //Debug.DrawRay(transform.position, Quaternion.AngleAxis(-45, Vector3.up) * transform.forward * 200.0f);
-        //Debug.DrawRay(transform.position, Quaternion.AngleAxis(-60, Vector3.up) * transform.forward * 200.0f);
-        //Debug.DrawRay(transform.position, Quaternion.AngleAxis(15, Vector3.up) * transform.forward * 200.0f);
-        //Debug.DrawRay(transform.position, Quaternion.AngleAxis(30, Vector3.up) * transform.forward * 200.0f);
-        //Debug.DrawRay(transform.position, Quaternion.AngleAxis(45, Vector3.up) * transform.forward * 200.0f);
-        //Debug.DrawRay(transform.position, Quaternion.AngleAxis(60, Vector3.up) * transform.forward * 200.0f);
-        //
-        //Debug.DrawRay(transform.position, transform.right * 100.0f);
-        //Debug.DrawRay(transform.position, -transform.forward * 100.0f);
-        //Debug.DrawRay(transform.position, -transform.right * 100.0f);
-        //Debug.DrawRay(transform.position, Quaternion.AngleAxis(30, Vector3.up) * transform.right * 100.0f);
-        //Debug.DrawRay(transform.position, Quaternion.AngleAxis(30, Vector3.up) * -transform.forward * 100.0f);
-        //Debug.DrawRay(transform.position, Quaternion.AngleAxis(60, Vector3.up) * -transform.forward * 100.0f);
-        //Debug.DrawRay(transform.position, Quaternion.AngleAxis(60, Vector3.up) * transform.right * 100.0f);
+        // Shot ready
+        sensor.AddObservation(canShoot);
 
-        // Front Ray //////////////////////
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.forward, out hit, 200.0f, ~BulletLayer))
-        {
-            sensor.AddObservation(true);
-            Debug.DrawRay(transform.position, transform.forward * 200.0f, Color.red);
-        }
-        else
-        {
-            sensor.AddObservation(false);
-            Debug.DrawRay(transform.position,transform.forward * 200.0f);
-        }
-
-        /*
-        // Front Sensors //////////////////////
-        if (Physics.Raycast(transform.position, Quaternion.AngleAxis(-15, Vector3.up) * transform.forward, out hit, 175.0f, ~BulletLayer))
-        {
-            sensor.AddObservation(true);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(-15, Vector3.up) * transform.forward * 175.0f, Color.red);
-        }
-        else
-        {
-            sensor.AddObservation(false);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(-15, Vector3.up) * transform.forward * 175.0f);
-        }
-
-        if (Physics.Raycast(transform.position, Quaternion.AngleAxis(15, Vector3.up) * transform.forward, out hit, 175.0f, ~BulletLayer))
-        {
-            sensor.AddObservation(true);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(15, Vector3.up) * transform.forward * 175.0f, Color.red);
-        }
-        else
-        {
-            sensor.AddObservation(false);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(15, Vector3.up) * transform.forward * 175.0f);
-        }
-
-        if (Physics.Raycast(transform.position, Quaternion.AngleAxis(-30, Vector3.up) * transform.forward, out hit, 175.0f, ~BulletLayer))
-        {
-            sensor.AddObservation(true);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(-30, Vector3.up) * transform.forward * 175.0f, Color.red);
-        }
-        else
-        {
-            sensor.AddObservation(false);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(-30, Vector3.up) * transform.forward * 175.0f);
-        }
-
-        if (Physics.Raycast(transform.position, Quaternion.AngleAxis(30, Vector3.up) * transform.forward, out hit, 175.0f, ~BulletLayer))
-        {
-            sensor.AddObservation(true);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(30, Vector3.up) * transform.forward * 175.0f, Color.red);
-        }
-        else
-        {
-            sensor.AddObservation(false);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(30, Vector3.up) * transform.forward * 175.0f);
-        }
-
-        if (Physics.Raycast(transform.position, Quaternion.AngleAxis(-45, Vector3.up) * transform.forward, out hit, 175.0f, ~BulletLayer))
-        {
-            sensor.AddObservation(true);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(-45, Vector3.up) * transform.forward * 175.0f, Color.red);
-        }
-        else
-        {
-            sensor.AddObservation(false);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(-45, Vector3.up) * transform.forward * 175.0f);
-        }
-
-        if (Physics.Raycast(transform.position, Quaternion.AngleAxis(45, Vector3.up) * transform.forward, out hit, 175.0f, ~BulletLayer))
-        {
-            sensor.AddObservation(true);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(45, Vector3.up) * transform.forward * 175.0f, Color.red);
-        }
-        else
-        {
-            sensor.AddObservation(false);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(45, Vector3.up) * transform.forward * 175.0f);
-        }
-
-        if (Physics.Raycast(transform.position, Quaternion.AngleAxis(-60, Vector3.up) * transform.forward, out hit, 175.0f, ~BulletLayer))
-        {
-            sensor.AddObservation(true);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(-60, Vector3.up) * transform.forward * 175.0f, Color.red);
-        }
-        else
-        {
-            sensor.AddObservation(false);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(-60, Vector3.up) * transform.forward * 175.0f);
-        }
-
-        if (Physics.Raycast(transform.position, Quaternion.AngleAxis(60, Vector3.up) * transform.forward, out hit, 175.0f, ~BulletLayer))
-        {
-            sensor.AddObservation(true);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(60, Vector3.up) * transform.forward * 175.0f, Color.red);
-        }
-        else
-        {
-            sensor.AddObservation(false);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(60, Vector3.up) * transform.forward * 175.0f);
-        }
-
-        if (Physics.Raycast(transform.position, Quaternion.AngleAxis(-75, Vector3.up) * transform.forward, out hit, 175.0f, ~BulletLayer))
-        {
-            sensor.AddObservation(true);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(-75, Vector3.up) * transform.forward * 175.0f, Color.red);
-        }
-        else
-        {
-            sensor.AddObservation(false);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(-75, Vector3.up) * transform.forward * 175.0f);
-        }
-
-        if (Physics.Raycast(transform.position, Quaternion.AngleAxis(75, Vector3.up) * transform.forward, out hit, 175.0f, ~BulletLayer))
-        {
-            sensor.AddObservation(true);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(75, Vector3.up) * transform.forward * 175.0f, Color.red);
-        }
-        else
-        {
-            sensor.AddObservation(false);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(75, Vector3.up) * transform.forward * 175.0f);
-        }
-
-        // Back Sensors //////////////////////
-        if (Physics.Raycast(transform.position, transform.right, out hit, 175.0f, ~BulletLayer))
-        {
-            sensor.AddObservation(true);
-            Debug.DrawRay(transform.position, transform.right * 175.0f, Color.red);
-        }
-        else
-        {
-            sensor.AddObservation(false);
-            Debug.DrawRay(transform.position, transform.right * 175.0f);
-        }
-
-        if (Physics.Raycast(transform.position, Quaternion.AngleAxis(15, Vector3.up) * transform.right, out hit, 175.0f, ~BulletLayer))
-        {
-            sensor.AddObservation(true);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(15, Vector3.up) * transform.right * 175.0f, Color.red);
-        }
-        else
-        {
-            sensor.AddObservation(false);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(15, Vector3.up) * transform.right * 175.0f);
-        }
-
-        if (Physics.Raycast(transform.position, Quaternion.AngleAxis(30, Vector3.up) * transform.right, out hit, 175.0f, ~BulletLayer))
-        {
-            sensor.AddObservation(true);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(30, Vector3.up) * transform.right * 175.0f, Color.red);
-        }
-        else
-        {
-            sensor.AddObservation(false);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(30, Vector3.up) * transform.right * 175.0f);
-        }
-
-        if (Physics.Raycast(transform.position, Quaternion.AngleAxis(45, Vector3.up) * transform.right, out hit, 175.0f, ~BulletLayer))
-        {
-            sensor.AddObservation(true);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(45, Vector3.up) * transform.right * 175.0f, Color.red);
-        }
-        else
-        {
-            sensor.AddObservation(false);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(45, Vector3.up) * transform.right * 175.0f);
-        }
-
-        if (Physics.Raycast(transform.position, Quaternion.AngleAxis(60, Vector3.up) * transform.right, out hit, 175.0f, ~BulletLayer))
-        {
-            sensor.AddObservation(true);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(60, Vector3.up) * transform.right * 175.0f, Color.red);
-        }
-        else
-        {
-            sensor.AddObservation(false);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(60, Vector3.up) * transform.right * 175.0f);
-        }
-
-        if (Physics.Raycast(transform.position, Quaternion.AngleAxis(75, Vector3.up) * transform.right, out hit, 175.0f, ~BulletLayer))
-        {
-            sensor.AddObservation(true);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(75, Vector3.up) * transform.right * 175.0f, Color.red);
-        }
-        else
-        {
-            sensor.AddObservation(false);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(75, Vector3.up) * transform.right * 175.0f);
-        }
-
-        if (Physics.Raycast(transform.position, Quaternion.AngleAxis(90, Vector3.up) * transform.right, out hit, 175.0f, ~BulletLayer))
-        {
-            sensor.AddObservation(true);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(90, Vector3.up) * transform.right * 175.0f, Color.red);
-        }
-        else
-        {
-            sensor.AddObservation(false);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(90, Vector3.up) * transform.right * 175.0f);
-        }
-
-        if (Physics.Raycast(transform.position, Quaternion.AngleAxis(105, Vector3.up) * transform.right, out hit, 175.0f, ~BulletLayer))
-        {
-            sensor.AddObservation(true);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(105, Vector3.up) * transform.right * 175.0f, Color.red);
-        }
-        else
-        {
-            sensor.AddObservation(false);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(105, Vector3.up) * transform.right * 175.0f);
-        }
-
-        if (Physics.Raycast(transform.position, Quaternion.AngleAxis(120, Vector3.up) * transform.right, out hit, 175.0f, ~BulletLayer))
-        {
-            sensor.AddObservation(true);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(120, Vector3.up) * transform.right * 175.0f, Color.red);
-        }
-        else
-        {
-            sensor.AddObservation(false);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(120, Vector3.up) * transform.right * 175.0f);
-        }
-
-        if (Physics.Raycast(transform.position, Quaternion.AngleAxis(135, Vector3.up) * transform.right, out hit, 175.0f, ~BulletLayer))
-        {
-            sensor.AddObservation(true);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(135, Vector3.up) * transform.right * 175.0f, Color.red);
-        }
-        else
-        {
-            sensor.AddObservation(false);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(135, Vector3.up) * transform.right * 175.0f);
-        }
-
-        if (Physics.Raycast(transform.position, Quaternion.AngleAxis(150, Vector3.up) * transform.right, out hit, 175.0f, ~BulletLayer))
-        {
-            sensor.AddObservation(true);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(150, Vector3.up) * transform.right * 175.0f, Color.red);
-        }
-        else
-        {
-            sensor.AddObservation(false);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(150, Vector3.up) * transform.right * 175.0f);
-        }
-
-        if (Physics.Raycast(transform.position, Quaternion.AngleAxis(165, Vector3.up) * transform.right, out hit, 175.0f, ~BulletLayer))
-        {
-            sensor.AddObservation(true);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(165, Vector3.up) * transform.right * 175.0f, Color.red);
-        }
-        else
-        {
-            sensor.AddObservation(false);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(165, Vector3.up) * transform.right * 175.0f);
-        }
-
-        if (Physics.Raycast(transform.position, Quaternion.AngleAxis(180, Vector3.up) * transform.right, out hit, 175.0f, ~BulletLayer))
-        {
-            sensor.AddObservation(true);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(180, Vector3.up) * transform.right * 175.0f, Color.red);
-        }
-        else
-        {
-            sensor.AddObservation(false);
-            Debug.DrawRay(transform.position, Quaternion.AngleAxis(180, Vector3.up) * transform.right * 175.0f);
-        }
-        */
+        // Rotation
+        //sensor.AddObservation(transform.rotation.y);
 
         //// Position
         //sensor.AddObservation(transform.position);
-        //
-        //// Rotation
-        //sensor.AddObservation(transform.rotation.y);
 
         //// Velocity
         //sensor.AddObservation(body.velocity);
@@ -508,8 +194,8 @@ public class Ship : Agent
             ShootBullet();
 
 
-        //var continuousActions = actionBuffers.ContinuousActions;
-        //Rotate(continuousActions[0]);
+        var continuousActions = actionBuffers.ContinuousActions;
+        Rotate(continuousActions[0]);
         //Move(continuousActions[1]);
 
     }
@@ -529,7 +215,7 @@ public class Ship : Agent
         var continuousActionsOut = actionsOut.ContinuousActions;
 
         // Rotate
-        //continuousActionsOut[0] = Input.GetAxis("Horizontal");
+        continuousActionsOut[0] = Input.GetAxis("Horizontal");
 
         // Move
         //continuousActionsOut[1] = Input.GetAxis("Vertical");

@@ -96,10 +96,10 @@ public class GameController : MonoBehaviour
             for (int i = 0; i < asteroidsRemaining; i++)
             {
                 // Spawn an Asteroid
-                Vector3 startPosition = new Vector3(this.transform.position.x,
-                        0, this.transform.position.z+100.0f);
+                //Vector3 startPosition = new Vector3(Random.Range(this.transform.position.x - 150.0f, this.transform.position.x + 150.0f),
+                //        0, this.transform.position.z+100.0f);
 
-                /*
+                
                 int maxCount = 0;
                 Vector3 startPosition = new Vector3(Random.Range(this.transform.position.x - 530.0f, this.transform.position.x + 530.0f),
                         0, Random.Range(this.transform.position.z - 320.0f, this.transform.position.z + 320.0f));
@@ -123,7 +123,7 @@ public class GameController : MonoBehaviour
                     startPosition = new Vector3(Random.Range(this.transform.position.x - 100.0f, this.transform.position.x + 100.0f),
                         0, Random.Range(this.transform.position.z - 100.0f, this.transform.position.z + 100.0f));
                 }
-                */
+                
 
                 var instance = Instantiate(bigAsteroid, startPosition,
                     Quaternion.Euler(0, Random.Range(-0.0f, 359.0f), 0));
