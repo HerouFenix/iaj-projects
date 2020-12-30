@@ -1,0 +1,42 @@
+{
+    "Ship": {
+        "checkpoints": [
+            {
+                "steps": 499527,
+                "file_path": "results\\MoveNShoot_v4\\Ship\\Ship-499527.onnx",
+                "reward": -4.556214788130352,
+                "creation_time": 1609244094.8875375
+            },
+            {
+                "steps": 999985,
+                "file_path": "results\\MoveNShoot_v4\\Ship\\Ship-999985.onnx",
+                "reward": -6.466500747203827,
+                "creation_time": 1609247080.5997975
+            },
+            {
+                "steps": 1499195,
+                "file_path": "results\\MoveNShoot_v4\\Ship\\Ship-1499195.onnx",
+                "reward": -1.5839999318122864,
+                "creation_time": 1609250084.062693
+            },
+            {
+                "steps": 1961599,
+                "file_path": "results\\MoveNShoot_v4\\Ship\\Ship-1961599.onnx",
+                "reward": -10.723210513591766,
+                "creation_time": 1609252841.0281098
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1961599,
+            "file_path": "results\\MoveNShoot_v4\\Ship.onnx",
+            "reward": -10.723210513591766,
+            "creation_time": 1609252841.0281098
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.23.0",
+        "torch_version": "1.7.1+cpu",
+        "tensorflow_version": -1
+    }
+}

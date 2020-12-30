@@ -1,0 +1,36 @@
+{
+    "Ship": {
+        "checkpoints": [
+            {
+                "steps": 256566,
+                "file_path": "results\\ShootNRotate_v9\\Ship\\Ship-256566.onnx",
+                "reward": null,
+                "creation_time": 1609170067.6402223
+            },
+            {
+                "steps": 499838,
+                "file_path": "results\\ShootNRotate_v9\\Ship\\Ship-499838.onnx",
+                "reward": 0.7136665880680084,
+                "creation_time": 1609173393.7782044
+            },
+            {
+                "steps": 960398,
+                "file_path": "results\\ShootNRotate_v9\\Ship\\Ship-960398.onnx",
+                "reward": null,
+                "creation_time": 1609176662.8114674
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 960398,
+            "file_path": "results\\ShootNRotate_v9\\Ship.onnx",
+            "reward": null,
+            "creation_time": 1609176662.8114674
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.23.0",
+        "torch_version": "1.7.1+cpu",
+        "tensorflow_version": -1
+    }
+}

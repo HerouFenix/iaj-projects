@@ -29,6 +29,7 @@ public class GameController : MonoBehaviour
     public bool infiniteLives = false;
     public int startWave = 1;
 
+
     // Use this for initialization
     void Start()
     {
@@ -66,10 +67,10 @@ public class GameController : MonoBehaviour
         wave = 1;
 
         // Prepare the HUD
-        scoreText.text = "SCORE:" + score;
-        hiscoreText.text = "HISCORE: " + hiscore;
-        livesText.text = "LIVES: " + lives;
-        waveText.text = "WAVE: " + wave;
+        //scoreText.text = "SCORE:" + score;
+        //hiscoreText.text = "HISCORE: " + hiscore;
+        //livesText.text = "LIVES: " + lives;
+        //waveText.text = "WAVE: " + wave;
 
         SpawnAsteroids();
     }
@@ -84,6 +85,7 @@ public class GameController : MonoBehaviour
 
         if (wave < 10 || disableWaveIncrease)
         {
+            /*
             if (disableWaveIncrease)
             {
                 asteroidsRemaining = 1;
@@ -92,26 +94,23 @@ public class GameController : MonoBehaviour
             {
                 asteroidsRemaining = (wave * increaseEachWave);
             }
+            */
+            asteroidsRemaining = 10;
 
             for (int i = 0; i < asteroidsRemaining; i++)
             {
                 // Spawn an Asteroid
-                //Vector3 startPosition = new Vector3(Random.Range(this.transform.position.x - 150.0f, this.transform.position.x + 150.0f),
+                //Vector3 startPosition = new Vector3(this.transform.position.x,
                 //        0, this.transform.position.z+100.0f);
-
                 
                 int maxCount = 0;
                 Vector3 startPosition = new Vector3(Random.Range(this.transform.position.x - 530.0f, this.transform.position.x + 530.0f),
                         0, Random.Range(this.transform.position.z - 320.0f, this.transform.position.z + 320.0f));
 
-                startPosition = new Vector3(Random.Range(this.transform.position.x - 100.0f, this.transform.position.x + 100.0f),
-                        0, Random.Range(this.transform.position.z - 100.0f, this.transform.position.z + 100.0f));
-
-                
                 while (maxCount < 1000)
                 {
                     float dist = Vector3.Distance(startPosition, ship.transform.position);
-                    if (dist > 90.0f && dist <= 100.0f)
+                    if (dist > 75.0f)
                     {
                         break;
                     }
@@ -120,10 +119,9 @@ public class GameController : MonoBehaviour
                     startPosition = new Vector3(Random.Range(this.transform.position.x - 530.0f, this.transform.position.x + 530.0f),
                         0, Random.Range(this.transform.position.z - 320.0f, this.transform.position.z + 320.0f));
 
-                    startPosition = new Vector3(Random.Range(this.transform.position.x - 100.0f, this.transform.position.x + 100.0f),
-                        0, Random.Range(this.transform.position.z - 100.0f, this.transform.position.z + 100.0f));
+                    //startPosition = new Vector3(Random.Range(this.transform.position.x - 100.0f, this.transform.position.x + 100.0f),
+                    //    0, Random.Range(this.transform.position.z - 100.0f, this.transform.position.z + 100.0f));
                 }
-                
 
                 var instance = Instantiate(bigAsteroid, startPosition,
                     Quaternion.Euler(0, Random.Range(-0.0f, 359.0f), 0));
@@ -294,17 +292,17 @@ public class GameController : MonoBehaviour
     public void IncrementScore()
     {
         score++;
-        ship.GetComponent<Ship>().IncrementScore();
+        ship.GetComponent<Ship>().IncrementScore(0);
 
-        scoreText.text = "SCORE:" + score;
+        //scoreText.text = "SCORE:" + score;
 
         if (score > hiscore)
         {
             hiscore = score;
-            hiscoreText.text = "HISCORE: " + hiscore;
+            //hiscoreText.text = "HISCORE: " + hiscore;
 
             // Save the new hiscore
-            PlayerPrefs.SetInt("hiscore", hiscore);
+            //PlayerPrefs.SetInt("hiscore", hiscore);
         }
 
         // Has player destroyed all asteroids?
@@ -312,7 +310,7 @@ public class GameController : MonoBehaviour
         {
             // Start next wave
             wave++;
-            waveText.text = "WAVE: " + wave;
+           // waveText.text = "WAVE: " + wave;
             ship.GetComponent<Ship>().FinishEpisode();
             SpawnAsteroids();
         }
@@ -321,7 +319,11 @@ public class GameController : MonoBehaviour
     public void DecrementLives()
     {
         lives--;
-        livesText.text = "LIVES: " + lives;
+        //livesText.text = "LIVES: " + lives;
+
+        // Agent died
+        ship.GetComponent<Ship>().AddReward(-1.0f);
+        ship.GetComponent<Ship>().FinishEpisode();
 
         // Has player run out of lives?
         if (lives < 1)

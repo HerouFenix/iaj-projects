@@ -12,7 +12,7 @@ public class Asteroid : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        /*
+        
         transform.position = transform.position + transform.forward * 12.0f;
 
         // Push the asteroid in the direction it is facing
@@ -22,7 +22,7 @@ public class Asteroid : MonoBehaviour
         // Give a random angular velocity/rotation
         GetComponent<Rigidbody>()
            .angularVelocity = new Vector3(0,Random.Range(-5.0f, 5.0f),0);
-        */
+        
     }
 
     void OnTriggerEnter(Collider c)

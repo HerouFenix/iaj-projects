@@ -18,6 +18,10 @@ public class Ship : Agent
 
     bool canShoot = true;
 
+    int stepCounter = 0;
+
+    int MAX_STEPS = 2048;
+
     public AudioClip crash;
     public AudioClip shoot;
 
@@ -39,6 +43,12 @@ public class Ship : Agent
 
     void FixedUpdate()
     {
+        //stepCounter++;
+        //if(stepCounter > MAX_STEPS)
+        //{
+        //    gameController.DecrementLives();
+        //}
+
         if (!canShoot)
         {
             stepsUntilShoot--;
@@ -50,7 +60,7 @@ public class Ship : Agent
         }
 
         // Small penalty at each step
-        this.AddReward(-0.001f);
+        this.AddReward(-0.0008f);
     }
 
     void OnTriggerEnter(Collider c)
@@ -64,15 +74,23 @@ public class Ship : Agent
             AudioSource.PlayClipAtPoint
                 (crash, this.gameController.cam.transform.position);
 
-            // Move the ship to the centre of the screen
-            transform.position = transform.parent.position;
-
-            // Remove all velocity from the ship
-            body.
-                velocity = new Vector3(0, 0, 0);
+            this.ResetShip();
 
             gameController.DecrementLives();
         }
+    }
+
+    public void ResetShip()
+    {
+        // Remove all velocity from the ship
+        body.velocity = new Vector3(0, 0, 0);
+        body.angularVelocity = new Vector3(0, 0, 0);
+
+        // Move the ship to the centre of the screen
+        transform.position = transform.parent.position;
+
+        // Reset Rotation
+        body.rotation = Quaternion.Euler(0, 0, 0);
     }
 
     void ShootBullet()
@@ -90,21 +108,23 @@ public class Ship : Agent
         // Play a shoot sound
         AudioSource.PlayClipAtPoint(shoot, this.gameController.cam.transform.position);
 
-        AddReward(-0.1f);
+        AddReward(-0.22f);
 
         canShoot = false;
         stepsUntilShoot = STEPS_BETWEEN_SHOTS;
     }
 
-    public void IncrementScore()
+    public void IncrementScore(int score)
     {
-        AddReward(1.0f);
+        // The extra 0.1 is to give back the cost of the shot
+        AddReward(0.25f + 0.22f);
     }
 
     public void FinishEpisode()
     {
         stats.Add("Game/Score", this.gameController.score);
         stats.Add("Game/Wave", this.gameController.wave);
+        //Debug.Log("Finished Episode");
         //Debug.Log(GetCumulativeReward());
         EndEpisode();
     }
@@ -145,14 +165,16 @@ public class Ship : Agent
         sensor.AddObservation(canShoot);
 
         // Rotation
-        //sensor.AddObservation(transform.rotation.y);
+        sensor.AddObservation(transform.rotation.y);
 
-        //// Position
+        // Position
         //sensor.AddObservation(transform.position);
 
-        //// Velocity
-        //sensor.AddObservation(body.velocity);
+        // Velocity
+        sensor.AddObservation(body.velocity);
 
+        //// Angular Velocity
+        //sensor.AddObservation(body.angularVelocity);
     }
 
     private void Move(float dir)
@@ -196,7 +218,7 @@ public class Ship : Agent
 
         var continuousActions = actionBuffers.ContinuousActions;
         Rotate(continuousActions[0]);
-        //Move(continuousActions[1]);
+        Move(continuousActions[1]);
 
     }
 
@@ -218,13 +240,19 @@ public class Ship : Agent
         continuousActionsOut[0] = Input.GetAxis("Horizontal");
 
         // Move
-        //continuousActionsOut[1] = Input.GetAxis("Vertical");
+        continuousActionsOut[1] = Input.GetAxis("Vertical");
     }
 
     public override void OnEpisodeBegin()
     {
-        // Reset Environment
+        this.ResetShip();
+
+        // Reset timeout
+        stepCounter = 0;
+
         base.OnEpisodeBegin();
+
+        Debug.Log("Starting Episode");
     }
 
 
