@@ -773,10 +773,11 @@ MonoBehaviour:
   livesText: {fileID: 1482920941}
   hiscoreText: {fileID: 680815280}
   waveText: {fileID: 1298501662}
-  disableWaveIncrease: 1
+  disableWaveIncrease: 0
   disableAliens: 1
   infiniteLives: 0
   startWave: 1
+  enemies: []
 --- !u!1 &1482920940
 GameObject:
   m_ObjectHideFlags: 0

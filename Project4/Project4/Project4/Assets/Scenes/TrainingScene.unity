@@ -959,6 +959,7 @@ MonoBehaviour:
   disableAliens: 1
   infiniteLives: 0
   startWave: 1
+  enemies: []
 --- !u!1 &105922245 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1948531812796171633, guid: f0327b7344a1cc2409264f8b9182c7ce,
@@ -1395,6 +1396,7 @@ MonoBehaviour:
   disableAliens: 1
   infiniteLives: 0
   startWave: 1
+  enemies: []
 --- !u!1001 &156584926
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1646,7 +1648,7 @@ GameObject:
   m_Component:
   - component: {fileID: 195946032}
   m_Layer: 0
-  m_Name: Instance14 (1)
+  m_Name: Instance17
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1813,6 +1815,7 @@ MonoBehaviour:
   disableAliens: 1
   infiniteLives: 0
   startWave: 1
+  enemies: []
 --- !u!1001 &252834684
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2082,7 +2085,7 @@ GameObject:
   m_Component:
   - component: {fileID: 300908926}
   m_Layer: 0
-  m_Name: Instance15 (1)
+  m_Name: Instance20
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2351,6 +2354,7 @@ MonoBehaviour:
   disableAliens: 1
   infiniteLives: 0
   startWave: 1
+  enemies: []
 --- !u!1 &323723209
 GameObject:
   m_ObjectHideFlags: 0
@@ -2416,6 +2420,7 @@ MonoBehaviour:
   disableAliens: 1
   infiniteLives: 0
   startWave: 1
+  enemies: []
 --- !u!1 &326610250 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1948531812796171633, guid: f0327b7344a1cc2409264f8b9182c7ce,
@@ -2571,6 +2576,7 @@ MonoBehaviour:
   disableAliens: 1
   infiniteLives: 0
   startWave: 1
+  enemies: []
 --- !u!1 &340943406
 GameObject:
   m_ObjectHideFlags: 0
@@ -2728,6 +2734,7 @@ MonoBehaviour:
   disableAliens: 1
   infiniteLives: 0
   startWave: 1
+  enemies: []
 --- !u!1001 &350421100
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2983,6 +2990,7 @@ MonoBehaviour:
   disableAliens: 1
   infiniteLives: 0
   startWave: 1
+  enemies: []
 --- !u!1 &376756441
 GameObject:
   m_ObjectHideFlags: 0
@@ -3726,6 +3734,7 @@ MonoBehaviour:
   disableAliens: 1
   infiniteLives: 0
   startWave: 1
+  enemies: []
 --- !u!1 &461554705
 GameObject:
   m_ObjectHideFlags: 0
@@ -3947,6 +3956,7 @@ MonoBehaviour:
   disableAliens: 1
   infiniteLives: 0
   startWave: 1
+  enemies: []
 --- !u!1 &484315364
 GameObject:
   m_ObjectHideFlags: 0
@@ -4518,6 +4528,7 @@ MonoBehaviour:
   disableAliens: 1
   infiniteLives: 0
   startWave: 1
+  enemies: []
 --- !u!1 &627791334
 GameObject:
   m_ObjectHideFlags: 0
@@ -5994,6 +6005,7 @@ MonoBehaviour:
   disableAliens: 1
   infiniteLives: 0
   startWave: 1
+  enemies: []
 --- !u!1 &870187024
 GameObject:
   m_ObjectHideFlags: 0
@@ -6765,6 +6777,7 @@ MonoBehaviour:
   disableAliens: 1
   infiniteLives: 0
   startWave: 1
+  enemies: []
 --- !u!1001 &950435040
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7498,6 +7511,7 @@ MonoBehaviour:
   disableAliens: 1
   infiniteLives: 0
   startWave: 1
+  enemies: []
 --- !u!1 &1037058414
 GameObject:
   m_ObjectHideFlags: 0
@@ -8068,7 +8082,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1125076008}
   m_Layer: 0
-  m_Name: Instance13 (1)
+  m_Name: Instance19
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9472,7 +9486,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1274254894}
   m_Layer: 0
-  m_Name: Instance12 (1)
+  m_Name: Instance16
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10260,6 +10274,7 @@ MonoBehaviour:
   disableAliens: 1
   infiniteLives: 0
   startWave: 1
+  enemies: []
 --- !u!1 &1377720472
 GameObject:
   m_ObjectHideFlags: 0
@@ -10699,6 +10714,7 @@ MonoBehaviour:
   disableAliens: 1
   infiniteLives: 0
   startWave: 1
+  enemies: []
 --- !u!1 &1483659033
 GameObject:
   m_ObjectHideFlags: 0
@@ -10821,7 +10837,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1502821607}
   m_Layer: 0
-  m_Name: Instance11 (1)
+  m_Name: Instance18
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12440,6 +12456,7 @@ MonoBehaviour:
   disableAliens: 1
   infiniteLives: 0
   startWave: 1
+  enemies: []
 --- !u!1 &1812291861
 GameObject:
   m_ObjectHideFlags: 0
@@ -13302,6 +13319,7 @@ MonoBehaviour:
   disableAliens: 1
   infiniteLives: 0
   startWave: 1
+  enemies: []
 --- !u!1 &1991948486
 GameObject:
   m_ObjectHideFlags: 0
@@ -13367,6 +13385,7 @@ MonoBehaviour:
   disableAliens: 1
   infiniteLives: 0
   startWave: 1
+  enemies: []
 --- !u!1 &1996237677
 GameObject:
   m_ObjectHideFlags: 0
@@ -14250,3 +14269,4 @@ MonoBehaviour:
   disableAliens: 1
   infiniteLives: 0
   startWave: 1
+  enemies: []

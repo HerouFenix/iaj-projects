@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class GameController : MonoBehaviour
 {
@@ -29,11 +30,12 @@ public class GameController : MonoBehaviour
     public bool infiniteLives = false;
     public int startWave = 1;
 
+    public List<GameObject> enemies;
 
     // Use this for initialization
     void Start()
     {
-
+        enemies = new List<GameObject>();
         hiscore = PlayerPrefs.GetInt("hiscore", 0);
         BeginGame();
     }
@@ -93,9 +95,9 @@ public class GameController : MonoBehaviour
             else
             {
                 asteroidsRemaining = (wave * increaseEachWave);
-            }
-            */
-            asteroidsRemaining = 10;
+            }*/
+            
+            asteroidsRemaining = 5;
 
             for (int i = 0; i < asteroidsRemaining; i++)
             {
@@ -110,7 +112,8 @@ public class GameController : MonoBehaviour
                 while (maxCount < 1000)
                 {
                     float dist = Vector3.Distance(startPosition, ship.transform.position);
-                    if (dist > 75.0f)
+                    //if (dist > 75.0f)
+                    if (dist > 20.0f)
                     {
                         break;
                     }
@@ -128,6 +131,8 @@ public class GameController : MonoBehaviour
                 instance.GetComponent<EuclideanTorus>().cam = cam;
                 instance.GetComponent<Asteroid>().gameController = this;
                 instance.transform.SetParent(transform.parent);
+
+                enemies.Add(instance);
             }
 
             if (wave > 4 && !disableAliens)
@@ -292,7 +297,7 @@ public class GameController : MonoBehaviour
     public void IncrementScore()
     {
         score++;
-        ship.GetComponent<Ship>().IncrementScore(0);
+        ship.GetComponent<Ship>().IncrementScore(0.27f + 0.25f);
 
         //scoreText.text = "SCORE:" + score;
 
@@ -310,7 +315,8 @@ public class GameController : MonoBehaviour
         {
             // Start next wave
             wave++;
-           // waveText.text = "WAVE: " + wave;
+            // waveText.text = "WAVE: " + wave;
+            ship.GetComponent<Ship>().AddReward(1.0f); // Reward for completing wave
             ship.GetComponent<Ship>().FinishEpisode();
             SpawnAsteroids();
         }
@@ -322,7 +328,7 @@ public class GameController : MonoBehaviour
         //livesText.text = "LIVES: " + lives;
 
         // Agent died
-        ship.GetComponent<Ship>().AddReward(-1.0f);
+        ship.GetComponent<Ship>().AddReward(-2.0f);
         ship.GetComponent<Ship>().FinishEpisode();
 
         // Has player run out of lives?
@@ -403,6 +409,8 @@ public class GameController : MonoBehaviour
             if (current.transform.parent == this.transform.parent)
                 GameObject.Destroy(current);
         }
+
+        enemies.Clear();
     }
 
 }

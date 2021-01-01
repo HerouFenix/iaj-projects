@@ -34,7 +34,7 @@ public class Asteroid : MonoBehaviour
             Destroy(c.gameObject);
 
             // If large asteroid spawn new ones
-            if (tag.Equals("BigAsteroid") && false)
+            if (tag.Equals("BigAsteroid"))
             {
                 // Spawn medium asteroids
                 var instance = Instantiate(mediumAsteroid,
@@ -44,6 +44,7 @@ public class Asteroid : MonoBehaviour
                 instance.GetComponent<EuclideanTorus>().cam = this.gameController.cam;
                 instance.GetComponent<Asteroid>().gameController = this.gameController;
                 instance.transform.SetParent(transform.parent);
+                gameController.enemies.Add(instance);
 
                 // Spawn medium asteroids
                 instance = Instantiate(mediumAsteroid,
@@ -54,6 +55,7 @@ public class Asteroid : MonoBehaviour
                 instance.GetComponent<Asteroid>().gameController = this.gameController;
                 instance.transform.SetParent(transform.parent);
 
+                gameController.enemies.Add(instance);
                 gameController.SplitAsteroid(1); // +1
 
             }
@@ -69,6 +71,7 @@ public class Asteroid : MonoBehaviour
                 instance.GetComponent<EuclideanTorus>().cam = this.gameController.cam;
                 instance.GetComponent<Asteroid>().gameController = this.gameController;
                 instance.transform.SetParent(transform.parent);
+                gameController.enemies.Add(instance);
 
                 float rot2 = Random.Range(rot1, rot1 + 60);
 
@@ -80,6 +83,7 @@ public class Asteroid : MonoBehaviour
                 instance.GetComponent<EuclideanTorus>().cam = this.gameController.cam;
                 instance.GetComponent<Asteroid>().gameController = this.gameController;
                 instance.transform.SetParent(transform.parent);
+                gameController.enemies.Add(instance);
 
                 // Spawn small asteroids
                 instance = Instantiate(smallAsteroid,
@@ -90,6 +94,7 @@ public class Asteroid : MonoBehaviour
                 instance.GetComponent<Asteroid>().gameController = this.gameController;
                 instance.transform.SetParent(transform.parent);
 
+                gameController.enemies.Add(instance);
                 gameController.SplitAsteroid(2); // +2
             }
             else
@@ -106,6 +111,7 @@ public class Asteroid : MonoBehaviour
             gameController.IncrementScore();
 
             // Destroy the current asteroid
+            gameController.enemies.Remove(this.gameObject);
             Destroy(gameObject);
 
         }

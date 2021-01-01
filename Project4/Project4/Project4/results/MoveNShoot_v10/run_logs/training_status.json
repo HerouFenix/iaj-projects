@@ -1,0 +1,18 @@
+{
+    "Ship": {
+        "checkpoints": [
+            {
+                "steps": 499897,
+                "file_path": "results\\MoveNShoot_v10\\Ship\\Ship-499897.onnx",
+                "reward": -1.169830322265625,
+                "creation_time": 1609363013.365094
+            }
+        ]
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.23.0",
+        "torch_version": "1.7.1+cpu",
+        "tensorflow_version": -1
+    }
+}

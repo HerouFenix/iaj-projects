@@ -1,0 +1,48 @@
+{
+    "Ship": {
+        "checkpoints": [
+            {
+                "steps": 3999839,
+                "file_path": "results\\MoveNShoot_v14_splitasteroids\\Ship\\Ship-3999839.onnx",
+                "reward": -4.679441690444946,
+                "creation_time": 1609489319.0079775
+            },
+            {
+                "steps": 4499780,
+                "file_path": "results\\MoveNShoot_v14_splitasteroids\\Ship\\Ship-4499780.onnx",
+                "reward": -3.1732636162867913,
+                "creation_time": 1609493913.0720513
+            },
+            {
+                "steps": 4999810,
+                "file_path": "results\\MoveNShoot_v14_splitasteroids\\Ship\\Ship-4999810.onnx",
+                "reward": -3.849876992404461,
+                "creation_time": 1609498540.8806367
+            },
+            {
+                "steps": 5499539,
+                "file_path": "results\\MoveNShoot_v14_splitasteroids\\Ship\\Ship-5499539.onnx",
+                "reward": -4.325108131941627,
+                "creation_time": 1609503145.722259
+            },
+            {
+                "steps": 5672649,
+                "file_path": "results\\MoveNShoot_v14_splitasteroids\\Ship\\Ship-5672649.onnx",
+                "reward": null,
+                "creation_time": 1609504767.384577
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 5672649,
+            "file_path": "results\\MoveNShoot_v14_splitasteroids\\Ship.onnx",
+            "reward": null,
+            "creation_time": 1609504767.384577
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.23.0",
+        "torch_version": "1.7.1+cpu",
+        "tensorflow_version": -1
+    }
+}

@@ -1,0 +1,30 @@
+{
+    "Ship": {
+        "checkpoints": [
+            {
+                "steps": 499870,
+                "file_path": "results\\MoveNShoot_v12_non_moving_asses\\Ship\\Ship-499870.onnx",
+                "reward": -8.11299940943718,
+                "creation_time": 1609430493.8460522
+            },
+            {
+                "steps": 990541,
+                "file_path": "results\\MoveNShoot_v12_non_moving_asses\\Ship\\Ship-990541.onnx",
+                "reward": -9.21277693245146,
+                "creation_time": 1609435074.8124757
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 990541,
+            "file_path": "results\\MoveNShoot_v12_non_moving_asses\\Ship.onnx",
+            "reward": -9.21277693245146,
+            "creation_time": 1609435074.8124757
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.23.0",
+        "torch_version": "1.7.1+cpu",
+        "tensorflow_version": -1
+    }
+}
