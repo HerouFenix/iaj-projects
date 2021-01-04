@@ -1,0 +1,48 @@
+{
+    "Ship": {
+        "checkpoints": [
+            {
+                "steps": 499958,
+                "file_path": "results\\2_Shoot_overtimepenalty\\Ship\\Ship-499958.onnx",
+                "reward": 0.9384112284980087,
+                "creation_time": 1609589270.9701068
+            },
+            {
+                "steps": 999992,
+                "file_path": "results\\2_Shoot_overtimepenalty\\Ship\\Ship-999992.onnx",
+                "reward": 0.9385185338280819,
+                "creation_time": 1609590409.338453
+            },
+            {
+                "steps": 1499961,
+                "file_path": "results\\2_Shoot_overtimepenalty\\Ship\\Ship-1499961.onnx",
+                "reward": 0.9419526754928058,
+                "creation_time": 1609591529.7695925
+            },
+            {
+                "steps": 1999994,
+                "file_path": "results\\2_Shoot_overtimepenalty\\Ship\\Ship-1999994.onnx",
+                "reward": 0.9357174041316562,
+                "creation_time": 1609592885.860657
+            },
+            {
+                "steps": 2004615,
+                "file_path": "results\\2_Shoot_overtimepenalty\\Ship\\Ship-2004615.onnx",
+                "reward": null,
+                "creation_time": 1609592898.371875
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 2004615,
+            "file_path": "results\\2_Shoot_overtimepenalty\\Ship.onnx",
+            "reward": null,
+            "creation_time": 1609592898.371875
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.23.0",
+        "torch_version": "1.7.1+cpu",
+        "tensorflow_version": -1
+    }
+}

@@ -45,10 +45,10 @@ public class Ship : Agent
     void FixedUpdate()
     {
         stepCounter++;
-        if (stepCounter > MAX_STEPS)
-        {
-            gameController.DecrementLives();
-        }
+        //if (stepCounter > MAX_STEPS)
+        //{
+        //    gameController.DecrementLives();
+        //}
 
         if (!canShoot)
         {
@@ -61,7 +61,7 @@ public class Ship : Agent
         }
 
         // Small penalty at each step
-        this.AddReward(-0.0008f);
+        this.AddReward(-0.001f);
     }
 
     void OnTriggerEnter(Collider c)
@@ -91,7 +91,7 @@ public class Ship : Agent
         transform.position = transform.parent.position;
 
         // Reset Rotation
-        body.rotation = Quaternion.Euler(0, 0, 0);
+        transform.rotation = Quaternion.Euler(0, 0, 0);
     }
 
     void ShootBullet()
@@ -105,11 +105,12 @@ public class Ship : Agent
 
         bulletInstance.GetComponent<EuclideanTorus>().cam = this.gameController.cam;
         bulletInstance.transform.SetParent(transform.parent);
+        bulletInstance.GetComponent<Bullet>().ship = this.gameObject;
 
         // Play a shoot sound
         AudioSource.PlayClipAtPoint(shoot, this.gameController.cam.transform.position);
 
-        AddReward(-0.25f);
+        AddReward(-0.1f);
 
         canShoot = false;
         stepsUntilShoot = STEPS_BETWEEN_SHOTS;
@@ -125,8 +126,8 @@ public class Ship : Agent
     {
         stats.Add("Game/Score", this.gameController.score);
         stats.Add("Game/Wave", this.gameController.wave);
-        Debug.Log("Finished Episode");
-        Debug.Log(GetCumulativeReward());
+        //Debug.Log("Finished Episode");
+        //Debug.Log(GetCumulativeReward());
         EndEpisode();
     }
 
@@ -164,39 +165,6 @@ public class Ship : Agent
     {
         // Shot ready
         sensor.AddObservation(canShoot);
-
-        // Rotation - TODO: TRY TO PASS THE FORWARD VECTOR INSTEAD / AS WELL
-        sensor.AddObservation(transform.rotation.y);
-
-        // Position
-        sensor.AddObservation(transform.localPosition);
-        //sensor.AddObservation(transform.localPosition.x);
-        //sensor.AddObservation(transform.localPosition.z);
-
-        // Velocity
-        sensor.AddObservation(body.velocity);
-
-        // Distance to asteroids
-        float smallestDistance = Mathf.Infinity;
-        GameObject closestEnemy = null;
-        foreach (GameObject enemy in this.gameController.enemies)
-        {
-            float newDist = Vector3.Distance(enemy.transform.localPosition, transform.localPosition);
-            if (newDist < smallestDistance)
-            {
-                closestEnemy = enemy;
-                smallestDistance = newDist;
-            }
-        }
-
-        // Closest Asteroid position / TODO - Mb remove this? OR pass the rotation needed to face the closest asteroid and distance aswell
-        if (closestEnemy != null)
-        {
-            sensor.AddObservation(closestEnemy.transform.localPosition);
-            sensor.AddObservation(smallestDistance);
-            //sensor.AddObservation(closestEnemy.transform.localPosition.x);
-            //sensor.AddObservation(closestEnemy.transform.localPosition.z);
-        }
 
     }
 
@@ -238,11 +206,11 @@ public class Ship : Agent
         if (discreteActions[0] == 1 && canShoot)
             ShootBullet();
 
-
+        
         var continuousActions = actionBuffers.ContinuousActions;
         Rotate(continuousActions[0]);
-        Move(continuousActions[1]);
-
+        //Move(continuousActions[1]);
+        
     }
 
 
@@ -257,13 +225,15 @@ public class Ship : Agent
             discreteActionsOut[0] = 1;
         }
 
+        
         var continuousActionsOut = actionsOut.ContinuousActions;
-
+        
         // Rotate
         continuousActionsOut[0] = Input.GetAxis("Horizontal");
 
         // Move
-        continuousActionsOut[1] = Input.GetAxis("Vertical");
+        //continuousActionsOut[1] = Input.GetAxis("Vertical");
+        
     }
 
     public override void OnEpisodeBegin()
@@ -275,7 +245,7 @@ public class Ship : Agent
 
         base.OnEpisodeBegin();
 
-        Debug.Log("Starting Episode");
+        //Debug.Log("Starting Episode");
     }
 
 

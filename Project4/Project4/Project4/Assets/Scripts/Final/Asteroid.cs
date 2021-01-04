@@ -14,27 +14,31 @@ public class Asteroid : MonoBehaviour
     {
         
         transform.position = transform.position + transform.forward * 12.0f;
+        transform.LookAt(this.transform.parent.position);
 
         // Push the asteroid in the direction it is facing
+        //GetComponent<Rigidbody>().
+        //    AddForce(transform.forward * Random.Range(1400.0f, 1600.0f));
+        //
+
         GetComponent<Rigidbody>().
-            AddForce(transform.forward * Random.Range(1400.0f, 1600.0f));
-        
-        // Give a random angular velocity/rotation
-        GetComponent<Rigidbody>()
-           .angularVelocity = new Vector3(0,Random.Range(-5.0f, 5.0f),0);
-        
+            AddForce(transform.forward * Random.Range(1000.0f, 1400.0f));
+
+        //// Give a random angular velocity/rotation
+        //GetComponent<Rigidbody>()
+        //   .angularVelocity = new Vector3(0,Random.Range(-5.0f, 5.0f),0);
+
     }
 
     void OnTriggerEnter(Collider c)
     {
         if (c.gameObject.tag.Equals("Bullet"))
         {
-
             // Destroy the bullet
             Destroy(c.gameObject);
 
             // If large asteroid spawn new ones
-            if (tag.Equals("BigAsteroid"))
+            if (tag.Equals("BigAsteroid") && false)
             {
                 // Spawn medium asteroids
                 var instance = Instantiate(mediumAsteroid,

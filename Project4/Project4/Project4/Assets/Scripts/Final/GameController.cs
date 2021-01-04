@@ -20,6 +20,8 @@ public class GameController : MonoBehaviour
     public int wave;
     private int increaseEachWave = 1;
 
+    private int totalAsteroidsInWave = 0;
+
     public Text scoreText;
     public Text livesText;
     public Text hiscoreText;
@@ -97,23 +99,24 @@ public class GameController : MonoBehaviour
                 asteroidsRemaining = (wave * increaseEachWave);
             }*/
             
-            asteroidsRemaining = 5;
+            asteroidsRemaining = 4;
 
             for (int i = 0; i < asteroidsRemaining; i++)
             {
                 // Spawn an Asteroid
                 //Vector3 startPosition = new Vector3(this.transform.position.x,
                 //        0, this.transform.position.z+100.0f);
+
                 
                 int maxCount = 0;
                 Vector3 startPosition = new Vector3(Random.Range(this.transform.position.x - 530.0f, this.transform.position.x + 530.0f),
                         0, Random.Range(this.transform.position.z - 320.0f, this.transform.position.z + 320.0f));
 
-                while (maxCount < 1000)
+                //while (maxCount < 100000000)
+                while (true)
                 {
                     float dist = Vector3.Distance(startPosition, ship.transform.position);
-                    //if (dist > 75.0f)
-                    if (dist > 20.0f)
+                    if (dist > 115.0f && dist < 200.0f)
                     {
                         break;
                     }
@@ -121,18 +124,19 @@ public class GameController : MonoBehaviour
 
                     startPosition = new Vector3(Random.Range(this.transform.position.x - 530.0f, this.transform.position.x + 530.0f),
                         0, Random.Range(this.transform.position.z - 320.0f, this.transform.position.z + 320.0f));
-
-                    //startPosition = new Vector3(Random.Range(this.transform.position.x - 100.0f, this.transform.position.x + 100.0f),
-                    //    0, Random.Range(this.transform.position.z - 100.0f, this.transform.position.z + 100.0f));
                 }
+                
 
+                //var instance = Instantiate(bigAsteroid, startPosition,
+                //    Quaternion.Euler(0, Random.Range(-0.0f, 359.0f), 0));
                 var instance = Instantiate(bigAsteroid, startPosition,
-                    Quaternion.Euler(0, Random.Range(-0.0f, 359.0f), 0));
+                    Quaternion.Euler(0, 0, 0));
                 instance.GetComponent<EuclideanTorus>().cam = cam;
                 instance.GetComponent<Asteroid>().gameController = this;
                 instance.transform.SetParent(transform.parent);
 
                 enemies.Add(instance);
+                totalAsteroidsInWave += 9; // 1 Big + 2 Medium + 6 Small
             }
 
             if (wave > 4 && !disableAliens)
@@ -164,6 +168,8 @@ public class GameController : MonoBehaviour
                 instance.GetComponent<EuclideanTorus>().cam = cam;
                 instance.GetComponent<UFO>().gameController = this;
                 instance.transform.SetParent(transform.parent);
+
+                totalAsteroidsInWave++;
             }
         }
         else
@@ -198,6 +204,7 @@ public class GameController : MonoBehaviour
                 instance.GetComponent<Asteroid>().gameController = this;
                 instance.transform.SetParent(transform.parent);
 
+                totalAsteroidsInWave += 9;
             }
 
             // Extra asteroids
@@ -214,26 +221,31 @@ public class GameController : MonoBehaviour
                 if (randomValue < 0.3)
                 {
                     asteroid = smallAsteroid;
+                    totalAsteroidsInWave++;
                 }
                 else if (randomValue < 0.7)
                 {
                     asteroid = mediumAsteroid;
+                    totalAsteroidsInWave += 4; // 1 Medium + 3 small
                 }
                 else if (randomValue < 0.9)
                 {
                     if (disableAliens)
                     {
                         asteroid = mediumAsteroid;
+                        totalAsteroidsInWave += 4;
                     }
                     else
                     {
                         asteroid = UFO;
                         ufo = true;
+                        totalAsteroidsInWave++;
                     }
                 }
                 else
                 {
                     asteroid = bigAsteroid;
+                    totalAsteroidsInWave += 9;
                 }
 
                 if (ufo)
@@ -264,6 +276,8 @@ public class GameController : MonoBehaviour
                     instance.GetComponent<EuclideanTorus>().cam = cam;
                     instance.GetComponent<UFO>().gameController = this;
                     instance.transform.SetParent(transform.parent);
+
+                    totalAsteroidsInWave++;
                 }
                 else
                 {
@@ -297,7 +311,7 @@ public class GameController : MonoBehaviour
     public void IncrementScore()
     {
         score++;
-        ship.GetComponent<Ship>().IncrementScore(0.27f + 0.25f);
+        ship.GetComponent<Ship>().IncrementScore(1.0f / 4.0f + 0.1f); ;
 
         //scoreText.text = "SCORE:" + score;
 
@@ -316,7 +330,7 @@ public class GameController : MonoBehaviour
             // Start next wave
             wave++;
             // waveText.text = "WAVE: " + wave;
-            ship.GetComponent<Ship>().AddReward(1.0f); // Reward for completing wave
+
             ship.GetComponent<Ship>().FinishEpisode();
             SpawnAsteroids();
         }
@@ -327,9 +341,7 @@ public class GameController : MonoBehaviour
         lives--;
         //livesText.text = "LIVES: " + lives;
 
-        // Agent died
-        ship.GetComponent<Ship>().AddReward(-2.0f);
-        ship.GetComponent<Ship>().FinishEpisode();
+        ship.GetComponent<Ship>().IncrementScore(-1.0f);
 
         // Has player run out of lives?
         if (lives < 1)

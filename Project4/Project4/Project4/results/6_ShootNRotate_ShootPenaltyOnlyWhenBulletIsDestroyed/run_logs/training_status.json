@@ -1,0 +1,30 @@
+{
+    "Ship": {
+        "checkpoints": [
+            {
+                "steps": 499958,
+                "file_path": "results\\6_ShootNRotate_ShootPenaltyOnlyWhenBulletIsDestroyed\\Ship\\Ship-499958.onnx",
+                "reward": 0.33373329788446426,
+                "creation_time": 1609722388.46429
+            },
+            {
+                "steps": 860501,
+                "file_path": "results\\6_ShootNRotate_ShootPenaltyOnlyWhenBulletIsDestroyed\\Ship\\Ship-860501.onnx",
+                "reward": 0.6033333092927933,
+                "creation_time": 1609723995.8455963
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 860501,
+            "file_path": "results\\6_ShootNRotate_ShootPenaltyOnlyWhenBulletIsDestroyed\\Ship.onnx",
+            "reward": 0.6033333092927933,
+            "creation_time": 1609723995.8455963
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.23.0",
+        "torch_version": "1.7.1+cpu",
+        "tensorflow_version": -1
+    }
+}
