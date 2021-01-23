@@ -1,0 +1,54 @@
+{
+    "SmallAsteroids": {
+        "lesson_num": 0
+    },
+    "BigAsteroids": {
+        "lesson_num": 0
+    },
+    "Ship": {
+        "checkpoints": [
+            {
+                "steps": 3499511,
+                "file_path": "results\\13_MoveNShoot_CurriculumLearning-SingleSmall-SingleBig-TwoBig\\Ship\\Ship-3499511.onnx",
+                "reward": -0.20840000361204147,
+                "creation_time": 1610139283.7530103
+            },
+            {
+                "steps": 3768149,
+                "file_path": "results\\13_MoveNShoot_CurriculumLearning-SingleSmall-SingleBig-TwoBig\\Ship\\Ship-3768149.onnx",
+                "reward": -0.7975971195846796,
+                "creation_time": 1610140409.1815069
+            },
+            {
+                "steps": 3999513,
+                "file_path": "results\\13_MoveNShoot_CurriculumLearning-SingleSmall-SingleBig-TwoBig\\Ship\\Ship-3999513.onnx",
+                "reward": -0.6870999112725258,
+                "creation_time": 1610141426.4720163
+            },
+            {
+                "steps": 4499932,
+                "file_path": "results\\13_MoveNShoot_CurriculumLearning-SingleSmall-SingleBig-TwoBig\\Ship\\Ship-4499932.onnx",
+                "reward": -1.320800006389618,
+                "creation_time": 1610143558.425044
+            },
+            {
+                "steps": 4682464,
+                "file_path": "results\\13_MoveNShoot_CurriculumLearning-SingleSmall-SingleBig-TwoBig\\Ship\\Ship-4682464.onnx",
+                "reward": -0.8793950925270716,
+                "creation_time": 1610144324.1023285
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 4682464,
+            "file_path": "results\\13_MoveNShoot_CurriculumLearning-SingleSmall-SingleBig-TwoBig\\Ship.onnx",
+            "reward": -0.8793950925270716,
+            "creation_time": 1610144324.1023285
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.23.0",
+        "torch_version": "1.7.1+cpu",
+        "tensorflow_version": -1
+    }
+}

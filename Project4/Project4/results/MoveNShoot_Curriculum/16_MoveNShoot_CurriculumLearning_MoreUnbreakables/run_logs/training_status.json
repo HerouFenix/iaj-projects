@@ -1,0 +1,54 @@
+{
+    "UnbreakableAsteroids": {
+        "lesson_num": 0
+    },
+    "BigAsteroids": {
+        "lesson_num": 0
+    },
+    "Ship": {
+        "checkpoints": [
+            {
+                "steps": 8999990,
+                "file_path": "results\\16_MoveNShoot_CurriculumLearning_MoreUnbreakables\\Ship\\Ship-8999990.onnx",
+                "reward": 0.5860000550746918,
+                "creation_time": 1610272037.7380123
+            },
+            {
+                "steps": 9499747,
+                "file_path": "results\\16_MoveNShoot_CurriculumLearning_MoreUnbreakables\\Ship\\Ship-9499747.onnx",
+                "reward": 0.6921667158603668,
+                "creation_time": 1610274039.7279756
+            },
+            {
+                "steps": 9999565,
+                "file_path": "results\\16_MoveNShoot_CurriculumLearning_MoreUnbreakables\\Ship\\Ship-9999565.onnx",
+                "reward": 0.15970004498958587,
+                "creation_time": 1610276036.6795282
+            },
+            {
+                "steps": 10499873,
+                "file_path": "results\\16_MoveNShoot_CurriculumLearning_MoreUnbreakables\\Ship\\Ship-10499873.onnx",
+                "reward": 0.3466111454698775,
+                "creation_time": 1610278049.271698
+            },
+            {
+                "steps": 10860461,
+                "file_path": "results\\16_MoveNShoot_CurriculumLearning_MoreUnbreakables\\Ship\\Ship-10860461.onnx",
+                "reward": 0.35550002989016083,
+                "creation_time": 1610279513.256746
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 10860461,
+            "file_path": "results\\16_MoveNShoot_CurriculumLearning_MoreUnbreakables\\Ship.onnx",
+            "reward": 0.35550002989016083,
+            "creation_time": 1610279513.256746
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.23.0",
+        "torch_version": "1.7.1+cpu",
+        "tensorflow_version": -1
+    }
+}

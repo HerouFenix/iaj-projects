@@ -1,0 +1,54 @@
+{
+    "UnbreakableAsteroids": {
+        "lesson_num": 1
+    },
+    "BigAsteroids": {
+        "lesson_num": 1
+    },
+    "Ship": {
+        "checkpoints": [
+            {
+                "steps": 4499749,
+                "file_path": "results\\15_MoveNShoot_CurriculumLearning_UnbreakableInsteadOfSmall\\Ship\\Ship-4499749.onnx",
+                "reward": -1.6285000443458557,
+                "creation_time": 1610219100.7839007
+            },
+            {
+                "steps": 4999752,
+                "file_path": "results\\15_MoveNShoot_CurriculumLearning_UnbreakableInsteadOfSmall\\Ship\\Ship-4999752.onnx",
+                "reward": -2.510000005364418,
+                "creation_time": 1610221460.783599
+            },
+            {
+                "steps": 5499852,
+                "file_path": "results\\15_MoveNShoot_CurriculumLearning_UnbreakableInsteadOfSmall\\Ship\\Ship-5499852.onnx",
+                "reward": -4.461132001131773,
+                "creation_time": 1610223742.6224122
+            },
+            {
+                "steps": 5999571,
+                "file_path": "results\\15_MoveNShoot_CurriculumLearning_UnbreakableInsteadOfSmall\\Ship\\Ship-5999571.onnx",
+                "reward": -2.444388873875141,
+                "creation_time": 1610226176.797272
+            },
+            {
+                "steps": 6168896,
+                "file_path": "results\\15_MoveNShoot_CurriculumLearning_UnbreakableInsteadOfSmall\\Ship\\Ship-6168896.onnx",
+                "reward": -1.8365552425384521,
+                "creation_time": 1610226989.5610034
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 6168896,
+            "file_path": "results\\15_MoveNShoot_CurriculumLearning_UnbreakableInsteadOfSmall\\Ship.onnx",
+            "reward": -1.8365552425384521,
+            "creation_time": 1610226989.5610034
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.23.0",
+        "torch_version": "1.7.1+cpu",
+        "tensorflow_version": -1
+    }
+}

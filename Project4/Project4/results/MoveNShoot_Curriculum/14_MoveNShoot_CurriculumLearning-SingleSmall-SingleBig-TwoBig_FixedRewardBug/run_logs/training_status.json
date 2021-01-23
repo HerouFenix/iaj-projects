@@ -1,0 +1,54 @@
+{
+    "SmallAsteroids": {
+        "lesson_num": 0
+    },
+    "BigAsteroids": {
+        "lesson_num": 0
+    },
+    "Ship": {
+        "checkpoints": [
+            {
+                "steps": 8999847,
+                "file_path": "results\\14_MoveNShoot_CurriculumLearning-SingleSmall-SingleBig-TwoBig_FixedRewardBug\\Ship\\Ship-8999847.onnx",
+                "reward": 0.3755000482002894,
+                "creation_time": 1610184090.7365136
+            },
+            {
+                "steps": 9499915,
+                "file_path": "results\\14_MoveNShoot_CurriculumLearning-SingleSmall-SingleBig-TwoBig_FixedRewardBug\\Ship\\Ship-9499915.onnx",
+                "reward": 0.28316669662793476,
+                "creation_time": 1610186059.6558366
+            },
+            {
+                "steps": 9999764,
+                "file_path": "results\\14_MoveNShoot_CurriculumLearning-SingleSmall-SingleBig-TwoBig_FixedRewardBug\\Ship\\Ship-9999764.onnx",
+                "reward": -0.30000002185503644,
+                "creation_time": 1610188022.297655
+            },
+            {
+                "steps": 10499864,
+                "file_path": "results\\14_MoveNShoot_CurriculumLearning-SingleSmall-SingleBig-TwoBig_FixedRewardBug\\Ship\\Ship-10499864.onnx",
+                "reward": 0.12518753483891487,
+                "creation_time": 1610189995.402239
+            },
+            {
+                "steps": 10772526,
+                "file_path": "results\\14_MoveNShoot_CurriculumLearning-SingleSmall-SingleBig-TwoBig_FixedRewardBug\\Ship\\Ship-10772526.onnx",
+                "reward": -0.40659997165203093,
+                "creation_time": 1610191071.355048
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 10772526,
+            "file_path": "results\\14_MoveNShoot_CurriculumLearning-SingleSmall-SingleBig-TwoBig_FixedRewardBug\\Ship.onnx",
+            "reward": -0.40659997165203093,
+            "creation_time": 1610191071.355048
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.23.0",
+        "torch_version": "1.7.1+cpu",
+        "tensorflow_version": -1
+    }
+}
