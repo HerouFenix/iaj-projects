@@ -18,8 +18,7 @@ public class EuclideanTorus : MonoBehaviour
         objColliders = GetComponents<Collider>();
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
 
         //var isVisible = m_Renderer.isVisible;

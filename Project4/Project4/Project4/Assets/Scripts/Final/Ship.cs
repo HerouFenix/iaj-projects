@@ -9,6 +9,7 @@ public class Ship : Agent
 {
     private StatsRecorder stats;
     public LayerMask BulletLayer;
+    public bool justMove = false;
 
     float rotationSpeed = 90.0f;
     float thrustForce = 25.0f;
@@ -21,7 +22,7 @@ public class Ship : Agent
 
     int stepCounter = 0;
 
-    int MAX_STEPS = 1024;
+    int MAX_STEPS = 5000;
 
     public AudioClip crash;
     public AudioClip shoot;
@@ -31,6 +32,8 @@ public class Ship : Agent
     public GameController gameController;
 
     private Rigidbody body;
+
+    public bool getNumberOfAsteroids = false;
 
     private void Awake()
     {
@@ -44,11 +47,19 @@ public class Ship : Agent
 
     void FixedUpdate()
     {
-        stepCounter++;
-        if (stepCounter > MAX_STEPS)
-        {
-            gameController.DecrementLives();
-        }
+        //stepCounter++;
+        //if (stepCounter > MAX_STEPS)
+        //{
+        //    if (!justMove)
+        //        gameController.DecrementLives(false);
+        //    else
+        //    {
+        //        SetReward(1.0f);
+        //        FinishEpisode();
+        //        gameController.SpawnAsteroids();
+        //    }
+        //
+        //}
 
         if (!canShoot)
         {
@@ -61,7 +72,11 @@ public class Ship : Agent
         }
 
         // Small penalty at each step
-        this.AddReward(-0.0008f);
+        //this.AddReward(-0.00008f);
+        //this.AddReward(-0.0001f);
+        //this.AddReward(-0.00002f);
+        if (!justMove)
+            this.AddReward(-0.00125f);
     }
 
     void OnTriggerEnter(Collider c)
@@ -91,7 +106,7 @@ public class Ship : Agent
         transform.position = transform.parent.position;
 
         // Reset Rotation
-        body.rotation = Quaternion.Euler(0, 0, 0);
+        transform.rotation = Quaternion.Euler(0, 0, 0);
     }
 
     void ShootBullet()
@@ -105,11 +120,12 @@ public class Ship : Agent
 
         bulletInstance.GetComponent<EuclideanTorus>().cam = this.gameController.cam;
         bulletInstance.transform.SetParent(transform.parent);
+        bulletInstance.GetComponent<Bullet>().ship = this.gameObject;
 
         // Play a shoot sound
         AudioSource.PlayClipAtPoint(shoot, this.gameController.cam.transform.position);
 
-        AddReward(-0.25f);
+        AddReward(-0.05f);
 
         canShoot = false;
         stepsUntilShoot = STEPS_BETWEEN_SHOTS;
@@ -117,7 +133,6 @@ public class Ship : Agent
 
     public void IncrementScore(float score)
     {
-        // The extra 0.1 is to give back the cost of the shot
         AddReward(score);
     }
 
@@ -125,8 +140,8 @@ public class Ship : Agent
     {
         stats.Add("Game/Score", this.gameController.score);
         stats.Add("Game/Wave", this.gameController.wave);
-        Debug.Log("Finished Episode");
-        Debug.Log(GetCumulativeReward());
+        //Debug.Log("Finished Episode");
+        //Debug.Log(GetCumulativeReward());
         EndEpisode();
     }
 
@@ -138,66 +153,55 @@ public class Ship : Agent
         stats = Academy.Instance.StatsRecorder;
     }
 
-    /*
-    private bool checkRayCastHitID(RaycastHit hit)
-    {
-        if (hit.transform.gameObject.tag.Contains("Asteroid") && hit.transform.gameObject.GetComponent<TrainingAsteroid>().ID == ID)
-        {
-            return true;
-        }
-
-        if (hit.transform.gameObject.tag.Equals("UFO") && hit.transform.gameObject.GetComponent<UFO>().ID == ID)
-        {
-            return true;
-        }
-
-        if (hit.transform.gameObject.tag.Equals("Bullet_UFO") && hit.transform.gameObject.GetComponent<BulletUFO>().ID == ID)
-        {
-            return true;
-        }
-
-        return false;
-    }
-    */
-
     public override void CollectObservations(VectorSensor sensor)
     {
         // Shot ready
         sensor.AddObservation(canShoot);
 
-        // Rotation - TODO: TRY TO PASS THE FORWARD VECTOR INSTEAD / AS WELL
-        sensor.AddObservation(transform.rotation.y);
-
-        // Position
-        sensor.AddObservation(transform.localPosition);
-        //sensor.AddObservation(transform.localPosition.x);
-        //sensor.AddObservation(transform.localPosition.z);
+        // Rotation
+        sensor.AddObservation(transform.forward);
 
         // Velocity
         sensor.AddObservation(body.velocity);
 
-        // Distance to asteroids
-        float smallestDistance = Mathf.Infinity;
+        // Position
+        sensor.AddObservation(transform.position);
+
+        // Closest Enemy Position + Direction + Distance
         GameObject closestEnemy = null;
-        foreach (GameObject enemy in this.gameController.enemies)
+        float closestDistance = 10000000.0f;
+
+        foreach (GameObject enemy in gameController.enemies)
         {
-            float newDist = Vector3.Distance(enemy.transform.localPosition, transform.localPosition);
-            if (newDist < smallestDistance)
+            float dist = Vector3.Distance(enemy.transform.position, transform.position);
+            if (dist < closestDistance)
             {
+                closestDistance = dist;
                 closestEnemy = enemy;
-                smallestDistance = newDist;
             }
         }
 
-        // Closest Asteroid position / TODO - Mb remove this? OR pass the rotation needed to face the closest asteroid and distance aswell
-        if (closestEnemy != null)
-        {
-            sensor.AddObservation(closestEnemy.transform.localPosition);
-            sensor.AddObservation(smallestDistance);
-            //sensor.AddObservation(closestEnemy.transform.localPosition.x);
-            //sensor.AddObservation(closestEnemy.transform.localPosition.z);
-        }
+        Vector3 directionToEnemy = (closestEnemy.transform.position - this.transform.position).normalized;
 
+        //float dotProd = Vector3.Dot(directionToEnemy, transform.forward);
+        //
+        //if (dotProd > 0.9)
+        //{
+        //    sensor.AddObservation(true); // Ship facing enemy
+        //}
+        //else
+        //{
+        //    sensor.AddObservation(false); // Ship not facing enemy
+        //}
+
+        sensor.AddObservation(closestEnemy.transform.position);
+        sensor.AddObservation(closestEnemy.transform.GetComponent<Rigidbody>().velocity); // Enemy Velocity4
+        //Debug.Log(Vector3.SignedAngle(transform.forward, directionToEnemy, Vector3.up));
+        sensor.AddObservation(Vector3.SignedAngle(transform.forward, directionToEnemy, Vector3.up)); // Angle difference between forward and enemy direction
+        sensor.AddObservation(closestDistance);
+
+        if(getNumberOfAsteroids)
+            sensor.AddObservation(gameController.totalAsteroidsRemaining); //So it knows how many enemies in total are left
     }
 
     private void Move(float dir)
@@ -235,7 +239,9 @@ public class Ship : Agent
     public override void OnActionReceived(ActionBuffers actionBuffers)
     {
         var discreteActions = actionBuffers.DiscreteActions;
-        if (discreteActions[0] == 1 && canShoot)
+
+        // During lesson zero we just wanna teach the agent how to evade, so no shooting :)
+        if (discreteActions[0] == 1 && canShoot && !justMove)
             ShootBullet();
 
 
@@ -257,6 +263,7 @@ public class Ship : Agent
             discreteActionsOut[0] = 1;
         }
 
+
         var continuousActionsOut = actionsOut.ContinuousActions;
 
         // Rotate
@@ -264,6 +271,7 @@ public class Ship : Agent
 
         // Move
         continuousActionsOut[1] = Input.GetAxis("Vertical");
+
     }
 
     public override void OnEpisodeBegin()
@@ -271,11 +279,16 @@ public class Ship : Agent
         this.ResetShip();
 
         // Reset timeout
-        stepCounter = 0;
+        //stepCounter = 0;
+
+        //if (justMove)
+        //    MAX_STEPS = 1250;
+        //else
+        //    MAX_STEPS = 800;
 
         base.OnEpisodeBegin();
 
-        Debug.Log("Starting Episode");
+        //Debug.Log("Starting Episode");
     }
 
 

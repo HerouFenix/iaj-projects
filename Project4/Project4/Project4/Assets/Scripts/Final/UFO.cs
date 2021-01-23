@@ -30,6 +30,8 @@ public class UFO : MonoBehaviour
         GetComponent<Rigidbody>().
             AddForce(transform.right * 1500.0f);
 
+        playerObj = gameController.ship;
+
     }
 
     void OnTriggerEnter(Collider c)
@@ -50,6 +52,9 @@ public class UFO : MonoBehaviour
 
             // Add to the score
             gameController.IncrementScore();
+
+            // Destroy the current asteroid
+            gameController.enemies.Remove(this.gameObject);
 
             // Destroy the current asteroid
             Destroy(gameObject);

@@ -12,10 +12,11 @@ GameObject:
   - component: {fileID: 8487000381174461673}
   - component: {fileID: 8487000381174461672}
   - component: {fileID: -7481457764705939127}
-  - component: {fileID: 8487000381174461679}
   - component: {fileID: 8487000381174461675}
+  - component: {fileID: 7672194618882828156}
+  - component: {fileID: 8487000381174461679}
   - component: {fileID: 5537315225276745429}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: bullet_ufo
   m_TagString: Bullet_UFO
   m_Icon: {fileID: 0}
@@ -96,20 +97,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerObj: {fileID: 0}
---- !u!136 &8487000381174461679
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8487000381174461678}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &8487000381174461675
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -126,6 +113,33 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!65 &7672194618882828156
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8487000381174461678}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.21, y: 1.3581519, z: 1.03}
+  m_Center: {x: 0.0077860057, y: -0.03881499, z: 0.02898699}
+--- !u!136 &8487000381174461679
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8487000381174461678}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &5537315225276745429
 MonoBehaviour:
   m_ObjectHideFlags: 0
