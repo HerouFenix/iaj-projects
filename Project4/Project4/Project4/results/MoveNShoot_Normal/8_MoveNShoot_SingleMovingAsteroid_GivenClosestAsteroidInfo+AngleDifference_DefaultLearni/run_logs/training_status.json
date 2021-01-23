@@ -1,0 +1,48 @@
+{
+    "Ship": {
+        "checkpoints": [
+            {
+                "steps": 1999536,
+                "file_path": "results\\8_MoveNShoot_SingleMovingAsteroid_GivenClosestAsteroidInfo+AngleDifference_DefaultLearningRate_NoCuriosity\\Ship\\Ship-1999536.onnx",
+                "reward": 0.21859992742538453,
+                "creation_time": 1609961717.0387309
+            },
+            {
+                "steps": 2109473,
+                "file_path": "results\\8_MoveNShoot_SingleMovingAsteroid_GivenClosestAsteroidInfo+AngleDifference_DefaultLearningRate_NoCuriosity\\Ship\\Ship-2109473.onnx",
+                "reward": -0.3530002352264192,
+                "creation_time": 1609962194.820578
+            },
+            {
+                "steps": 2499754,
+                "file_path": "results\\8_MoveNShoot_SingleMovingAsteroid_GivenClosestAsteroidInfo+AngleDifference_DefaultLearningRate_NoCuriosity\\Ship\\Ship-2499754.onnx",
+                "reward": -0.21712510287761688,
+                "creation_time": 1609964017.4963305
+            },
+            {
+                "steps": 2999846,
+                "file_path": "results\\8_MoveNShoot_SingleMovingAsteroid_GivenClosestAsteroidInfo+AngleDifference_DefaultLearningRate_NoCuriosity\\Ship\\Ship-2999846.onnx",
+                "reward": -0.716615596642861,
+                "creation_time": 1609966023.5366645
+            },
+            {
+                "steps": 3466024,
+                "file_path": "results\\8_MoveNShoot_SingleMovingAsteroid_GivenClosestAsteroidInfo+AngleDifference_DefaultLearningRate_NoCuriosity\\Ship\\Ship-3466024.onnx",
+                "reward": 0.015166565775871277,
+                "creation_time": 1609967919.374172
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 3466024,
+            "file_path": "results\\8_MoveNShoot_SingleMovingAsteroid_GivenClosestAsteroidInfo+AngleDifference_DefaultLearningRate_NoCuriosity\\Ship.onnx",
+            "reward": 0.015166565775871277,
+            "creation_time": 1609967919.374172
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.23.0",
+        "torch_version": "1.7.1+cpu",
+        "tensorflow_version": -1
+    }
+}

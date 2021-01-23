@@ -1,0 +1,48 @@
+{
+    "Ship": {
+        "checkpoints": [
+            {
+                "steps": 1499968,
+                "file_path": "results\\9_ShootNRotate_FrequentShotPenalty_SmallerTimeHorizon_SmallerBeta\\Ship\\Ship-1499968.onnx",
+                "reward": 0.5698890396290355,
+                "creation_time": 1609788568.9874258
+            },
+            {
+                "steps": 1999946,
+                "file_path": "results\\9_ShootNRotate_FrequentShotPenalty_SmallerTimeHorizon_SmallerBeta\\Ship\\Ship-1999946.onnx",
+                "reward": -0.7650001961737871,
+                "creation_time": 1609790681.4120722
+            },
+            {
+                "steps": 2207818,
+                "file_path": "results\\9_ShootNRotate_FrequentShotPenalty_SmallerTimeHorizon_SmallerBeta\\Ship\\Ship-2207818.onnx",
+                "reward": 0.7256002336740494,
+                "creation_time": 1609791552.8509936
+            },
+            {
+                "steps": 2499945,
+                "file_path": "results\\9_ShootNRotate_FrequentShotPenalty_SmallerTimeHorizon_SmallerBeta\\Ship\\Ship-2499945.onnx",
+                "reward": 0.3562857412866184,
+                "creation_time": 1609793007.0219574
+            },
+            {
+                "steps": 2591223,
+                "file_path": "results\\9_ShootNRotate_FrequentShotPenalty_SmallerTimeHorizon_SmallerBeta\\Ship\\Ship-2591223.onnx",
+                "reward": 0.36825006920844316,
+                "creation_time": 1609793393.300304
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 2591223,
+            "file_path": "results\\9_ShootNRotate_FrequentShotPenalty_SmallerTimeHorizon_SmallerBeta\\Ship.onnx",
+            "reward": 0.36825006920844316,
+            "creation_time": 1609793393.300304
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.23.0",
+        "torch_version": "1.7.1+cpu",
+        "tensorflow_version": -1
+    }
+}

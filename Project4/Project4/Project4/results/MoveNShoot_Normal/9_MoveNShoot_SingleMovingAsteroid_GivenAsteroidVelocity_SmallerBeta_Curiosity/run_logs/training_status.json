@@ -1,0 +1,48 @@
+{
+    "Ship": {
+        "checkpoints": [
+            {
+                "steps": 999795,
+                "file_path": "results\\9_MoveNShoot_SingleMovingAsteroid_GivenAsteroidVelocity_SmallerBeta_Curiosity\\Ship\\Ship-999795.onnx",
+                "reward": -23.979003965854645,
+                "creation_time": 1609972966.9592607
+            },
+            {
+                "steps": 1499943,
+                "file_path": "results\\9_MoveNShoot_SingleMovingAsteroid_GivenAsteroidVelocity_SmallerBeta_Curiosity\\Ship\\Ship-1499943.onnx",
+                "reward": -10.343401676416397,
+                "creation_time": 1609975161.5550358
+            },
+            {
+                "steps": 1999501,
+                "file_path": "results\\9_MoveNShoot_SingleMovingAsteroid_GivenAsteroidVelocity_SmallerBeta_Curiosity\\Ship\\Ship-1999501.onnx",
+                "reward": -8.380001151561737,
+                "creation_time": 1609977348.6099582
+            },
+            {
+                "steps": 2499866,
+                "file_path": "results\\9_MoveNShoot_SingleMovingAsteroid_GivenAsteroidVelocity_SmallerBeta_Curiosity\\Ship\\Ship-2499866.onnx",
+                "reward": -4.948500633239746,
+                "creation_time": 1609979525.4830859
+            },
+            {
+                "steps": 2786513,
+                "file_path": "results\\9_MoveNShoot_SingleMovingAsteroid_GivenAsteroidVelocity_SmallerBeta_Curiosity\\Ship\\Ship-2786513.onnx",
+                "reward": null,
+                "creation_time": 1609980765.9519243
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 2786513,
+            "file_path": "results\\9_MoveNShoot_SingleMovingAsteroid_GivenAsteroidVelocity_SmallerBeta_Curiosity\\Ship.onnx",
+            "reward": null,
+            "creation_time": 1609980765.9519243
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.23.0",
+        "torch_version": "1.7.1+cpu",
+        "tensorflow_version": -1
+    }
+}

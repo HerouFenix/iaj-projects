@@ -1,0 +1,48 @@
+{
+    "Ship": {
+        "checkpoints": [
+            {
+                "steps": 1620403,
+                "file_path": "results\\8_ShootNRotate_EnemiesInbound\\Ship\\Ship-1620403.onnx",
+                "reward": -3.6700002029538155,
+                "creation_time": 1609769906.0904093
+            },
+            {
+                "steps": 1999719,
+                "file_path": "results\\8_ShootNRotate_EnemiesInbound\\Ship\\Ship-1999719.onnx",
+                "reward": 0.4880000352859497,
+                "creation_time": 1609771552.3108277
+            },
+            {
+                "steps": 2499922,
+                "file_path": "results\\8_ShootNRotate_EnemiesInbound\\Ship\\Ship-2499922.onnx",
+                "reward": -0.8946111595465077,
+                "creation_time": 1609773520.7884448
+            },
+            {
+                "steps": 2999708,
+                "file_path": "results\\8_ShootNRotate_EnemiesInbound\\Ship\\Ship-2999708.onnx",
+                "reward": -0.1415332466363907,
+                "creation_time": 1609775490.254721
+            },
+            {
+                "steps": 3058120,
+                "file_path": "results\\8_ShootNRotate_EnemiesInbound\\Ship\\Ship-3058120.onnx",
+                "reward": 0.6076666911443075,
+                "creation_time": 1609775733.8769517
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 3058120,
+            "file_path": "results\\8_ShootNRotate_EnemiesInbound\\Ship.onnx",
+            "reward": 0.6076666911443075,
+            "creation_time": 1609775733.8769517
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.23.0",
+        "torch_version": "1.7.1+cpu",
+        "tensorflow_version": -1
+    }
+}

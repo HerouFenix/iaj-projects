@@ -1,0 +1,42 @@
+{
+    "Ship": {
+        "checkpoints": [
+            {
+                "steps": 499660,
+                "file_path": "results\\12_MoveNShoot_SameAsLastButMaxTimeoutBeforeDeath_FixedFinishEpisodeBug\\Ship\\Ship-499660.onnx",
+                "reward": -1.494499921798706,
+                "creation_time": 1610042005.005271
+            },
+            {
+                "steps": 999616,
+                "file_path": "results\\12_MoveNShoot_SameAsLastButMaxTimeoutBeforeDeath_FixedFinishEpisodeBug\\Ship\\Ship-999616.onnx",
+                "reward": -2.8469987958669662,
+                "creation_time": 1610044162.3525143
+            },
+            {
+                "steps": 1499669,
+                "file_path": "results\\12_MoveNShoot_SameAsLastButMaxTimeoutBeforeDeath_FixedFinishEpisodeBug\\Ship\\Ship-1499669.onnx",
+                "reward": -2.973772043531591,
+                "creation_time": 1610046274.3408277
+            },
+            {
+                "steps": 1793582,
+                "file_path": "results\\12_MoveNShoot_SameAsLastButMaxTimeoutBeforeDeath_FixedFinishEpisodeBug\\Ship\\Ship-1793582.onnx",
+                "reward": -2.533574570309032,
+                "creation_time": 1610047503.0928812
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1793582,
+            "file_path": "results\\12_MoveNShoot_SameAsLastButMaxTimeoutBeforeDeath_FixedFinishEpisodeBug\\Ship.onnx",
+            "reward": -2.533574570309032,
+            "creation_time": 1610047503.0928812
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.23.0",
+        "torch_version": "1.7.1+cpu",
+        "tensorflow_version": -1
+    }
+}

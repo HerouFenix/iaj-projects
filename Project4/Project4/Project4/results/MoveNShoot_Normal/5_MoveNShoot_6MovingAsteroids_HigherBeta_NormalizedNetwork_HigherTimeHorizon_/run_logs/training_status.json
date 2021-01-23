@@ -1,0 +1,48 @@
+{
+    "Ship": {
+        "checkpoints": [
+            {
+                "steps": 10499773,
+                "file_path": "results\\5_MoveNShoot_6MovingAsteroids_HigherBeta_NormalizedNetwork_HigherTimeHorizon_MoreLayers_MoreHiddenUnits_VelocityPosition\\Ship\\Ship-10499773.onnx",
+                "reward": -3.0309996977448463,
+                "creation_time": 1609924932.0871544
+            },
+            {
+                "steps": 10999488,
+                "file_path": "results\\5_MoveNShoot_6MovingAsteroids_HigherBeta_NormalizedNetwork_HigherTimeHorizon_MoreLayers_MoreHiddenUnits_VelocityPosition\\Ship\\Ship-10999488.onnx",
+                "reward": null,
+                "creation_time": 1609926843.337802
+            },
+            {
+                "steps": 11499908,
+                "file_path": "results\\5_MoveNShoot_6MovingAsteroids_HigherBeta_NormalizedNetwork_HigherTimeHorizon_MoreLayers_MoreHiddenUnits_VelocityPosition\\Ship\\Ship-11499908.onnx",
+                "reward": -4.34999980032444,
+                "creation_time": 1609928754.144402
+            },
+            {
+                "steps": 11999711,
+                "file_path": "results\\5_MoveNShoot_6MovingAsteroids_HigherBeta_NormalizedNetwork_HigherTimeHorizon_MoreLayers_MoreHiddenUnits_VelocityPosition\\Ship\\Ship-11999711.onnx",
+                "reward": -9.453400117158889,
+                "creation_time": 1609930661.919366
+            },
+            {
+                "steps": 12499499,
+                "file_path": "results\\5_MoveNShoot_6MovingAsteroids_HigherBeta_NormalizedNetwork_HigherTimeHorizon_MoreLayers_MoreHiddenUnits_VelocityPosition\\Ship\\Ship-12499499.onnx",
+                "reward": -3.0154996141791344,
+                "creation_time": 1609932578.5958903
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 3031112,
+            "file_path": "results\\5_MoveNShoot_6MovingAsteroids_HigherBeta_NormalizedNetwork_HigherTimeHorizon_MoreLayers_MoreHiddenUnits_VelocityPosition\\Ship.onnx",
+            "reward": null,
+            "creation_time": 1609896144.5091827
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.23.0",
+        "torch_version": "1.7.1+cpu",
+        "tensorflow_version": -1
+    }
+}

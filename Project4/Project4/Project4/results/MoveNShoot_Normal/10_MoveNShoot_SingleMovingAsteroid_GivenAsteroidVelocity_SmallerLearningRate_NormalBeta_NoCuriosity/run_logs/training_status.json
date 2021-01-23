@@ -1,0 +1,48 @@
+{
+    "Ship": {
+        "checkpoints": [
+            {
+                "steps": 9019528,
+                "file_path": "results\\10_MoveNShoot_SingleMovingAsteroid_GivenAsteroidVelocity_SmallerLearningRate_NormalBeta_NoCuriosity\\Ship\\Ship-9019528.onnx",
+                "reward": -0.146272827278484,
+                "creation_time": 1610017437.025275
+            },
+            {
+                "steps": 9499698,
+                "file_path": "results\\10_MoveNShoot_SingleMovingAsteroid_GivenAsteroidVelocity_SmallerLearningRate_NormalBeta_NoCuriosity\\Ship\\Ship-9499698.onnx",
+                "reward": 0.4967499077320099,
+                "creation_time": 1610023974.7391248
+            },
+            {
+                "steps": 9999640,
+                "file_path": "results\\10_MoveNShoot_SingleMovingAsteroid_GivenAsteroidVelocity_SmallerLearningRate_NormalBeta_NoCuriosity\\Ship\\Ship-9999640.onnx",
+                "reward": -0.7082001209259033,
+                "creation_time": 1610026143.352037
+            },
+            {
+                "steps": 10499960,
+                "file_path": "results\\10_MoveNShoot_SingleMovingAsteroid_GivenAsteroidVelocity_SmallerLearningRate_NormalBeta_NoCuriosity\\Ship\\Ship-10499960.onnx",
+                "reward": -0.06828583989824567,
+                "creation_time": 1610028442.7551215
+            },
+            {
+                "steps": 10989533,
+                "file_path": "results\\10_MoveNShoot_SingleMovingAsteroid_GivenAsteroidVelocity_SmallerLearningRate_NormalBeta_NoCuriosity\\Ship\\Ship-10989533.onnx",
+                "reward": -0.26321063229912206,
+                "creation_time": 1610030543.9264467
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 10989533,
+            "file_path": "results\\10_MoveNShoot_SingleMovingAsteroid_GivenAsteroidVelocity_SmallerLearningRate_NormalBeta_NoCuriosity\\Ship.onnx",
+            "reward": -0.26321063229912206,
+            "creation_time": 1610030543.9264467
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.23.0",
+        "torch_version": "1.7.1+cpu",
+        "tensorflow_version": -1
+    }
+}
