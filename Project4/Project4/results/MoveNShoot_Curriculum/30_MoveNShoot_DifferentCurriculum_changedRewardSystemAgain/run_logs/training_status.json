@@ -1,0 +1,57 @@
+{
+    "UnbreakableAsteroids": {
+        "lesson_num": 1
+    },
+    "BigAsteroids": {
+        "lesson_num": 1
+    },
+    "UFOs": {
+        "lesson_num": 1
+    },
+    "Ship": {
+        "checkpoints": [
+            {
+                "steps": 14499580,
+                "file_path": "results\\30_MoveNShoot_DifferentCurriculum_changedRewardSystemAgain\\Ship\\Ship-14499580.onnx",
+                "reward": null,
+                "creation_time": 1610880938.115827
+            },
+            {
+                "steps": 14999503,
+                "file_path": "results\\30_MoveNShoot_DifferentCurriculum_changedRewardSystemAgain\\Ship\\Ship-14999503.onnx",
+                "reward": null,
+                "creation_time": 1610882968.6796675
+            },
+            {
+                "steps": 15499806,
+                "file_path": "results\\30_MoveNShoot_DifferentCurriculum_changedRewardSystemAgain\\Ship\\Ship-15499806.onnx",
+                "reward": 0.5882132976419396,
+                "creation_time": 1610884955.2567308
+            },
+            {
+                "steps": 15599297,
+                "file_path": "results\\30_MoveNShoot_DifferentCurriculum_changedRewardSystemAgain\\Ship\\Ship-15599297.onnx",
+                "reward": 1.0119155175569985,
+                "creation_time": 1610885376.4973629
+            },
+            {
+                "steps": 15623120,
+                "file_path": "results\\30_MoveNShoot_DifferentCurriculum_changedRewardSystemAgain\\Ship\\Ship-15622096.onnx",
+                "reward": null,
+                "creation_time": 1610889266.4091723
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 15623120,
+            "file_path": "results\\30_MoveNShoot_DifferentCurriculum_changedRewardSystemAgain\\Ship.onnx",
+            "reward": null,
+            "creation_time": 1610889266.4091723
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.23.0",
+        "torch_version": "1.7.1+cpu",
+        "tensorflow_version": -1
+    }
+}

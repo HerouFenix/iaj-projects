@@ -1,0 +1,57 @@
+{
+    "UnbreakableAsteroids": {
+        "lesson_num": 1
+    },
+    "UFOs": {
+        "lesson_num": 1
+    },
+    "BigAsteroids": {
+        "lesson_num": 1
+    },
+    "Ship": {
+        "checkpoints": [
+            {
+                "steps": 11499321,
+                "file_path": "results\\26_MoveNShoot_DifferentCurriculum_noCuriosity\\Ship\\Ship-11499321.onnx",
+                "reward": 0.169253471493721,
+                "creation_time": 1610701723.1989806
+            },
+            {
+                "steps": 11999301,
+                "file_path": "results\\26_MoveNShoot_DifferentCurriculum_noCuriosity\\Ship\\Ship-11999301.onnx",
+                "reward": 0.4730979303518931,
+                "creation_time": 1610703706.8426185
+            },
+            {
+                "steps": 12499858,
+                "file_path": "results\\26_MoveNShoot_DifferentCurriculum_noCuriosity\\Ship\\Ship-12499858.onnx",
+                "reward": 0.886520117521286,
+                "creation_time": 1610705694.4901361
+            },
+            {
+                "steps": 12999110,
+                "file_path": "results\\26_MoveNShoot_DifferentCurriculum_noCuriosity\\Ship\\Ship-12999110.onnx",
+                "reward": null,
+                "creation_time": 1610707686.7636752
+            },
+            {
+                "steps": 13219654,
+                "file_path": "results\\26_MoveNShoot_DifferentCurriculum_noCuriosity\\Ship\\Ship-13219654.onnx",
+                "reward": 0.16358422636985778,
+                "creation_time": 1610708564.9088113
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 13219654,
+            "file_path": "results\\26_MoveNShoot_DifferentCurriculum_noCuriosity\\Ship.onnx",
+            "reward": 0.16358422636985778,
+            "creation_time": 1610708564.9088113
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.23.0",
+        "torch_version": "1.7.1+cpu",
+        "tensorflow_version": -1
+    }
+}

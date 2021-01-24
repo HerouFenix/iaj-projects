@@ -1,0 +1,57 @@
+{
+    "UnbreakableAsteroids": {
+        "lesson_num": 1
+    },
+    "BigAsteroids": {
+        "lesson_num": 1
+    },
+    "UFOs": {
+        "lesson_num": 1
+    },
+    "Ship": {
+        "checkpoints": [
+            {
+                "steps": 499963,
+                "file_path": "results\\27_MoveNShoot_DifferentCurriculum\\Ship\\Ship-499963.onnx",
+                "reward": -1.4053282201290132,
+                "creation_time": 1610712954.0872464
+            },
+            {
+                "steps": 999982,
+                "file_path": "results\\27_MoveNShoot_DifferentCurriculum\\Ship\\Ship-999982.onnx",
+                "reward": 0.8090500235557556,
+                "creation_time": 1610715271.6999083
+            },
+            {
+                "steps": 1499589,
+                "file_path": "results\\27_MoveNShoot_DifferentCurriculum\\Ship\\Ship-1499589.onnx",
+                "reward": -1.4342889338731766,
+                "creation_time": 1610717528.0026324
+            },
+            {
+                "steps": 1999590,
+                "file_path": "results\\27_MoveNShoot_DifferentCurriculum\\Ship\\Ship-1999590.onnx",
+                "reward": -1.1163777615875006,
+                "creation_time": 1610719687.801708
+            },
+            {
+                "steps": 2411024,
+                "file_path": "results\\27_MoveNShoot_DifferentCurriculum\\Ship\\Ship-2411024.onnx",
+                "reward": null,
+                "creation_time": 1610721426.780344
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 2411024,
+            "file_path": "results\\27_MoveNShoot_DifferentCurriculum\\Ship.onnx",
+            "reward": null,
+            "creation_time": 1610721426.780344
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.23.0",
+        "torch_version": "1.7.1+cpu",
+        "tensorflow_version": -1
+    }
+}
