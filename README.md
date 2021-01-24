@@ -4,7 +4,7 @@
 In the first project of IAJ, the goal was to implement and test several collision avoidance algorithms, including the AvoidCharacter, AvoidObstacle and Reciprocal Velocity Obstacle methods lectured.
 
 ## Project 2 - Pathfinding
-In the second project of IAJ, the goal was to implement several pathfinding algorithms. More specifically, A*, NodeArray A* and JPS+.
+In the second project of IAJ, the goal was to implement several pathfinding algorithms. More specifically, A*, NodeArray A* and JPS+. Additionally, I also had to add a car, using movement scripts from project 1, that would follow the generated path (without bumping into walls).
 
 ## Project 3 - Decision Making
 In the third project of IAJ, the goal was to implement Decision Making algorithms into a game-scenario. More specifically, Depth-Limited GOAP and Monte-Carlo Tree Search (with and without the RAVE variant). A world representation was also built in accordance to the FEAR world model.
