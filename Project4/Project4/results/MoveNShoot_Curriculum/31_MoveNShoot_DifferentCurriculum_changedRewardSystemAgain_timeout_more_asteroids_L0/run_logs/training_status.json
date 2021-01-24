@@ -1,0 +1,57 @@
+{
+    "UnbreakableAsteroids": {
+        "lesson_num": 2
+    },
+    "BigAsteroids": {
+        "lesson_num": 2
+    },
+    "UFOs": {
+        "lesson_num": 2
+    },
+    "Ship": {
+        "checkpoints": [
+            {
+                "steps": 34499674,
+                "file_path": "results\\31_MoveNShoot_DifferentCurriculum_changedRewardSystemAgain_timeout_more_asteroids_justmove_lessonzero\\Ship\\Ship-34499674.onnx",
+                "reward": 0.08083783835172653,
+                "creation_time": 1611135209.3280122
+            },
+            {
+                "steps": 34999702,
+                "file_path": "results\\31_MoveNShoot_DifferentCurriculum_changedRewardSystemAgain_timeout_more_asteroids_justmove_lessonzero\\Ship\\Ship-34999702.onnx",
+                "reward": null,
+                "creation_time": 1611137331.393544
+            },
+            {
+                "steps": 35499744,
+                "file_path": "results\\31_MoveNShoot_DifferentCurriculum_changedRewardSystemAgain_timeout_more_asteroids_justmove_lessonzero\\Ship\\Ship-35499744.onnx",
+                "reward": -0.4622412949800491,
+                "creation_time": 1611139451.9704075
+            },
+            {
+                "steps": 35999181,
+                "file_path": "results\\31_MoveNShoot_DifferentCurriculum_changedRewardSystemAgain_timeout_more_asteroids_justmove_lessonzero\\Ship\\Ship-35999181.onnx",
+                "reward": 0.0625078696757555,
+                "creation_time": 1611141583.3783796
+            },
+            {
+                "steps": 36284536,
+                "file_path": "results\\31_MoveNShoot_DifferentCurriculum_changedRewardSystemAgain_timeout_more_asteroids_justmove_lessonzero\\Ship\\Ship-36284536.onnx",
+                "reward": -0.44789324328303337,
+                "creation_time": 1611142821.7420876
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 36284536,
+            "file_path": "results\\31_MoveNShoot_DifferentCurriculum_changedRewardSystemAgain_timeout_more_asteroids_justmove_lessonzero\\Ship.onnx",
+            "reward": -0.44789324328303337,
+            "creation_time": 1611142821.7420876
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.23.0",
+        "torch_version": "1.7.1+cpu",
+        "tensorflow_version": -1
+    }
+}

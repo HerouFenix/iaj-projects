@@ -1,0 +1,57 @@
+{
+    "UnbreakableAsteroids": {
+        "lesson_num": 2
+    },
+    "BigAsteroids": {
+        "lesson_num": 2
+    },
+    "UFOs": {
+        "lesson_num": 2
+    },
+    "Ship": {
+        "checkpoints": [
+            {
+                "steps": 15499904,
+                "file_path": "results\\32_MoveNShoot_DifferentCurriculum_changedCurriculum\\Ship\\Ship-15499904.onnx",
+                "reward": -0.49132807180285454,
+                "creation_time": 1611337326.2830367
+            },
+            {
+                "steps": 15999346,
+                "file_path": "results\\32_MoveNShoot_DifferentCurriculum_changedCurriculum\\Ship\\Ship-15999346.onnx",
+                "reward": -0.5229411107652328,
+                "creation_time": 1611339624.2904325
+            },
+            {
+                "steps": 16499594,
+                "file_path": "results\\32_MoveNShoot_DifferentCurriculum_changedCurriculum\\Ship\\Ship-16499594.onnx",
+                "reward": -0.22303567613874162,
+                "creation_time": 1611341896.8642273
+            },
+            {
+                "steps": 16999718,
+                "file_path": "results\\32_MoveNShoot_DifferentCurriculum_changedCurriculum\\Ship\\Ship-16999718.onnx",
+                "reward": 0.022867653299780452,
+                "creation_time": 1611344501.2738223
+            },
+            {
+                "steps": 17123684,
+                "file_path": "results\\32_MoveNShoot_DifferentCurriculum_changedCurriculum\\Ship\\Ship-17123684.onnx",
+                "reward": 0.020625008270144463,
+                "creation_time": 1611345073.4754257
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 17123684,
+            "file_path": "results\\32_MoveNShoot_DifferentCurriculum_changedCurriculum\\Ship.onnx",
+            "reward": 0.020625008270144463,
+            "creation_time": 1611345073.4754257
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.23.0",
+        "torch_version": "1.7.1+cpu",
+        "tensorflow_version": -1
+    }
+}
