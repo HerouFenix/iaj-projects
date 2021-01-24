@@ -1,0 +1,45 @@
+{
+    "UnbreakableAsteroids": {
+        "lesson_num": 0
+    },
+    "UFOs": {
+        "lesson_num": 0
+    },
+    "BigAsteroids": {
+        "lesson_num": 0
+    },
+    "Ship": {
+        "checkpoints": [
+            {
+                "steps": 499452,
+                "file_path": "results\\20_MoveNShoot_DifferentCurriculum_DefaultLearningEpsilon_HigherBatchBufferSize\\Ship\\Ship-499452.onnx",
+                "reward": -15.221154227852821,
+                "creation_time": 1610457023.9877925
+            },
+            {
+                "steps": 999483,
+                "file_path": "results\\20_MoveNShoot_DifferentCurriculum_DefaultLearningEpsilon_HigherBatchBufferSize\\Ship\\Ship-999483.onnx",
+                "reward": -16.87228282732623,
+                "creation_time": 1610459128.2276392
+            },
+            {
+                "steps": 1145872,
+                "file_path": "results\\20_MoveNShoot_DifferentCurriculum_DefaultLearningEpsilon_HigherBatchBufferSize\\Ship\\Ship-1145872.onnx",
+                "reward": -16.278180875217735,
+                "creation_time": 1610459696.661299
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1145872,
+            "file_path": "results\\20_MoveNShoot_DifferentCurriculum_DefaultLearningEpsilon_HigherBatchBufferSize\\Ship.onnx",
+            "reward": -16.278180875217735,
+            "creation_time": 1610459696.661299
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.23.0",
+        "torch_version": "1.7.1+cpu",
+        "tensorflow_version": -1
+    }
+}

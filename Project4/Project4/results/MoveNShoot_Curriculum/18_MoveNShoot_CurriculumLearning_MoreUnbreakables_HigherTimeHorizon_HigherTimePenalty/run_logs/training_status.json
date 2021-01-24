@@ -1,0 +1,54 @@
+{
+    "UnbreakableAsteroids": {
+        "lesson_num": 1
+    },
+    "BigAsteroids": {
+        "lesson_num": 1
+    },
+    "Ship": {
+        "checkpoints": [
+            {
+                "steps": 17499328,
+                "file_path": "results\\18_MoveNShoot_CurriculumLearning_MoreUnbreakables_HigherTimeHorizon_HigherTimePenalty\\Ship\\Ship-17499328.onnx",
+                "reward": 0.2460000365972519,
+                "creation_time": 1610386732.4021058
+            },
+            {
+                "steps": 17999716,
+                "file_path": "results\\18_MoveNShoot_CurriculumLearning_MoreUnbreakables_HigherTimeHorizon_HigherTimePenalty\\Ship\\Ship-17999716.onnx",
+                "reward": -0.5527998090666884,
+                "creation_time": 1610388828.04524
+            },
+            {
+                "steps": 18499975,
+                "file_path": "results\\18_MoveNShoot_CurriculumLearning_MoreUnbreakables_HigherTimeHorizon_HigherTimePenalty\\Ship\\Ship-18499975.onnx",
+                "reward": -0.4871998379627864,
+                "creation_time": 1610390959.786852
+            },
+            {
+                "steps": 18999674,
+                "file_path": "results\\18_MoveNShoot_CurriculumLearning_MoreUnbreakables_HigherTimeHorizon_HigherTimePenalty\\Ship\\Ship-18999674.onnx",
+                "reward": -0.10620945621104468,
+                "creation_time": 1610393102.9407604
+            },
+            {
+                "steps": 19480858,
+                "file_path": "results\\18_MoveNShoot_CurriculumLearning_MoreUnbreakables_HigherTimeHorizon_HigherTimePenalty\\Ship\\Ship-19480858.onnx",
+                "reward": -0.203410394881901,
+                "creation_time": 1610395150.5616689
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 19480858,
+            "file_path": "results\\18_MoveNShoot_CurriculumLearning_MoreUnbreakables_HigherTimeHorizon_HigherTimePenalty\\Ship.onnx",
+            "reward": -0.203410394881901,
+            "creation_time": 1610395150.5616689
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.23.0",
+        "torch_version": "1.7.1+cpu",
+        "tensorflow_version": -1
+    }
+}
