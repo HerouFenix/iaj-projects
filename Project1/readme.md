@@ -4,8 +4,6 @@ This report has been made in accordance to the guidelines provided for the IAJ's
 
 ### Authors
  - Diogo Silva (98776)
- - Carlos Marques (98639)
- - Rui Melo (98823)
 
 ## Initial Analysis and Improvements
 
