@@ -1,0 +1,57 @@
+{
+    "UnbreakableAsteroids": {
+        "lesson_num": 2
+    },
+    "UFOs": {
+        "lesson_num": 1
+    },
+    "BigAsteroids": {
+        "lesson_num": 0
+    },
+    "Ship": {
+        "checkpoints": [
+            {
+                "steps": 8499046,
+                "file_path": "results\\23_MoveNShoot_DifferentCurriculum_Like18\\Ship\\Ship-8499046.onnx",
+                "reward": -0.5766396820545197,
+                "creation_time": 1610618889.1860127
+            },
+            {
+                "steps": 8999594,
+                "file_path": "results\\23_MoveNShoot_DifferentCurriculum_Like18\\Ship\\Ship-8999594.onnx",
+                "reward": 0.25336024661858875,
+                "creation_time": 1610620864.2128036
+            },
+            {
+                "steps": 9499391,
+                "file_path": "results\\23_MoveNShoot_DifferentCurriculum_Like18\\Ship\\Ship-9499391.onnx",
+                "reward": -0.23062381595373155,
+                "creation_time": 1610622833.003168
+            },
+            {
+                "steps": 9999629,
+                "file_path": "results\\23_MoveNShoot_DifferentCurriculum_Like18\\Ship\\Ship-9999629.onnx",
+                "reward": -1.1270400285720825,
+                "creation_time": 1610624808.820477
+            },
+            {
+                "steps": 10039316,
+                "file_path": "results\\23_MoveNShoot_DifferentCurriculum_Like18\\Ship\\Ship-10039316.onnx",
+                "reward": 0.8071202784776688,
+                "creation_time": 1610624958.0696635
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 10039316,
+            "file_path": "results\\23_MoveNShoot_DifferentCurriculum_Like18\\Ship.onnx",
+            "reward": 0.8071202784776688,
+            "creation_time": 1610624958.0696635
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.23.0",
+        "torch_version": "1.7.1+cpu",
+        "tensorflow_version": -1
+    }
+}

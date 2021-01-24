@@ -1,0 +1,57 @@
+{
+    "UnbreakableAsteroids": {
+        "lesson_num": 0
+    },
+    "UFOs": {
+        "lesson_num": 0
+    },
+    "BigAsteroids": {
+        "lesson_num": 0
+    },
+    "Ship": {
+        "checkpoints": [
+            {
+                "steps": 1999939,
+                "file_path": "results\\24_MoveNShoot_DifferentCurriculum_pleasework\\Ship\\Ship-1999939.onnx",
+                "reward": -4.55428155301844,
+                "creation_time": 1610638310.957618
+            },
+            {
+                "steps": 2499971,
+                "file_path": "results\\24_MoveNShoot_DifferentCurriculum_pleasework\\Ship\\Ship-2499971.onnx",
+                "reward": -4.291735496123632,
+                "creation_time": 1610640793.2645686
+            },
+            {
+                "steps": 2760152,
+                "file_path": "results\\24_MoveNShoot_DifferentCurriculum_pleasework\\Ship\\Ship-2759426.onnx",
+                "reward": -2.8156636476516725,
+                "creation_time": 1610642081.702038
+            },
+            {
+                "steps": 2999458,
+                "file_path": "results\\24_MoveNShoot_DifferentCurriculum_pleasework\\Ship\\Ship-2999458.onnx",
+                "reward": -4.020076983332634,
+                "creation_time": 1610643398.4689336
+            },
+            {
+                "steps": 3298785,
+                "file_path": "results\\24_MoveNShoot_DifferentCurriculum_pleasework\\Ship\\Ship-3298785.onnx",
+                "reward": -5.050098573427592,
+                "creation_time": 1610644739.5522614
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 3298785,
+            "file_path": "results\\24_MoveNShoot_DifferentCurriculum_pleasework\\Ship.onnx",
+            "reward": -5.050098573427592,
+            "creation_time": 1610644739.5522614
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.23.0",
+        "torch_version": "1.7.1+cpu",
+        "tensorflow_version": -1
+    }
+}

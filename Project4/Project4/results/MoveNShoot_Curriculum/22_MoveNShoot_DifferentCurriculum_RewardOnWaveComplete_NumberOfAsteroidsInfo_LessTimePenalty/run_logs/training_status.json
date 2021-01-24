@@ -1,0 +1,57 @@
+{
+    "UnbreakableAsteroids": {
+        "lesson_num": 0
+    },
+    "UFOs": {
+        "lesson_num": 1
+    },
+    "BigAsteroids": {
+        "lesson_num": 0
+    },
+    "Ship": {
+        "checkpoints": [
+            {
+                "steps": 2999711,
+                "file_path": "results\\22_MoveNShoot_DifferentCurriculum_RewardOnWaveComplete_NumberOfAsteroidsInfo_LessTimePenalty\\Ship\\Ship-2999711.onnx",
+                "reward": -0.7005399192372957,
+                "creation_time": 1610570067.0729995
+            },
+            {
+                "steps": 3404293,
+                "file_path": "results\\22_MoveNShoot_DifferentCurriculum_RewardOnWaveComplete_NumberOfAsteroidsInfo_LessTimePenalty\\Ship\\Ship-3404293.onnx",
+                "reward": null,
+                "creation_time": 1610571891.279095
+            },
+            {
+                "steps": 3499952,
+                "file_path": "results\\22_MoveNShoot_DifferentCurriculum_RewardOnWaveComplete_NumberOfAsteroidsInfo_LessTimePenalty\\Ship\\Ship-3499952.onnx",
+                "reward": -1.218719705939293,
+                "creation_time": 1610572444.8651054
+            },
+            {
+                "steps": 3999845,
+                "file_path": "results\\22_MoveNShoot_DifferentCurriculum_RewardOnWaveComplete_NumberOfAsteroidsInfo_LessTimePenalty\\Ship\\Ship-3999845.onnx",
+                "reward": 0.848640151321888,
+                "creation_time": 1610574748.6038141
+            },
+            {
+                "steps": 4323791,
+                "file_path": "results\\22_MoveNShoot_DifferentCurriculum_RewardOnWaveComplete_NumberOfAsteroidsInfo_LessTimePenalty\\Ship\\Ship-4323791.onnx",
+                "reward": -0.272542101641496,
+                "creation_time": 1610576309.796055
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 4323791,
+            "file_path": "results\\22_MoveNShoot_DifferentCurriculum_RewardOnWaveComplete_NumberOfAsteroidsInfo_LessTimePenalty\\Ship.onnx",
+            "reward": -0.272542101641496,
+            "creation_time": 1610576309.796055
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.23.0",
+        "torch_version": "1.7.1+cpu",
+        "tensorflow_version": -1
+    }
+}
