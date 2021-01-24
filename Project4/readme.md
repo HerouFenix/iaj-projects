@@ -56,7 +56,7 @@ The **ship** works exactly as expected. The player can press **w** to accelerate
 
 The player can also turn the ship left or right by pressing **a** or **d** respectively. This is also done through the application of a force (i.e using angular velocity), but this velocity drops so fast after the player stops pressing that the momentum is barely noticeable. This was done on porpuse, as even on the original game, whilst moving is supposed to feel like it has some weight to it, turning should be able to be done fast and snappy.
 
-Finally the player can **shoot** a bullet that travels in a straight line, at a certain velocity, disappearing after some time (or if it collides against an enemy).
+Finally the player can **shoot** a bullet (by pressing the **Spacebar**) that travels in a straight line, at a certain velocity, disappearing after some time (or if it collides against an enemy).
 
 ### Enemies
 There are basically two types of enemies in the game - UFOs and Asteroids.
