@@ -5,8 +5,7 @@ This report has been made in accordance to the guidelines provided for the IAJ's
 
 ### Authors
  - Diogo Silva (98776)
- - Rui Melo (98823)
- - Carlos Marques (98639)
+
 
 ## Index
 - [Depth-Limited GOAP](#depth-limited-goap)
